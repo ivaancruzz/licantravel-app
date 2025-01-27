@@ -7,6 +7,10 @@ import {
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getContext } from '@netlify/angular-runtime/context';
+import { AngularAppEngine } from '@angular/ssr';
+
+const angularAppEngine = new AngularAppEngine();
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -58,6 +62,15 @@ if (isMainModule(import.meta.url)) {
   app.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
+}
+
+export async function netlifyAppEngineHandler(
+  request: Request
+): Promise<Response> {
+  const context = getContext();
+
+  const result = await angularAppEngine.handle(request, context);
+  return result || new Response('Not found', { status: 404 });
 }
 
 /**
