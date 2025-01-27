@@ -1,0 +1,33 @@
+<section class="background-gradient">
+  <a routerLink="/test">To test</a>
+  <div class="container-x">
+    <div class="search-wrapper">
+      <img src="/chucao/emoji_1.svg" width="100" alt="Imágen de Chucao feliz" />
+      <article class="card w-full">
+        <p class="text-center">Descubre tu siguiente aventura en</p>
+        <h1 class="text-5xl font-bold lexend-font colorful-text text-center">
+          Lican Ray
+        </h1>
+
+        <tui-textfield iconStart="@tui.search">
+          <label tuiLabel>Buscar</label>
+          <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
+        </tui-textfield>
+      </article>
+      <div class="flex flex-wrap gap-5">
+        @for (category of categories; track category) {
+        <button
+          tuiCardLarge
+          tuiSurface="floating"
+          type="button"
+          class="grid grid-cols-1 gap-5"
+          style="align-items: center !important; height: 100px"
+        >
+          <img [src]="category.img" class="text-center" alt="" width="50" />
+          <p>{{ category.name }}</p>
+        </button>
+        }
+      </div>
+    </div>
+  </div>
+</section>

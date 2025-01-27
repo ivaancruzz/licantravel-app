@@ -1,0 +1,14 @@
+nav {
+  background-color: white;
+  padding: calc(var(--spacing)* 5);
+  border-bottom: 1px solid var(--tui-border-normal);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.drawer {
+  top: 0;
+  border-radius: 0;
+  inline-size: 20rem;
+}

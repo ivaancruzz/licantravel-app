@@ -1,0 +1,26 @@
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap);
+  img {
+    margin-bottom: -30px;
+  }
+}
+
+.colorful-text {
+  display: inline-block;
+  background: linear-gradient(
+    to right,
+    #f45725,
+    #ff8f00,
+    #ffc700,
+    #8dda71,
+    #34b41f,
+    #133ba7,
+    #21a0ff,
+    #00247d
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+}

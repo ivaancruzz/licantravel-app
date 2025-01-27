@@ -1,0 +1,28 @@
+<tui-carousel
+  [draggable]="true"
+  [(index)]="index"
+  [itemsCount]="3"
+  class="w-full"
+>
+  <button
+    *tuiItem
+    tuiCardLarge
+    tuiSurface="floating"
+    type="button"
+    class="grid grid-cols-1 items-center"
+  >
+    <img src="/icons/adventure.png" class="text-center" alt="" width="50" />
+    <span>Aventura</span>
+  </button>
+  <button
+    *tuiItem
+    tuiCardLarge
+    tuiSurface="floating"
+    type="button"
+    class="grid grid-cols-1 items-center"
+  >
+    <img src="/icons/adventure.png" class="text-center" alt="" width="50" />
+    <span>Aventura</span>
+  </button>
+</tui-carousel>
+<tui-pagination size="s" [length]="2" class="pagination" [(index)]="index" />

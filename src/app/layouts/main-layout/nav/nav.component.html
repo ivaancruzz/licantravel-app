@@ -1,0 +1,71 @@
+<nav>
+  <span class="flex-grow">
+    <img src="/logo/short.svg" alt="Logo LicanTravel" height="50" />
+  </span>
+
+  <button
+    size="m"
+    iconStart="@tui.compass"
+    tuiButton
+    type="button"
+    appearance="accent"
+    (click)="toExplore()"
+  >
+    Explorar
+  </button>
+  <tui-badged-content>
+    <tui-badge-notification size="l" tuiSlot="top"> 99 </tui-badge-notification>
+    <button
+      size="m"
+      iconStart="@tui.shopping-cart"
+      tuiIconButton
+      appearance="flat"
+      type="button"
+    >
+      Carrito de compras
+    </button>
+  </tui-badged-content>
+  <button
+    iconStart="@tui.menu"
+    size="m"
+    tuiIconButton
+    appearance="flat"
+    type="button"
+    (click)="open.set(true)"
+  >
+    Menú
+  </button>
+</nav>
+
+<tui-drawer
+  *tuiPopup="open()"
+  direction="right"
+  class="drawer"
+  [overlay]="true"
+  (click.self)="onClose()"
+>
+  <div class="flex flex-col gap-10">
+    <img src="/logo/long.svg" alt="" class="w-100" />
+    <button
+      iconStart="@tui.log-in"
+      size="xl"
+      appearance="primary"
+      tuiButton
+      type="button"
+      class="w-100"
+    >
+      Ingresar
+    </button>
+    <button
+      iconStart="@tui.user-plus"
+      size="xl"
+      appearance="outline"
+      tuiButton
+      type="button"
+      class="w-100"
+    >
+      Crear cuenta
+    </button>
+  </div>
+</tui-drawer>
+<ng-content></ng-content>
