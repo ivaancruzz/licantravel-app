@@ -17,6 +17,7 @@ import {
     TuiBadgeNotification,
     TuiDrawer,
     TuiPopup,
+    RouterLink,
   ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',

@@ -1,0 +1,35 @@
+<div tuiAppearance="floating" class="shop-item" tuiCardMedium>
+  <div
+    class="embla w-full"
+    emblaCarousel
+    [options]="options"
+    [plugins]="plugins"
+  >
+    <div class="embla__container">
+      @for(img of product.img; track img){
+      <div class="embla__slide">
+        <img class="embla__slide__img" [src]="img" alt="Your alt text" />
+        <div class="p-3">
+          <h2 tuiTitle="xs">
+            <small tuiSubtitle>
+              {{ product.ubication }} · {{ product.category }}
+            </small>
+            <div class="text-secondary">{{ product.name }}</div>
+            <p class="line-clamp-1 font-normal">{{ product.description }}</p>
+            <div
+              tuiSubtitle
+              class="mt-3"
+              [style.color]="'var(--tui-text-primary)'"
+            >
+              {{ product.price | currency : "CLP" }}
+              @if(product.priceOff) {<del
+                >${{ product.priceOff | currency : "CLP" }}</del
+              >}
+            </div>
+          </h2>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

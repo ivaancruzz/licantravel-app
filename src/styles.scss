@@ -1,17 +1,22 @@
 @use "tailwindcss";
 
+@theme {
+  --color-primary: #21a0ff;
+  --color-secondary: #ff8f00;
+  --dark: ;
+}
+
 .container-x {
-  padding: calc(var(--spacing) * 5);
   max-width: var(--container-6xl);
   margin-inline: auto;
-  width: 100%;
+  width: 90%;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  border-radius: 1.5rem;
+  border-radius: var(--border-radius);
   gap: var(--gap);
   background: var(--tui-background-elevation-2);
   box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.1);
@@ -29,4 +34,12 @@
     rgba(237, 237, 237, 0) 11.54%,
     #21a0ff 100%
   );
+
+  &-short {
+    background: linear-gradient(
+      180deg,
+      rgba(237, 237, 237, 0) 82.5%,
+      #21a0ff 100%
+    );
+  }
 }

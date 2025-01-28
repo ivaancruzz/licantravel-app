@@ -1,9 +1,8 @@
-<section class="background-gradient">
-  <a routerLink="/test">To test</a>
+<section class="background-gradient pt-5">
   <div class="container-x">
     <div class="search-wrapper">
       <img src="/chucao/emoji_1.svg" width="100" alt="Imágen de Chucao feliz" />
-      <article class="card w-full">
+      <article class="card w-full" style="">
         <p class="text-center">Descubre tu siguiente aventura en</p>
         <h1 class="text-5xl font-bold lexend-font colorful-text text-center">
           Lican Ray
@@ -14,20 +13,131 @@
           <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
         </tui-textfield>
       </article>
-      <div class="flex flex-wrap gap-5">
-        @for (category of categories; track category) {
-        <button
-          tuiCardLarge
-          tuiSurface="floating"
-          type="button"
-          class="grid grid-cols-1 gap-5"
-          style="align-items: center !important; height: 100px"
-        >
-          <img [src]="category.img" class="text-center" alt="" width="50" />
-          <p>{{ category.name }}</p>
-        </button>
-        }
+      <div class="w-full">
+        <app-category-slider ngSkipHydration></app-category-slider>
       </div>
     </div>
+  </div>
+</section>
+
+<!--Carrousel-->
+<section class="container-x py-5">
+  <h2 class="font-semibold mb-2">Lo que tenemos para ti</h2>
+  <div class="overflow-hidden" style="border-radius: var(--border-radius)">
+    <app-featured-products></app-featured-products>
+  </div>
+</section>
+
+<!--Released products -->
+<section class="background-gradient-short pb-5">
+  <div class="container-x flex flex-col gap-5">
+    <div class="grid grid-cols-2 gap-5">
+      @for(product of products; track product){
+      <app-shop-item [product]="product"></app-shop-item>
+      }
+    </div>
+    <button
+      iconStart="@tui.telescope"
+      size="l"
+      tuiButton
+      type="button"
+      class="w-full"
+      appearance="accent"
+    >
+      Explorar
+    </button>
+  </div>
+</section>
+
+<!--Information -->
+<section class="bg-primary py-5">
+  <div class="container-x flex flex-col gap-5">
+    <h1 class="text-2xl text-white font-semibold text-center">
+      Descube lo fácil que es vivir una experiencia inolvidable
+    </h1>
+    <!--Step 1-->
+    <div class="card-step">
+      <img src="/photos/10.jpg" alt="" />
+      <div class="p-3 relative">
+        <div class="float-wrapper">
+          <tui-badge appearance="accent" size="xl"> 1 </tui-badge>
+          <img
+            src="/chucao/treking.png"
+            alt=""
+            class="transform-[scaleX(-1)]"
+          />
+        </div>
+        <h2
+          tuiTitle="l"
+          class="font-bold text-2xl lexend-font my-2 text-secondary"
+        >
+          Encuentra tu próxima aventura
+        </h2>
+        <p>
+          Explora una selección única de actividades y destinos increíbles.
+          Desde paseos relajantes hasta aventuras emocionantes, encuentra el
+          plan perfecto para ti.
+        </p>
+      </div>
+    </div>
+
+    <!--Step 2-->
+    <div class="card-step">
+      <img src="/photos/9.jpg" alt="" />
+      <div class="p-3 relative">
+        <div class="float-wrapper">
+          <tui-badge appearance="accent" size="xl"> 2 </tui-badge>
+          <img src="/chucao/surf.png" alt="" />
+        </div>
+        <h2
+          tuiTitle="l"
+          class="font-bold text-2xl lexend-font my-2 text-secondary"
+        >
+          Reserva y relajate
+        </h2>
+        <p>
+          Compra tus tickets en segundos y deja el resto en nuestras manos. Con
+          nuestra plataforma, todo es sencillo, rápido y seguro.
+        </p>
+      </div>
+    </div>
+
+    <!--Step 3-->
+    <div class="card-step">
+      <img src="/photos/3.jpg" alt="" />
+      <div class="p-3 relative">
+        <div class="float-wrapper">
+          <tui-badge appearance="accent" size="xl"> 3 </tui-badge>
+          <img src="/chucao/playa.png" alt="" />
+        </div>
+        <h2
+          tuiTitle="l"
+          class="font-bold text-2xl lexend-font my-2 text-secondary"
+        >
+          Disfruta sin preocupaciones
+        </h2>
+        <p>
+          Llega a la atracción, muestra tu ticket digital y comienza a vivir
+          momentos inolvidables. ¡Tú solo enfócate en disfrutar, nosotros nos
+          encargamos del resto!
+        </p>
+      </div>
+    </div>
+    <h1
+      class="lexend-font font-bold text-7xl text-center text-white leading-[1.2]"
+    >
+      Es momento de vivir algo único
+    </h1>
+
+    <button
+      iconStart="@tui.tree-palm"
+      size="l"
+      tuiButton
+      type="button"
+      class="w-full"
+      appearance="accent"
+    >
+      Descubre
+    </button>
   </div>
 </section>
