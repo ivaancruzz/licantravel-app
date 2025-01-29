@@ -1,43 +1,33 @@
 export const categories = [
   {
-    img: '/icons/adventure.png',
+    icon: '/icons/adventure.png',
+    picture: '/photos/1.jpg',
     name: 'Aventura',
-    to: '/',
+    to: '/aventura',
   },
   {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
+    icon: '/icons/kayak.png',
+    picture: '/photo/1.jpg',
+    name: 'Navegación',
+    to: '/navegacion',
   },
   {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
+    icon: '/icons/tour.png',
+    picture: '/photo/1.jpg',
+    name: 'Tours',
+    to: '/tours',
   },
   {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
+    icon: '/icons/cabin.png',
+    picture: '/photo/1.jpg',
+    name: 'Cabañas',
+    to: '/cabañas',
   },
   {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
-  },
-  {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
-  },
-  {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
-  },
-  {
-    img: '/icons/adventure.png',
-    name: 'Aventura',
-    to: '/',
+    icon: '/icons/water-slide.png',
+    picture: '/photo/1.jpg',
+    name: 'Entretenimiento',
+    to: '/entretenimiento',
   },
 ];
 

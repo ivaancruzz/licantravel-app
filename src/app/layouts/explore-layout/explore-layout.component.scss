@@ -1,0 +1,35 @@
+.category-header {
+}
+
+.header-wrapper {
+  position: relative;
+  height: 250px;
+  min-height: 250px;
+  max-height: 250px;
+
+  .image-wrapper {
+    height: 100%;
+    width: 100%;
+    mask-image: linear-gradient(
+      to bottom,
+      var(--tui-background-base),
+      transparent
+    );
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .title-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--tui-text-primary);
+    font-weight: bold;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

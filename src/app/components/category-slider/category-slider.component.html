@@ -2,18 +2,21 @@
   <div class="embla__container">
     @for(category of categories; track category){
     <div class="embla__slide">
-      <button
-        tuiCardLarge
-        tuiSurface="floating"
-        type="button"
-        class="grid grid-cols-1 items-center"
-        style="border-radius: var(--border-radius)"
-      >
-        <div class="w-full flex justify-center">
-          <img src="/icons/adventure.png" alt="" width="50" />
-        </div>
-        <span>Aventura</span>
-      </button>
+      <a [routerLink]="category.to">
+        <button
+          tuiCardLarge
+          tuiSurface="floating"
+          type="button"
+          class="grid grid-cols-1 items-center h-full"
+          style="border-radius: var(--border-radius); gap: 5px"
+          [style.width.px]="120"
+        >
+          <div class="w-full flex justify-center">
+            <img [src]="category.icon" alt="" width="50" />
+          </div>
+          <span>Aventura</span>
+        </button>
+      </a>
     </div>
 
     }

@@ -33,11 +33,16 @@
   border-radius: var(--border-radius);
   overflow: hidden;
 
-  img {
-    height: 250px;
-    width: auto;
+  .image-wrapper {
+    min-height: 250px;
     max-height: 250px;
-    object-fit: cover;
+    max-height: 250px;
+    overflow: hidden;
+    width: 100%;
+    img {
+      object-position: center;
+      height: 100%;
+    }
   }
 
   .float-wrapper {

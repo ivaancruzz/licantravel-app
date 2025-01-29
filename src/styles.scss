@@ -10,6 +10,8 @@
   max-width: var(--container-6xl);
   margin-inline: auto;
   width: 90%;
+  overflow: clip;
+  overflow-clip-margin: 20px;
 }
 
 .card {

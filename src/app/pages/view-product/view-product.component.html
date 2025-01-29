@@ -1,0 +1,13 @@
+<div class="container-x my-5 flex flex-col gap-5">
+  <app-product-layout [product]="product"></app-product-layout>
+
+  <div>
+    <h2 class="font-semibold mb-2">Te puede interezar</h2>
+    <app-recommended-products></app-recommended-products>
+  </div>
+
+  <div>
+    <h2 class="font-semibold mb-2">Explora otras categorías</h2>
+    <app-category-slider ngSkipHydration></app-category-slider>
+  </div>
+</div>

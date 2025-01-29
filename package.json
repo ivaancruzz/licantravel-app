@@ -30,6 +30,7 @@
     "@taiga-ui/kit": "^4.21.0",
     "@taiga-ui/layout": "^4.22.0",
     "@taiga-ui/legacy": "^4.22.0",
+    "@taiga-ui/polymorpheus": "^4.8.0",
     "@tailwindcss/postcss": "^4.0.0",
     "embla-carousel-angular": "^19.0.0",
     "embla-carousel-fade": "^8.5.2",

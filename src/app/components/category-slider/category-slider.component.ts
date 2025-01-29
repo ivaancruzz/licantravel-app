@@ -16,10 +16,11 @@ import {
 } from 'embla-carousel-angular';
 import { categories } from '../../fakedata';
 import { TuiSurface } from '@taiga-ui/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-category-slider',
-  imports: [TuiCardLarge, TuiSurface, EmblaCarouselDirective],
+  imports: [TuiCardLarge, TuiSurface, EmblaCarouselDirective, RouterLink],
   templateUrl: './category-slider.component.html',
   styleUrl: './category-slider.component.scss',
 })

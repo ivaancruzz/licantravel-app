@@ -34,6 +34,6 @@ export class NavComponent {
 
   public toExplore(): void {
     console.log('asd');
-    this.router.navigate(['/test']);
+    this.router.navigate(['/explorar']);
   }
 }

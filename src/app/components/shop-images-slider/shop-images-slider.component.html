@@ -1,0 +1,42 @@
+<div
+  class="embla w-full h-full"
+  emblaCarousel
+  [options]="options"
+  [plugins]="plugins"
+>
+  <div class="embla__container h-full">
+    @for(img of images; track img;let i = $index){
+    <div class="embla__slide">
+      <img
+        class="embla__slide__img"
+        [src]="img"
+        alt="Your alt text"
+        (click)="show(i)"
+      />
+    </div>
+    }
+  </div>
+</div>
+
+<ng-template #preview let-preview>
+  <tui-preview
+    [rotatable]="false"
+    [zoomable]="true"
+    (tuiSwipe)="onSwipe($event)"
+  >
+    <img
+      *polymorpheusOutlet="images[currentImg] as src"
+      alt="preview"
+      [src]="src"
+    />
+    <button
+      iconStart="@tui.x"
+      tuiIconButton
+      tuiPreviewAction
+      type="button"
+      (click)="preview.complete()"
+    >
+      Close
+    </button>
+  </tui-preview>
+</ng-template>

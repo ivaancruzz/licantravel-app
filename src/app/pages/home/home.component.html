@@ -33,7 +33,7 @@
   <div class="container-x flex flex-col gap-5">
     <div class="grid grid-cols-2 gap-5">
       @for(product of products; track product){
-      <app-shop-item [product]="product"></app-shop-item>
+      <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
       }
     </div>
     <button
@@ -57,7 +57,9 @@
     </h1>
     <!--Step 1-->
     <div class="card-step">
-      <img src="/photos/10.jpg" alt="" />
+      <div class="image-wrapper">
+        <img src="/photos/10.jpg" alt="" />
+      </div>
       <div class="p-3 relative">
         <div class="float-wrapper">
           <tui-badge appearance="accent" size="xl"> 1 </tui-badge>

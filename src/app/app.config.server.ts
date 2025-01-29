@@ -8,9 +8,7 @@ import { provideServerRoutesConfig } from '@angular/ssr';
 import { appConfig } from './app.config';
 import { serverRoutes } from './app.routes.server';
 import { UNIVERSAL_PROVIDERS } from '@ng-web-apis/universal';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { NG_EVENT_PLUGINS } from '@taiga-ui/event-plugins';
-
+import {} from '@angular/platform-server';
 const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(),

@@ -1,0 +1,52 @@
+<div
+  class="h-[300px] overflow-hidden"
+  style="border-radius: var(--border-radius)"
+>
+  <app-shop-images-slider
+    [images]="product.img"
+    [previewImgs]="true"
+  ></app-shop-images-slider>
+</div>
+<div class="mt-5 flex flex-col gap-5">
+  <h2 tuiTitle="xs">
+    <div class="text-secondary font-bold text-4xl">{{ product.name }}</div>
+    <div
+      tuiSubtitle
+      class="font-bold text-3xl"
+      [style.color]="'var(--tui-text-primary)'"
+    >
+      {{ product.price | currency : "CLP" }}
+      @if(product.priceOff) {<del
+        >${{ product.priceOff | currency : "CLP" }}</del
+      >}
+    </div>
+    <div tuiSubtitle class="text-slate-500">
+      <tui-icon
+        icon="@tui.map-pin"
+        [style.width.px]="15"
+        [style.height.px]="15"
+      />
+      {{ product.ubication }}
+    </div>
+  </h2>
+
+  <button
+    iconStart="@tui.shopping-cart"
+    size="l"
+    tuiButton
+    type="button"
+    class="w-full"
+  >
+    Añadir al carrito
+  </button>
+
+  <p [ngClass]="{ 'line-clamp-3': dialog }">
+    {{ product.description }}
+  </p>
+
+  @if(dialog){
+  <button size="s" tuiButton appearance="outline" type="button" class="w-full">
+    Ver más
+  </button>
+  }
+</div>
