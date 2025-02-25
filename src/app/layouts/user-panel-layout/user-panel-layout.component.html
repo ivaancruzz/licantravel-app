@@ -1,0 +1,13 @@
+<div class="container-x my-5 flex flex-col gap-5">
+  <tui-breadcrumbs>
+    @for(item of items; track item){
+    <a *tuiItem tuiLink [routerLink]="item.routerLink">
+      {{ item.caption }}
+    </a>
+    }
+  </tui-breadcrumbs>
+
+  <section>
+    <ng-content></ng-content>
+  </section>
+</div>

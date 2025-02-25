@@ -1,0 +1,85 @@
+<app-user-panel-layout>
+  <div class="flex flex-col gap-5">
+    <tui-textfield iconStart="@tui.search">
+      <label tuiLabel>Buscar</label>
+      <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
+    </tui-textfield>
+
+    <div class="w-full flex overflow-x-auto pb-2">
+      <form tuiGroup class="group" [collapsed]="true" [formGroup]="testForm">
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="testValue"
+            tuiBlock
+            type="radio"
+            value="oranges"
+          />
+          Oranges
+        </label>
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="testValue"
+            tuiBlock
+            type="radio"
+            value="apples"
+          />
+          Apples
+        </label>
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="testValue"
+            tuiBlock
+            type="radio"
+            value="pineapples"
+          />
+          Pineapples
+        </label>
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="testValue"
+            tuiBlock
+            type="radio"
+            value="pineapples"
+          />
+          Pineapples
+        </label>
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="testValue"
+            tuiBlock
+            type="radio"
+            value="pineapples"
+          />
+          Pineapples
+        </label>
+      </form>
+    </div>
+
+    <a>
+      <button
+        tuiCardMedium
+        tuiSurface="floating"
+        type="button"
+        style="width: 100%; block-size: auto"
+      >
+        <div class="flex items-center justify-between w-full">
+          <h2 tuiTitle class="text-lg">
+            #123456 <span tuiSubtitle class="text-sm"> 15/02/2025</span>
+          </h2>
+          <tui-badge appearance="positive" tuiStatus> Abonado </tui-badge>
+        </div>
+
+        <div class="flex gap-5 mt-5">
+          <span class="flex gap-2 items-center">
+            <tui-icon icon="@tui.ticket" [style.height.px]="18"></tui-icon>
+            x3 tickets
+          </span>
+          <span class="flex gap-2 items-center">
+            <tui-icon icon="@tui.banknote" [style.height.px]="18"></tui-icon>
+            {{ 240000 | currency : "CLP" }}
+          </span>
+        </div>
+      </button>
+    </a>
+  </div>
+</app-user-panel-layout>

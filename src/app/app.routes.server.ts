@@ -21,4 +21,8 @@ export const serverRoutes: ServerRoute[] = [
     path: 'mis-compras',
     renderMode: RenderMode.Client,
   },
+  {
+    path: 'mis-compras/:id',
+    renderMode: RenderMode.Client,
+  },
 ];
