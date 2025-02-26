@@ -22,6 +22,8 @@
     "@angular/router": "^19.1.0",
     "@angular/ssr": "^19.1.4",
     "@ng-web-apis/universal": "^4.11.1",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.48.1",
     "@taiga-ui/addon-mobile": "^4.21.0",
     "@taiga-ui/cdk": "^4.21.0",
     "@taiga-ui/core": "^4.21.0",

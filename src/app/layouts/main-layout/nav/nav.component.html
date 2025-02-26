@@ -48,6 +48,8 @@
 >
   <div class="flex flex-col gap-10">
     <img src="/logo/long.svg" alt="" class="w-100" />
+    @if(!session()){
+
     <button
       iconStart="@tui.log-in"
       size="xl"
@@ -55,6 +57,7 @@
       tuiButton
       type="button"
       class="w-100"
+      (click)="login()"
     >
       Ingresar
     </button>
@@ -68,6 +71,57 @@
     >
       Crear cuenta
     </button>
+    } @else{
+    <div class="flex flex-col text-end gap-5">
+      <span class="text-slate-500">Cuenta</span>
+      <a
+        class="nav-item"
+        iconStart="@tui.shopping-bag"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        role="button"
+      >
+        Mis compras
+      </a>
+      <a
+        class="nav-item"
+        iconStart="@tui.ticket"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        role="button"
+      >
+        Mis tickets
+      </a>
+      <a
+        class="nav-item"
+        iconStart="@tui.settings-2"
+        iconEnd="@tui.chevron-down"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        role="button"
+      >
+        Ajustes
+      </a>
+      <a
+        class="nav-item"
+        iconStart="@tui.log-out"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        (click)="signOut()"
+        role="button"
+      >
+        Salir
+      </a>
+    </div>
+    }
   </div>
 </tui-drawer>
 <ng-content></ng-content>

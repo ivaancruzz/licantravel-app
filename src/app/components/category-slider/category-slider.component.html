@@ -1,8 +1,9 @@
 <div class="embla" emblaCarousel [options]="options">
   <div class="embla__container">
-    @for(category of categories; track category){
+    @for(category of categories(); track category){ @if(category.is_visible){
+
     <div class="embla__slide">
-      <a [routerLink]="category.to">
+      <a [routerLink]="">
         <button
           tuiCardLarge
           tuiSurface="floating"
@@ -14,11 +15,10 @@
           <div class="w-full flex justify-center">
             <img [src]="category.icon" alt="" width="50" />
           </div>
-          <span>Aventura</span>
+          <span>{{ category.name }}</span>
         </button>
       </a>
     </div>
-
-    }
+    } }
   </div>
 </div>

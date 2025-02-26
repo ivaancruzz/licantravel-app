@@ -1,6 +1,6 @@
 nav {
   background-color: white;
-  padding: calc(var(--spacing)* 5);
+  padding: calc(var(--spacing) * 5);
   border-bottom: 1px solid var(--tui-border-normal);
   display: flex;
   align-items: center;
@@ -11,4 +11,9 @@ nav {
   top: 0;
   border-radius: 0;
   inline-size: 20rem;
+}
+
+.nav-item:not(:last-child) {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--tui-border-normal);
 }

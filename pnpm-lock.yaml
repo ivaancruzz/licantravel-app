@@ -41,6 +41,12 @@ importers:
       '@ng-web-apis/universal':
         specifier: ^4.11.1
         version: 4.11.1(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(@ng-web-apis/common@4.11.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@types/node@18.19.74)(rxjs@7.8.1)
+      '@supabase/ssr':
+        specifier: ^0.5.2
+        version: 0.5.2(@supabase/supabase-js@2.48.1)
+      '@supabase/supabase-js':
+        specifier: ^2.48.1
+        version: 2.48.1
       '@taiga-ui/addon-mobile':
         specifier: ^4.21.0
         version: 4.21.0(@angular/cdk@19.1.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(@ng-web-apis/common@4.11.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@taiga-ui/cdk@4.21.0(rxl33shbn7d7qu5bk5eo3qsxdm))(@taiga-ui/core@4.21.0(5m3hebptyk4p6hrfnlpcrfxani))(@taiga-ui/kit@4.21.0(3qpcjrbkygl66j5oiqou6k22ti))(@taiga-ui/polymorpheus@4.8.0(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@19.1.3(@angular/animations@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))))(rxjs@7.8.1)
@@ -1685,6 +1691,33 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
+  '@supabase/auth-js@2.67.3':
+    resolution: {integrity: sha512-NJDaW8yXs49xMvWVOkSIr8j46jf+tYHV0wHhrwOaLLMZSFO4g6kKAf+MfzQ2RaD06OCUkUHIzctLAxjTgEVpzw==}
+
+  '@supabase/functions-js@2.4.4':
+    resolution: {integrity: sha512-WL2p6r4AXNGwop7iwvul2BvOtuJ1YQy8EbOd0dhG1oN1q8el/BIRSFCFnWAMM/vJJlHWLi4ad22sKbKr9mvjoA==}
+
+  '@supabase/node-fetch@2.6.15':
+    resolution: {integrity: sha512-1ibVeYUacxWYi9i0cf5efil6adJ9WRyZBLivgjs+AUpewx1F3xPi7gLgaASI2SmIQxPoCEjAsLAzKPgMJVgOUQ==}
+    engines: {node: 4.x || >=6.0.0}
+
+  '@supabase/postgrest-js@1.18.1':
+    resolution: {integrity: sha512-dWDnoC0MoDHKhaEOrsEKTadWQcBNknZVQcSgNE/Q2wXh05mhCL1ut/jthRUrSbYcqIw/CEjhaeIPp7dLarT0bg==}
+
+  '@supabase/realtime-js@2.11.2':
+    resolution: {integrity: sha512-u/XeuL2Y0QEhXSoIPZZwR6wMXgB+RQbJzG9VErA3VghVt7uRfSVsjeqd7m5GhX3JR6dM/WRmLbVR8URpDWG4+w==}
+
+  '@supabase/ssr@0.5.2':
+    resolution: {integrity: sha512-n3plRhr2Bs8Xun1o4S3k1CDv17iH5QY9YcoEvXX3bxV1/5XSasA0mNXYycFmADIdtdE6BG9MRjP5CGIs8qxC8A==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.43.4
+
+  '@supabase/storage-js@2.7.1':
+    resolution: {integrity: sha512-asYHcyDR1fKqrMpytAS1zjyEfvxuOIp1CIXX7ji4lHHcJKqyk+sLl/Vxgm4sN6u8zvuUtae9e4kDxQP2qrwWBA==}
+
+  '@supabase/supabase-js@2.48.1':
+    resolution: {integrity: sha512-VMD+CYk/KxfwGbI4fqwSUVA7CLr1izXpqfFerhnYPSi6LEKD8GoR4kuO5Cc8a+N43LnfSQwLJu4kVm2e4etEmA==}
+
   '@taiga-ui/addon-mobile@4.21.0':
     resolution: {integrity: sha512-AIklfOfgiTuCFHvGb9Ok1nNtkelrEZmoeOQsLEH0wIA0+Ou/6XeAG03BkwrIJq4yQ1AI+ZCFeVNtl17bg+EzkA==}
     peerDependencies:
@@ -1903,6 +1936,9 @@ packages:
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
 
+  '@types/cookie@0.6.0':
+    resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+
   '@types/cors@2.8.17':
     resolution: {integrity: sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==}
 
@@ -1947,6 +1983,9 @@ packages:
 
   '@types/node@18.19.74':
     resolution: {integrity: sha512-HMwEkkifei3L605gFdV+/UwtpxP6JSzM+xFk2Ia6DNFSwSVBRh9qp5Tgf4lNFOMfPVuU0WnkcWpXZpgn5ufO4A==}
+
+  '@types/phoenix@1.6.6':
+    resolution: {integrity: sha512-PIzZZlEppgrpoT2QgbnDU+MMzuR6BbCjllj0bM70lWoejMeNJAxCchxnv7J3XFkI8MpygtRpzXrIlmWUBclP5A==}
 
   '@types/qs@6.9.18':
     resolution: {integrity: sha512-kK7dgTYDyGqS+e2Q4aK9X3D7q234CIZ1Bv0q/7Z5IwRDoADNU81xXJK/YVyLbLTZCoIwUoDoffFeF+p/eIklAA==}
@@ -4366,6 +4405,9 @@ packages:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
 
+  tr46@0.0.3:
+    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+
   tree-dump@1.0.2:
     resolution: {integrity: sha512-dpev9ABuLWdEubk+cIaI9cHwRNNDjkBBLXTwI4UCUFdQ5xXKqNXoK4FEciw/vxf+NQ7Cb7sGUyeUtORvHIdRXQ==}
     engines: {node: '>=10.0'}
@@ -4537,6 +4579,9 @@ packages:
   weak-lru-cache@1.2.2:
     resolution: {integrity: sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw==}
 
+  webidl-conversions@3.0.1:
+    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
+
   webpack-dev-middleware@7.4.2:
     resolution: {integrity: sha512-xOO8n6eggxnwYpy1NlzUKpvrjfJTvae5/D6WOK0S2LSo7vjmo5gCM1DbLUmFqrMTJP+W/0YZNctm7jasWvLuBA==}
     engines: {node: '>= 18.12.0'}
@@ -4594,6 +4639,9 @@ packages:
   websocket-extensions@0.1.4:
     resolution: {integrity: sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==}
     engines: {node: '>=0.8.0'}
+
+  whatwg-url@5.0.0:
+    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
   which@1.3.1:
     resolution: {integrity: sha512-HxJdYWq1MTIQbJ3nw0cqssHoTNU267KlrDuGZ1WYlxDStUtKUhOaJmh112/TZmHxxUfuJqPXSOm7tDyas0OSIQ==}
@@ -6387,6 +6435,54 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
+  '@supabase/auth-js@2.67.3':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/functions-js@2.4.4':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/node-fetch@2.6.15':
+    dependencies:
+      whatwg-url: 5.0.0
+
+  '@supabase/postgrest-js@1.18.1':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/realtime-js@2.11.2':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+      '@types/phoenix': 1.6.6
+      '@types/ws': 8.5.14
+      ws: 8.18.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@supabase/ssr@0.5.2(@supabase/supabase-js@2.48.1)':
+    dependencies:
+      '@supabase/supabase-js': 2.48.1
+      '@types/cookie': 0.6.0
+      cookie: 0.7.1
+
+  '@supabase/storage-js@2.7.1':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/supabase-js@2.48.1':
+    dependencies:
+      '@supabase/auth-js': 2.67.3
+      '@supabase/functions-js': 2.4.4
+      '@supabase/node-fetch': 2.6.15
+      '@supabase/postgrest-js': 1.18.1
+      '@supabase/realtime-js': 2.11.2
+      '@supabase/storage-js': 2.7.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@taiga-ui/addon-mobile@4.21.0(@angular/cdk@19.1.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(@ng-web-apis/common@4.11.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@taiga-ui/cdk@4.21.0(rxl33shbn7d7qu5bk5eo3qsxdm))(@taiga-ui/core@4.21.0(5m3hebptyk4p6hrfnlpcrfxani))(@taiga-ui/kit@4.21.0(3qpcjrbkygl66j5oiqou6k22ti))(@taiga-ui/polymorpheus@4.8.0(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@19.1.3(@angular/animations@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))))(rxjs@7.8.1)':
     dependencies:
       '@angular/cdk': 19.1.1(@angular/common@19.1.3(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.3(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
@@ -6618,6 +6714,8 @@ snapshots:
     dependencies:
       '@types/node': 18.19.74
 
+  '@types/cookie@0.6.0': {}
+
   '@types/cors@2.8.17':
     dependencies:
       '@types/node': 18.19.74
@@ -6676,6 +6774,8 @@ snapshots:
   '@types/node@18.19.74':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/phoenix@1.6.6': {}
 
   '@types/qs@6.9.18': {}
 
@@ -9289,6 +9389,8 @@ snapshots:
 
   toidentifier@1.0.1: {}
 
+  tr46@0.0.3: {}
+
   tree-dump@1.0.2(tslib@2.8.1):
     dependencies:
       tslib: 2.8.1
@@ -9409,6 +9511,8 @@ snapshots:
   weak-lru-cache@1.2.2:
     optional: true
 
+  webidl-conversions@3.0.1: {}
+
   webpack-dev-middleware@7.4.2(webpack@5.97.1):
     dependencies:
       colorette: 2.0.20
@@ -9507,6 +9611,11 @@ snapshots:
       websocket-extensions: 0.1.4
 
   websocket-extensions@0.1.4: {}
+
+  whatwg-url@5.0.0:
+    dependencies:
+      tr46: 0.0.3
+      webidl-conversions: 3.0.1
 
   which@1.3.1:
     dependencies:
