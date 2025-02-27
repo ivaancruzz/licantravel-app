@@ -7,11 +7,20 @@ import { ViewProductComponent } from './pages/view-product/view-product.componen
 import { UserPanelLayoutComponent } from './layouts/user-panel-layout/user-panel-layout.component';
 import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { ViewOrderComponent } from './pages/my-orders/view-order/view-order.component';
+import { RegisterComponent } from './pages/register/register.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+  },
+  {
+    path: 'ingresar',
+    component: HomeComponent,
+  },
+  {
+    path: 'registro',
+    component: RegisterComponent,
   },
   {
     path: 'explorar',

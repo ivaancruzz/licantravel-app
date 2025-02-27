@@ -16,7 +16,8 @@ import {
   TuiDrawer,
 } from '@taiga-ui/kit';
 import { UserService } from '../../../services/user.service';
-import { Session } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
+import { SupabaseService } from '../../../services/supabase.service';
 
 @Component({
   selector: 'app-nav',
@@ -37,23 +38,19 @@ export class NavComponent {
   protected readonly dialogs = inject(TuiDialogService);
   private readonly alerts = inject(TuiAlertService);
   protected readonly open = signal(false);
-  protected readonly session = signal<Session | null>(null);
-  constructor(private router: Router, private userService: UserService) {}
+  protected readonly isAuthenticated = signal<boolean>(false);
+  constructor(
+    private router: Router,
+    public userService: UserService,
+    public supabaseService: SupabaseService
+  ) {}
 
-  async ngOnInit() {
-    try {
-      const res = await this.userService.getSession();
-      console.log(res);
-      this.session.set(res);
-    } catch (e: any) {
-      this.alerts
-        .open('Algo salió mal.' + e.message, {
-          label: 'Error',
-          appearance: 'negative',
-        })
-        .subscribe();
-    }
-  }
+  // async ngOnInit() {
+  //   if (!this.supabaseService.isServer) {
+  //     this.isAuthenticated.set(this.userService._isAuthenticated.);
+  //     console.log(this.userService._isAuthenticated());
+  //   }
+  // }
 
   public onClose(): void {
     this.open.set(false);
@@ -61,6 +58,11 @@ export class NavComponent {
 
   public toExplore(): void {
     this.router.navigate(['/explorar']);
+  }
+
+  public toRegister(): void {
+    this.onClose();
+    this.router.navigate(['/registro']);
   }
 
   async login() {

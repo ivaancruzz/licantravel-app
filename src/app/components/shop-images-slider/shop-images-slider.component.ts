@@ -26,6 +26,7 @@ import {
 } from '@taiga-ui/polymorpheus';
 import { TuiSwipeEvent } from '@taiga-ui/cdk/directives/swipe';
 import { tuiClamp, TuiSwipe } from '@taiga-ui/cdk';
+import { Tables } from '../../lib/database.types';
 
 @Component({
   selector: 'app-shop-images-slider',
@@ -43,7 +44,7 @@ import { tuiClamp, TuiSwipe } from '@taiga-ui/cdk';
   styleUrl: './shop-images-slider.component.scss',
 })
 export class ShopImagesSliderComponent {
-  @Input() images: string[] = [];
+  @Input() images: Tables<'product_multimedia'>[] = [];
   @Input() slider = true;
   @Input() previewImgs = false;
   @ViewChild(EmblaCarouselDirective) emblaRef!: EmblaCarouselDirective;
@@ -58,6 +59,8 @@ export class ShopImagesSliderComponent {
   constructor() {
     afterNextRender(() => {
       this.emblaApi = this.emblaRef.emblaApi;
+
+      this.images.sort((a, b) => a.order - b.order);
     });
   }
 

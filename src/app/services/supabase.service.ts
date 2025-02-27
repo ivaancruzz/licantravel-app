@@ -26,8 +26,8 @@ import { catchError, throwError } from 'rxjs';
 })
 export class SupabaseService {
   public client!: SupabaseClient;
-  public clientBrowser!: SupabaseClient;
   public isServer = false;
+  clientBrowser!: SupabaseClient;
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -86,6 +86,11 @@ export class SupabaseService {
           },
         }
       );
+    } else {
+      this.clientBrowser = createClient(
+        environment.SUPABASE_URL,
+        environment.SUPABASE_ANON_KEY
+      );
     }
   }
 
@@ -97,16 +102,20 @@ export class SupabaseService {
 
     // Server-side: Fetch and store data
     if (this.isServer) {
-      const data = await supabaseFetchFn(this.client);
-      console.log(data);
-      if (data.error) throw data.error;
+      const { data, error } = await supabaseFetchFn(this.client);
+
+      if (error) {
+        console.error(error);
+      }
+
       this.transferState?.set(stateKey, data);
-      return data;
+
+      return { data, error };
     }
 
     if (this.transferState?.hasKey(stateKey)) {
       const data = this.transferState?.get<any>(stateKey, null as any);
-      return data;
+      return { data, error: null };
     } else {
       throw new Error(`Error al obtener: ${stateKey}`);
     }

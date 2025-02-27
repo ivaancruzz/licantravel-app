@@ -14,6 +14,7 @@ import { switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { SupabaseService } from './services/supabase.service';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,21 @@ import { SupabaseService } from './services/supabase.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  constructor(private supabaseService: SupabaseService) {
-    // console.log(context);
-    // this.supabaseService.setClient(context.supabase)
+  constructor(
+    private userService: UserService,
+    private supabaseService: SupabaseService
+  ) {}
+
+  ngOnInit() {
+    this.userService.getUser();
+
+    const { data } = this.supabaseService.clientBrowser.auth.onAuthStateChange(
+      (event, session) => {
+        if (event !== 'PASSWORD_RECOVERY') {
+          this.userService._isAuthenticated.set(!!session);
+          this.userService._session.set(session);
+        }
+      }
+    );
   }
 }

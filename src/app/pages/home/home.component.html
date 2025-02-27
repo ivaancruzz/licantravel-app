@@ -32,7 +32,7 @@
 <section class="background-gradient-short pb-5">
   <div class="container-x flex flex-col gap-5">
     <div class="grid grid-cols-2 gap-5">
-      @for(product of products; track product){
+      @for(product of products(); track product){
       <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
       }
     </div>

@@ -21,6 +21,7 @@ import { TuiBadge, TuiTile } from '@taiga-ui/kit';
 import { CategoryService } from '../../services/category.service';
 import { isPlatformServer, JsonPipe } from '@angular/common';
 import { Tables } from '../../lib/database.types';
+import { ProductList, ProductService } from '../../services/product.service';
 @Component({
   selector: 'app-home',
   imports: [
@@ -36,6 +37,17 @@ import { Tables } from '../../lib/database.types';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  products = productsFilter;
+  products = signal<ProductList[]>([]);
   isServer = false;
+
+  constructor(private productService: ProductService) {}
+
+  async ngOnInit() {
+    try {
+      const res = await this.productService.fetchProducts();
+      this.products.set(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }

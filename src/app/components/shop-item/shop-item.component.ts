@@ -20,6 +20,8 @@ import {
 import Fade from 'embla-carousel-fade';
 import { ShopImagesSliderComponent } from '../shop-images-slider/shop-images-slider.component';
 import { ProductLayoutComponent } from '../../layouts/product-layout/product-layout.component';
+import { Tables } from '../../lib/database.types';
+import { ProductList } from '../../services/product.service';
 
 @Component({
   selector: 'app-shop-item',
@@ -36,7 +38,7 @@ import { ProductLayoutComponent } from '../../layouts/product-layout/product-lay
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShopItemComponent {
-  @Input() product: any;
+  @Input() product!: ProductList;
   @Input() slider = true;
 
   protected open = false;
