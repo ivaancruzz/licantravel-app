@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { loadMercadoPago } from '@mercadopago/sdk-js';
-import { environment } from '../../environments/environment';
 
 export interface Preference {
   id: string;

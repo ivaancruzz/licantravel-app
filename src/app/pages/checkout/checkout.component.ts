@@ -10,9 +10,6 @@ import { CheckoutResumeItemComponent } from '../../components/checkout-resume-it
 import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
-import { environment } from '../../../environments/environment';
-import { loadMercadoPago } from '@mercadopago/sdk-js';
-import { on } from 'events';
 import { PayService } from '../../services/pay.service';
 import { title } from 'process';
 import { ItemCartComponent } from '../../components/item-cart/item-cart.component';
