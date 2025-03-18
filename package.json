@@ -24,7 +24,6 @@
     "@angular/ssr": "^19.1.4",
     "@casl/ability": "^6.7.3",
     "@casl/angular": "^9.0.3",
-    "@mercadopago/sdk-js": "^0.0.3",
     "@ng-web-apis/universal": "^4.11.1",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
