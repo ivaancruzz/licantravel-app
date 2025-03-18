@@ -1,9 +1,0 @@
-[build]
-command = "ng build"
-functions = "netlify/functions"
-publish = "dist/licantravel-app/browser"
-
-[[redirects]]
-  from = "/*"
-  status = 200
-  to = "/index.html"
