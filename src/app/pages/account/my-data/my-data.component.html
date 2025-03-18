@@ -1,0 +1,170 @@
+<app-user-panel-layout [breadcrumbs]="breadcrumbs">
+  @if (user?.role === Role.client) {
+    <form tuiForm="l" [formGroup]="form">
+      <tui-textfield>
+        <label tuiLabel>Correo</label>
+        <input
+          formControlName="email"
+          autocomplete="email"
+          tuiTextfield
+          type="email"
+          placeholder="jhon@ejemplo.com"
+          [disabled]="true"
+        />
+      </tui-textfield>
+      <tui-textfield>
+        <label tuiLabel>Rut / Pasaporte / Documento de identidad</label>
+        <input
+          formControlName="document"
+          mask="A*"
+          placeholder="Ej: 123456789"
+          tuiTextfield
+          [disabled]="true"
+        />
+      </tui-textfield>
+
+      <tui-textfield>
+        <label tuiLabel>Nombres</label>
+        <input
+          formControlName="first_name"
+          placeholder="Ej: Jhon"
+          tuiTextfield
+        />
+      </tui-textfield>
+
+      <tui-error
+        formControlName="first_name"
+        [error]="[] | tuiFieldError | async"
+      />
+
+      <tui-textfield>
+        <label tuiLabel>Apellidos</label>
+        <input formControlName="last_name" placeholder="Ej: Doe" tuiTextfield />
+      </tui-textfield>
+      <tui-error
+        formControlName="last_name"
+        [error]="[] | tuiFieldError | async"
+      />
+
+      <tui-input-date formControlName="birthday">
+        Fecha de nacimiento
+        <input placeholder="Fecha de nacimiento" tuiTextfieldLegacy />
+      </tui-input-date>
+      <tui-error
+        formControlName="birthday"
+        [error]="[] | tuiFieldError | async"
+      />
+
+      <tui-textfield>
+        <label tuiLabel>Celular</label>
+        <input
+          formControlName="phone"
+          mask="0*"
+          placeholder="Código de área + número"
+          tuiTextfield
+        />
+      </tui-textfield>
+      <tui-error formControlName="phone" [error]="[] | tuiFieldError | async" />
+
+      <app-country-input formControlName="nationality"></app-country-input>
+
+      <div tuiGroup [collapsed]="true" class="group">
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="gender"
+            tuiBlock
+            type="radio"
+            [value]="Gender.female"
+          />
+          Femenino
+        </label>
+        <label appearance="" tuiBlock>
+          <input
+            formControlName="gender"
+            tuiBlock
+            type="radio"
+            [value]="Gender.male"
+          />
+          Masculino </label
+        ><label appearance="" tuiBlock>
+          <input
+            formControlName="gender"
+            tuiBlock
+            type="radio"
+            [value]="Gender.other"
+          />
+          Otro
+        </label>
+      </div>
+      <footer>
+        <button
+          tuiButton
+          (click)="register()"
+          [disabled]="!form.valid"
+          iconStart="@tui.save"
+          class="w-full"
+        >
+          Guardar
+        </button>
+      </footer>
+    </form>
+  } @else {
+    <div class="flex flex-col gap-5">
+      <tui-notification appearance="info" size="m">
+        <div tuiTitle [style.padding-inline-end.rem]="2">
+          Recuerda
+          <div tuiSubtitle>
+            Si quieres cambiar tus datos, contactate con administración.
+          </div>
+        </div>
+      </tui-notification>
+      <div tuiTitle>
+        <div tuiSubtitle class="font-normal">Correo</div>
+        <span>{{ user?.email }}</span>
+      </div>
+      <div tuiTitle>
+        <div tuiSubtitle class="font-normal">Nombre para mostrar</div>
+        <span>{{ user.user_metadata!["display_name"] }}</span>
+      </div>
+      <div tuiTitle>
+        <div tuiSubtitle class="font-normal">RUT</div>
+        <span
+          >{{ (user?.user_metadata)!["document"] || "Sin registrar" }}
+        </span>
+      </div>
+      <div tuiTitle>
+        <div tuiSubtitle class="font-normal">Dirección</div>
+        <span
+          ><a
+            tuiLink
+            target="_blank"
+            [href]="user.user_metadata['google_maps_link']"
+            >{{ (user?.user_metadata)!["address"] }} -
+            {{ (user?.user_metadata)!["region"] }},
+            {{ (user?.user_metadata)!["commune"] }}
+          </a></span
+        >
+      </div>
+      <div tuiTitle>
+        <div tuiSubtitle class="font-normal">Horarios</div>
+        <ul>
+          @for (item of (user?.user_metadata)!["open_days"]; track item) {
+            @if (item.open) {
+              <li class="text-sm">
+                <span class="capitalize text-slate-500">{{
+                  getDayName(item.day)
+                }}</span>
+
+                <ul>
+                  @for (hours of item.hours; track hours) {
+                    <li class="ps-3">{{ hours.open }} - {{ hours.close }}</li>
+                  }
+                </ul>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+    </div>
+  }
+</app-user-panel-layout>

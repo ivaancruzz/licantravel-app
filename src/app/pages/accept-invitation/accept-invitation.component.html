@@ -1,0 +1,39 @@
+<section class="background-gradient py-5">
+  <div class="container-x flex flex-col gap-5">
+    <div class="flex justify-center">
+      <img
+        width="150"
+        src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/star_eyes.png"
+        alt=""
+      />
+    </div>
+    <div
+      tuiAppearance="floating"
+      tuiCardLarge
+      class="mt-[-75px]"
+      [style.minHeight.px]="300"
+    >
+      <h1 class="text-center text-2xl text-secondary font-bold">
+        ¡Bienvenido!
+      </h1>
+      <p>
+        Haz sido invitado a la plataforma. Por favor, registra una contraseña
+        para disfrutar de nuestros servicios.
+      </p>
+
+      <app-set-password
+        (onChange)="onChangePassword($event)"
+      ></app-set-password>
+
+      <button
+        tuiButton
+        iconStart="@tui.check"
+        (click)="acceptInvitation()"
+        (keyup.enter)="acceptInvitation()"
+        [disabled]="!password"
+      >
+        Terminar
+      </button>
+    </div>
+  </div>
+</section>

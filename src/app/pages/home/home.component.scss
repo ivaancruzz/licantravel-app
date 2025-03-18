@@ -28,35 +28,42 @@
   color: transparent;
 }
 
+@media only screen and (min-width: 768px) {
+}
 .card-step {
   background-color: white;
   border-radius: var(--border-radius);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .wrapper-step {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -80px;
+    font-size: 150px;
+    z-index: 0;
+    opacity: 0.5;
+    color: white;
+    background-color: var(--tui-background-accent-2);
+    border-radius: 50%;
+    padding: 30px;
+    height: 100px;
+    width: 100px;
+  }
 
   .image-wrapper {
-    min-height: 250px;
-    max-height: 250px;
-    max-height: 250px;
+    z-index: 1;
     overflow: hidden;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
     width: 100%;
     img {
       object-position: center;
-      height: 100%;
-    }
-  }
-
-  .float-wrapper {
-    position: absolute;
-    top: -105px;
-    left: 0;
-    padding: 0 calc(var(--spacing) * 3);
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: end;
-
-    img {
-      height: 120px;
+      object-fit: cover;
+      height: auto;
+      width: 100%;
     }
   }
 }

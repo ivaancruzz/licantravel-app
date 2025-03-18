@@ -1,0 +1,83 @@
+<a
+  [routerLink]="['/mis-tickets', ticket.code]"
+  [@flip]="flipped()"
+  [ngClass]="goToPage ? 'cursor-pointer' : 'flipped-container'"
+>
+  @if (!goToPage) {
+    <div class="box">
+      <div class="wrapper-border">
+        <div class="wrapper-main" style="padding-left: 10px !important">
+          <div class="flex gap-5 justify-center items-center">
+            <div class="flex flex-col items-center">
+              <img
+                (click)="show()"
+                [src]="qr"
+                alt="QR"
+                style="
+                  aspect-ratio: 1 / 1;
+                  min-width: 150px;
+                  min-height: 150px;
+                  pointer-events: visible;
+                "
+              />
+              <span class="font-bold">{{ ticket.code }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <div [ngClass]="!goToPage ? 'box' : ''">
+    <div class="wrapper-border">
+      <div class="wrapper-img">
+        <img [src]="ticket.product.product_multimedia[0].file_url" alt="" />
+      </div>
+      <div class="wrapper-img last">
+        <img [src]="ticket.product.product_multimedia[0].file_url" alt="" />
+      </div>
+      <div class="chucao-wrapper">
+        <img
+          src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/summer.png"
+          alt=""
+        />
+      </div>
+      <div class="wrapper-main">
+        <div class="flex gap-2">
+          <img src="/logo/long.svg" alt="Logo LicanTravel" width="100" />
+          <div class="flex-grow text-end">
+            <tui-badge
+              [appearance]="ticketStatusNames[ticket.status].color"
+              tuiStatus
+              size="s"
+            >
+              {{ ticketStatusNames[ticket.status].label }}
+            </tui-badge>
+          </div>
+        </div>
+
+        <h1
+          class="font-extrabold leading-6 uppercase text-primary mt-2"
+          style="font-size: 1.5rem"
+        >
+          {{ ticket.product.name }}
+          <span class="text-secondary block">ticket</span>
+        </h1>
+      </div>
+    </div>
+  </div>
+</a>
+
+<ng-template #preview let-preview>
+  <tui-preview [rotatable]="false" [zoomable]="true">
+    <img alt="Ver QR" [src]="qr" />
+    <button
+      iconStart="@tui.x"
+      tuiIconButton
+      tuiPreviewAction
+      type="button"
+      (click)="preview.complete()"
+    >
+      Close
+    </button>
+  </tui-preview>
+</ng-template>

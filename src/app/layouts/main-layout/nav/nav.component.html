@@ -1,44 +1,258 @@
 <nav>
   <span class="flex-grow">
-    <a routerLink="/">
-      <img src="/logo/short.svg" alt="Logo LicanTravel" height="50" />
+    <a href="/">
+      @if ((breakpoint$ | async) === "mobile") {
+        <img
+          src="/logo/short.svg"
+          alt="Logo LicanTravel"
+          height="50"
+          style="max-height: 50px; height: 50px"
+        />
+      } @else {
+        <img
+          src="/logo/long.svg"
+          alt="Logo LicanTravel"
+          height="50"
+          style="max-height: 50px; height: 50px"
+        />
+      }
     </a>
   </span>
 
-  <button
-    size="m"
-    iconStart="@tui.compass"
-    tuiButton
-    type="button"
-    appearance="accent"
-    (click)="toExplore()"
-  >
-    Explorar
-  </button>
-  <tui-badged-content>
-    <tui-badge-notification size="l" tuiSlot="top"> 99 </tui-badge-notification>
+  @if (
+    !supabaseService.isServer && (breakpoint$ | async) !== "mobile" && !inHome
+  ) {
+    <div class="flex-grow">
+      <app-search></app-search>
+    </div>
+  }
+
+  @if ("read" | ablePure: "Product" | async) {
+    @if ((breakpoint$ | async) === "mobile") {
+      <button
+        iconStart="@tui.compass"
+        tuiButton
+        tuiIconButton
+        type="button"
+        appearance="accent"
+        (click)="toExplore()"
+      >
+        Explorar
+      </button>
+    } @else {
+      <button
+        iconStart="@tui.compass"
+        tuiButton
+        type="button"
+        appearance="accent"
+        (click)="toExplore()"
+      >
+        Explorar
+      </button>
+    }
+  }
+  @if ("buy" | ablePure: "Cart" | async) {
+    <tui-badged-content>
+      @if (cartService.items().length > 0) {
+        <tui-badge-notification size="l" tuiSlot="top">
+          {{ cartService.items().length }}
+        </tui-badge-notification>
+      }
+      <button
+        iconStart="@tui.shopping-cart"
+        tuiIconButton
+        appearance="outline"
+        type="button"
+        (click)="openCart = true"
+      >
+        Carrito de compras
+      </button>
+    </tui-badged-content>
+  }
+
+  @if ((breakpoint$ | async) === "mobile") {
     <button
-      size="m"
-      iconStart="@tui.shopping-cart"
+      iconStart="@tui.menu"
       tuiIconButton
-      appearance="flat"
+      appearance="outline"
+      type="button"
+      (click)="open.set(true)"
+    >
+      Menú
+    </button>
+  } @else {
+    <button
+      [tuiHint]="howToBuyTooltip"
+      [tuiHintShowDelay]="0"
+      [tuiHintHideDelay]="200"
+      tuiHintDirection="bottom"
+      iconStart="@tui.user"
+      appearance="outline"
+      tuiIconButton
       type="button"
     >
-      Carrito de compras
+      Mi cuenta
+
+      <!--Dekstop-->
+      <ng-template #howToBuyTooltip>
+        @if (!userService._isAuthenticated()) {
+          <div class="flex flex-col gap-2 text-dark">
+            <h1 class="font-semibold text-lg">¡Bienvenido!</h1>
+            <p>Parece que aún no iniciaste sesión</p>
+            <button
+              iconStart="@tui.log-in"
+              size="xl"
+              appearance="primary"
+              tuiButton
+              type="button"
+              class="w-100"
+              (click)="toLogin()"
+            >
+              Ingresar
+            </button>
+            <button
+              iconStart="@tui.user-plus"
+              size="xl"
+              appearance="outline"
+              tuiButton
+              type="button"
+              class="w-100"
+              (click)="toRegister()"
+            >
+              Crear cuenta
+            </button>
+          </div>
+        } @else {
+          <div class="flex flex-col gap-5 text-end">
+            <h1 class="text-slate-500">
+              Hola,
+              @if (userService._session()?.user?.role === Role.provider) {
+                {{ displayName }}
+              } @else {
+                {{ userName }}
+              }
+            </h1>
+            @if ("scan" | ablePure: "Ticket" | async) {
+              <a
+                class="nav-item"
+                iconStart="@tui.scan"
+                [style.--tui-icon-size.rem]="1.2"
+                [style.color]="'var(--tui-text-primary)'"
+                [style.font-size.rem]="1.2"
+                tuiLink
+                role="button"
+                routerLink="/escanear"
+                (click)="onClose()"
+              >
+                Escanear
+              </a>
+            }
+            @if ("administrate" | ablePure: "App" | async) {
+              <a
+                class="nav-item"
+                iconStart="@tui.shield"
+                [style.--tui-icon-size.rem]="1.2"
+                [style.color]="'var(--tui-text-primary)'"
+                [style.font-size.rem]="1.2"
+                tuiLink
+                role="button"
+                [href]="panelUrl"
+                _target="_blank"
+                (click)="onClose()"
+              >
+                Panel de control
+              </a>
+            }
+            @if ("read" | ablePure: "Sale" | async) {
+              <a
+                class="nav-item"
+                iconStart="@tui.shopping-bag"
+                [style.--tui-icon-size.rem]="1.2"
+                [style.color]="'var(--tui-text-primary)'"
+                [style.font-size.rem]="1.2"
+                tuiLink
+                role="button"
+                routerLink="/mis-compras"
+                (click)="onClose()"
+              >
+                Mis compras
+              </a>
+            }
+            @if ("read" | ablePure: "Ticket" | async) {
+              <a
+                class="nav-item"
+                iconStart="@tui.ticket"
+                [style.--tui-icon-size.rem]="1.2"
+                [style.color]="'var(--tui-text-primary)'"
+                [style.font-size.rem]="1.2"
+                tuiLink
+                role="button"
+                routerLink="/mis-tickets"
+                (click)="onClose()"
+              >
+                Mis tickets
+              </a>
+            }
+            @if ("adjust" | ablePure: "Account" | async) {
+              <tui-accordion class="accordion">
+                <button
+                  class="nav-item"
+                  iconStart="@tui.settings-2"
+                  [style.--tui-icon-size.rem]="1.2"
+                  [style.color]="'var(--tui-text-primary)'"
+                  [style.font-size.rem]="1.2"
+                  tuiAccordion
+                  tuiCell
+                >
+                  <span class="font-normal">Ajustes</span>
+                </button>
+                <tui-expand>
+                  <div class="flex flex-col">
+                    <a
+                      routerLink="ajustes/mis-datos"
+                      (click)="onClose()"
+                      [style.color]="'var(--tui-text-primary)'"
+                      tuiLink
+                      class="nav-subitem mt-2"
+                      >Mis datos</a
+                    >
+                    <a
+                      routerLink="ajustes/cambiar-clave"
+                      (click)="onClose()"
+                      [style.color]="'var(--tui-text-primary)'"
+                      class="nav-subitem"
+                      >Cambiar contraseña</a
+                    >
+                  </div>
+                </tui-expand>
+              </tui-accordion>
+            }
+            <a
+              class="nav-item"
+              iconStart="@tui.log-out"
+              [style.--tui-icon-size.rem]="1.2"
+              [style.color]="'var(--tui-text-primary)'"
+              [style.font-size.rem]="1.2"
+              tuiLink
+              (click)="signOut()"
+              role="button"
+            >
+              Salir
+            </a>
+          </div>
+        }
+      </ng-template>
     </button>
-  </tui-badged-content>
-  <button
-    iconStart="@tui.menu"
-    size="m"
-    tuiIconButton
-    appearance="flat"
-    type="button"
-    (click)="open.set(true)"
-  >
-    Menú
-  </button>
+  }
+
+  @if ((breakpoint$ | async) === "mobile" && !inHome) {
+    <div class="basis-full">
+      <app-search></app-search>
+    </div>
+  }
 </nav>
 
+<!--Mobile-->
 <tui-drawer
   *tuiPopup="open()"
   direction="right"
@@ -48,81 +262,188 @@
 >
   <div class="flex flex-col gap-10">
     <img src="/logo/long.svg" alt="" class="w-100" />
-    @if(!userService._isAuthenticated()){
+    @if (!userService._isAuthenticated()) {
+      <button
+        iconStart="@tui.log-in"
+        size="xl"
+        appearance="primary"
+        tuiButton
+        type="button"
+        class="w-100"
+        (click)="toLogin()"
+      >
+        Ingresar
+      </button>
+      <button
+        iconStart="@tui.user-plus"
+        size="xl"
+        appearance="outline"
+        tuiButton
+        type="button"
+        class="w-100"
+        (click)="toRegister()"
+      >
+        Crear cuenta
+      </button>
+    } @else {
+      <div class="flex flex-col text-end gap-5">
+        <span class="text-slate-500"
+          >Hola,
+          @if (userService._session()?.user?.role === Role.provider) {
+            {{ displayName }}
+          } @else {
+            {{ userName }}
+          }
+        </span>
 
-    <button
-      iconStart="@tui.log-in"
-      size="xl"
-      appearance="primary"
-      tuiButton
-      type="button"
-      class="w-100"
-      (click)="login()"
-    >
-      Ingresar
-    </button>
-    <button
-      iconStart="@tui.user-plus"
-      size="xl"
-      appearance="outline"
-      tuiButton
-      type="button"
-      class="w-100"
-      (click)="toRegister()"
-    >
-      Crear cuenta
-    </button>
-    } @else{
-    <div class="flex flex-col text-end gap-5">
-      <span class="text-slate-500">Cuenta</span>
-      <a
-        class="nav-item"
-        iconStart="@tui.shopping-bag"
-        [style.--tui-icon-size.rem]="1.2"
-        [style.color]="'var(--tui-text-primary)'"
-        [style.font-size.rem]="1.2"
-        tuiLink
-        role="button"
-      >
-        Mis compras
-      </a>
-      <a
-        class="nav-item"
-        iconStart="@tui.ticket"
-        [style.--tui-icon-size.rem]="1.2"
-        [style.color]="'var(--tui-text-primary)'"
-        [style.font-size.rem]="1.2"
-        tuiLink
-        role="button"
-      >
-        Mis tickets
-      </a>
-      <a
-        class="nav-item"
-        iconStart="@tui.settings-2"
-        iconEnd="@tui.chevron-down"
-        [style.--tui-icon-size.rem]="1.2"
-        [style.color]="'var(--tui-text-primary)'"
-        [style.font-size.rem]="1.2"
-        tuiLink
-        role="button"
-      >
-        Ajustes
-      </a>
-      <a
-        class="nav-item"
-        iconStart="@tui.log-out"
-        [style.--tui-icon-size.rem]="1.2"
-        [style.color]="'var(--tui-text-primary)'"
-        [style.font-size.rem]="1.2"
-        tuiLink
-        (click)="signOut()"
-        role="button"
-      >
-        Salir
-      </a>
-    </div>
+        @if ("scan" | ablePure: "Ticket" | async) {
+          <a
+            class="nav-item"
+            iconStart="@tui.scan"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            tuiLink
+            role="button"
+            routerLink="/escanear"
+            (click)="onClose()"
+          >
+            Escanear
+          </a>
+        }
+        @if ("administrate" | ablePure: "App" | async) {
+          <a
+            class="nav-item"
+            iconStart="@tui.shield"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            tuiLink
+            role="button"
+            routerLink="/mis-compras"
+            (click)="onClose()"
+          >
+            Panel de control
+          </a>
+        }
+        @if ("read" | ablePure: "Sale" | async) {
+          <a
+            class="nav-item"
+            iconStart="@tui.shopping-bag"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            tuiLink
+            role="button"
+            routerLink="/mis-compras"
+            (click)="onClose()"
+          >
+            Mis compras
+          </a>
+        }
+        @if ("read" | ablePure: "Ticket" | async) {
+          <a
+            class="nav-item"
+            iconStart="@tui.ticket"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            tuiLink
+            role="button"
+            routerLink="/mis-tickets"
+            (click)="onClose()"
+          >
+            Mis tickets
+          </a>
+        }
+        @if ("adjust" | ablePure: "Account" | async) {
+          <tui-accordion class="accordion">
+            <button
+              class="nav-item"
+              iconStart="@tui.settings-2"
+              iconEnd="@tui.chevron-down"
+              [style.--tui-icon-size.rem]="1.2"
+              [style.color]="'var(--tui-text-primary)'"
+              [style.font-size.rem]="1.2"
+              tuiAccordion
+              tuiCell
+            >
+              <span class="font-normal">Ajustes</span>
+            </button>
+            <tui-expand>
+              <div class="flex flex-col">
+                <a
+                  routerLink="/ajustes/mis-datos"
+                  (click)="onClose()"
+                  tuiLink
+                  [style.color]="'var(--tui-text-primary)'"
+                  class="nav-subitem"
+                  >Mis datos</a
+                >
+                <a
+                  routerLink="/ajustes/cambiar-clave"
+                  (click)="onClose()"
+                  tuiLink
+                  [style.color]="'var(--tui-text-primary)'"
+                  class="nav-subitem"
+                  >Cambiar contraseña</a
+                >
+              </div>
+            </tui-expand>
+          </tui-accordion>
+        }
+        <a
+          class="nav-item"
+          iconStart="@tui.log-out"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          (click)="signOut()"
+          role="button"
+        >
+          Salir
+        </a>
+      </div>
     }
   </div>
 </tui-drawer>
-<ng-content></ng-content>
+
+<!--Cart-->
+<ng-template
+  let-observer
+  [tuiResponsiveDialogOptions]="options"
+  [(tuiResponsiveDialog)]="openCart"
+>
+  <div class="flex flex-col gap-3">
+    @if (cartService.items().length) {
+      @for (product of cartService.items(); track i; let i = $index) {
+        <app-item-cart [item]="product"></app-item-cart>
+      }
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="positive"
+        class="w-full"
+        (click)="toCheckout()"
+        iconStart="@tui.dollar-sign"
+      >
+        Pagar {{ cartService.countItems() | currency: "CLP" }}
+      </button>
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="secondary"
+        class="w-full"
+        (click)="observer.complete()"
+        iconStart="@tui.shopping-cart"
+      >
+        Seguir comprando
+      </button>
+    } @else {
+      <app-not-found-items></app-not-found-items>
+    }
+  </div>
+</ng-template>

@@ -77,13 +77,11 @@ export class ShopImagesSliderComponent {
     }
   }
 
-  protected show(img: number): void {
+  protected show(index: number): void {
     if (!this.previewImgs) return;
 
-    this.currentImg = img;
-    this.previewDialogService
-      .open(this.preview || '', { data: img })
-      .subscribe();
+    this.currentImg = index;
+    this.previewDialogService.open(this.preview || '').subscribe();
   }
 
   protected onSwipe(swipe: TuiSwipeEvent): void {

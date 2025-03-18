@@ -1,24 +1,34 @@
 <div class="embla" emblaCarousel [options]="options">
   <div class="embla__container">
-    @for(category of categories(); track category){ @if(category.is_visible){
-
-    <div class="embla__slide">
-      <a [routerLink]="">
-        <button
-          tuiCardLarge
-          tuiSurface="floating"
-          type="button"
-          class="grid grid-cols-1 items-center h-full"
-          style="border-radius: var(--border-radius); gap: 5px"
-          [style.width.px]="120"
+    @for (category of categories; track category) {
+      @if (currentCategory !== category.slug) {
+        <a
+          role="button"
+          class="embla__slide"
+          (click)="goToCategory(category.slug)"
         >
-          <div class="w-full flex justify-center">
-            <img [src]="category.icon" alt="" width="50" />
-          </div>
-          <span>{{ category.name }}</span>
-        </button>
-      </a>
-    </div>
-    } }
+          <button
+            tuiCardLarge
+            tuiSurface="floating"
+            type="button"
+            class="grid grid-cols-1 items-center h-full relative"
+            style="border-radius: var(--border-radius); gap: 5px"
+            [style.width.px]="120"
+          >
+            @if (!category.is_visible) {
+              <span class="absolute top-0 right-0 p-2">
+                <tui-icon
+                  icon="@tui.lock-keyhole"
+                  [style.color]="'var(--tui-background-negative)'"
+              /></span>
+            }
+            <div class="w-full flex justify-center">
+              <img [src]="category.icon" alt="" width="50" />
+            </div>
+            <span>{{ category.name }}</span>
+          </button>
+        </a>
+      }
+    }
   </div>
 </div>

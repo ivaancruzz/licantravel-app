@@ -1,52 +1,76 @@
-<div
-  class="h-[300px] overflow-hidden"
-  style="border-radius: var(--border-radius)"
->
-  <app-shop-images-slider
-    [images]="product.img"
-    [previewImgs]="true"
-  ></app-shop-images-slider>
-</div>
-<div class="mt-5 flex flex-col gap-5">
-  <h2 tuiTitle="xs">
-    <div class="text-secondary font-bold text-4xl">{{ product.name }}</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+  <div class="md:col-span-2 bg-slate-100">
     <div
-      tuiSubtitle
-      class="font-bold text-3xl"
-      [style.color]="'var(--tui-text-primary)'"
+      class="h-[300px] md:h-[500px] overflow-hidden flex justify-center items-center sticky top-0"
+      style="border-radius: var(--border-radius)"
     >
-      {{ product.price | currency : "CLP" }}
-      @if(product.priceOff) {<del
-        >${{ product.priceOff | currency : "CLP" }}</del
-      >}
+      <app-shop-images-slider
+        [images]="product.product_multimedia"
+        [previewImgs]="true"
+      ></app-shop-images-slider>
     </div>
-    <div tuiSubtitle class="text-slate-500">
-      <tui-icon
-        icon="@tui.map-pin"
-        [style.width.px]="15"
-        [style.height.px]="15"
-      />
-      {{ product.ubication }}
-    </div>
-  </h2>
+  </div>
+  <div class="mt-5 flex flex-col gap-5">
+    <h2 tuiTitle="xs">
+      <div class="text-secondary font-bold text-4xl">{{ product.name }}</div>
+      <div
+        tuiSubtitle
+        class="font-bold text-3xl"
+        [style.color]="'var(--tui-text-primary)'"
+      >
+        @if (product.price_off) {
+          <div class="flex gap-2 items-center">
+            <span [style.color]="'var(--tui-text-positive)'">{{
+              product.price_off | currency: "CLP"
+            }}</span>
+            <span class="line-through text-sm">{{
+              product.price | currency: "CLP"
+            }}</span>
+          </div>
+        } @else {
+          {{ product.price | currency: "CLP" }}
+        }
+      </div>
+      <div tuiSubtitle class="text-slate-500">
+        <tui-icon
+          icon="@tui.map-pin"
+          [style.width.px]="15"
+          [style.height.px]="15"
+        />
+        {{ product.provider?.commune }}
+      </div>
+    </h2>
 
-  <button
-    iconStart="@tui.shopping-cart"
-    size="l"
-    tuiButton
-    type="button"
-    class="w-full"
-  >
-    Añadir al carrito
-  </button>
-
-  <p [ngClass]="{ 'line-clamp-3': dialog }">
-    {{ product.description }}
-  </p>
-
-  @if(dialog){
-  <button size="s" tuiButton appearance="outline" type="button" class="w-full">
-    Ver más
-  </button>
-  }
+    <button
+      [iconStart]="inCart() ? '@tui.check' : '@tui.shopping-cart'"
+      size="l"
+      tuiButton
+      type="button"
+      [appearance]="inCart() ? 'positive' : 'primary'"
+      [disabled]="inCart()"
+      class="w-full"
+      (click)="addToCart()"
+    >
+      @if (inCart()) {
+        Añadido
+      } @else {
+        Añadir al carrito
+      }
+    </button>
+    @if (inCart()) {
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="secondary-destructive"
+        class="w-full"
+        (click)="removeFromCart()"
+      >
+        Quitar del carrito
+      </button>
+    }
+    <p>
+      {{ product.description }}
+    </p>
+  </div>
 </div>

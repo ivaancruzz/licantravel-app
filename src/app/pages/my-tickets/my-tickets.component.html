@@ -1,0 +1,65 @@
+<app-user-panel-layout [breadcrumbs]="breadcrumbs">
+  <div class="flex flex-col gap-5">
+    <!-- <tui-textfield iconStart="@tui.search">
+        <label tuiLabel>Buscar</label>
+        <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
+      </tui-textfield> -->
+
+    <div class="w-full flex overflow-x-auto pb-2">
+      <form tuiGroup class="group" [formGroup]="formFilter">
+        @for (filter of filters; track filter) {
+          <label appearance="" tuiBlock>
+            <input
+              formControlName="filter"
+              tuiBlock
+              type="radio"
+              [value]="filter.value"
+              (input)="handleFilter(filter.value)"
+            />
+            {{ filter.label }}
+          </label>
+        }
+      </form>
+    </div>
+
+    @defer (when !loading()) {
+      @if (filter !== ticketState.active) {
+        @if (!tickets().length) {
+          <app-not-found-items></app-not-found-items>
+        } @else {
+          @for (ticket of tickets(); track ticket) {
+            <app-ticket [ticket]="ticket"></app-ticket>
+          }
+
+          <tui-pagination
+            [index]="currentPage"
+            [length]="pages"
+            (indexChange)="goToPage($event)"
+          />
+        }
+      } @else {
+        @if (!activeTickets().length) {
+          <app-not-found-items></app-not-found-items>
+        } @else {
+          @for (item of activeTickets(); track item) {
+            <div class="flex flex-col gap-1">
+              <h1 class="text-lg">
+                <tui-badge>
+                  {{ item.tickets.length }}
+                  {{ item.tickets.length > 1 ? "Tickets" : "Ticket" }}
+                </tui-badge>
+                <span class="ms-2 font-bold">{{ item.productName }}</span>
+              </h1>
+
+              <app-ticket-slider [tickets]="item.tickets"></app-ticket-slider>
+            </div>
+          }
+        }
+      }
+    } @placeholder {
+      <div class="flex justify-center items-center h-full">
+        <tui-loader></tui-loader>
+      </div>
+    }
+  </div>
+</app-user-panel-layout>

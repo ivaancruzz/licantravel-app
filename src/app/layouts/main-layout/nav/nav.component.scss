@@ -1,8 +1,18 @@
+@media only screen and (min-width: 768px) {
+  .nav-subitem {
+    padding: 10px !important;
+    border-right: 0 !important;
+  }
+}
+::ng-deep tui-hint {
+  background: var(--tui-background-elevation-1) !important;
+}
 nav {
   background-color: white;
   padding: calc(var(--spacing) * 5);
   border-bottom: 1px solid var(--tui-border-normal);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
 }
@@ -13,7 +23,45 @@ nav {
   inline-size: 20rem;
 }
 
+.nav-item {
+  text-wrap: nowrap;
+  height: fit-content;
+}
+
 .nav-item:not(:last-child) {
   padding-bottom: 20px;
   border-bottom: 1px solid var(--tui-border-normal);
+}
+
+.nav-subitem {
+  padding: 20px 0;
+  border-right: 1px solid var(--tui-border-normal);
+  padding-right: 20px;
+}
+
+.accordion {
+  border-radius: 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--tui-border-normal);
+  [tuiAccordion] {
+    background: transparent !important;
+    mask: none;
+  }
+
+  tui-expand,
+  [tuiCell] {
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: none;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  .nav-item {
+    border-bottom: 0 !important;
+  }
+
+  .nav-item::after {
+    margin-inline-start: 0 !important;
+  }
 }

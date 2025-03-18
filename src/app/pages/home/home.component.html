@@ -2,38 +2,51 @@
   <div class="container-x">
     <div class="search-wrapper">
       <img src="/chucao/emoji_1.svg" width="100" alt="Imágen de Chucao feliz" />
-      <article class="card w-full" style="">
-        <p class="text-center">Descubre tu siguiente aventura en</p>
-        <h1 class="text-5xl font-bold lexend-font colorful-text text-center">
+      <article class="card w-full">
+        <p class="text-center text-secondary md:text-2xl md:font-semibold">
+          Descubre tu siguiente aventura en
+        </p>
+        <h1
+          class="text-5xl md:text-7xl font-bold lexend-font colorful-text text-center"
+        >
           Lican Ray
         </h1>
 
-        <tui-textfield iconStart="@tui.search">
-          <label tuiLabel>Buscar</label>
-          <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
-        </tui-textfield>
+        @if (isBrowserOnly) {
+          <app-search></app-search>
+        }
       </article>
-      <div class="w-full">
-        <app-category-slider ngSkipHydration></app-category-slider>
-      </div>
+      <!-- <div class="w-full flex justify-center gap-5">
+        <app-category-slider
+          ngSkipHydration
+          [categories]="categories()"
+        ></app-category-slider>
+      </div> -->
     </div>
   </div>
 </section>
 
 <!--Carrousel-->
-<section class="container-x py-5">
-  <h2 class="font-semibold mb-2">Lo que tenemos para ti</h2>
-  <div class="overflow-hidden" style="border-radius: var(--border-radius)">
-    <app-featured-products></app-featured-products>
-  </div>
-</section>
+<div class="relative">
+  <section class="container-x pt-5">
+    <h2 class="font-semibold mb-2 md:text-lg">Lo que tenemos para ti</h2>
+    <div class="overflow-hidden" style="border-radius: var(--border-radius)">
+      <app-featured-products></app-featured-products>
+    </div>
+  </section>
+  <img
+    src="/chucao/señal.png"
+    alt=""
+    class="hidden md:block absolute right-[150px] bottom-0 scale-x-[-1] md:w-[200px] lg:w-[300px]"
+  />
+</div>
 
 <!--Released products -->
 <section class="background-gradient-short pb-5">
   <div class="container-x flex flex-col gap-5">
-    <div class="grid grid-cols-2 gap-5">
-      @for(product of products(); track product){
-      <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      @for (product of products(); track product) {
+        <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
       }
     </div>
     <button
@@ -43,6 +56,7 @@
       type="button"
       class="w-full"
       appearance="accent"
+      routerLink="/explorar"
     >
       Explorar
     </button>
@@ -50,83 +64,95 @@
 </section>
 
 <!--Information -->
-<section class="bg-primary py-5">
+<section class="bg-primary py-[150px] relative">
+  <img
+    src="/chucao/playa.png"
+    alt=""
+    class="hidden md:block absolute left-[130px] top-[350px] scale-x-[-1] md:w-[200px] lg:w-[300px]"
+  />
+
   <div class="container-x flex flex-col gap-5">
-    <h1 class="text-2xl text-white font-semibold text-center">
+    <h1
+      class="text-5xl md:text-6xl lg:text-7xl text-white font-bold text-center pb-[300px] lexend-font"
+    >
       Descube lo fácil que es vivir una experiencia inolvidable
     </h1>
-    <!--Step 1-->
-    <div class="card-step">
-      <div class="image-wrapper">
-        <img src="/photos/10.jpg" alt="" />
-      </div>
-      <div class="p-3 relative">
-        <div class="float-wrapper">
-          <tui-badge appearance="accent" size="xl"> 1 </tui-badge>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-[100px] md:gap-5">
+      <!--Step 1-->
+      <div class="card-step">
+        <div class="image-wrapper">
+          <img src="/photos/10.jpg" alt="" />
+        </div>
+        <span class="wrapper-step lexend-font">1</span>
+        <div class="p-3 relative">
           <img
             src="/chucao/treking.png"
             alt=""
-            class="transform-[scaleX(-1)]"
+            class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
           />
+          <h2
+            tuiTitle="l"
+            class="font-bold text-2xl lexend-font my-2 text-secondary"
+          >
+            Encuentra tu próxima aventura
+          </h2>
+          <p>
+            Explora una selección única de actividades y destinos increíbles.
+            Desde paseos relajantes hasta aventuras emocionantes, encuentra el
+            plan perfecto para ti.
+          </p>
         </div>
-        <h2
-          tuiTitle="l"
-          class="font-bold text-2xl lexend-font my-2 text-secondary"
-        >
-          Encuentra tu próxima aventura
-        </h2>
-        <p>
-          Explora una selección única de actividades y destinos increíbles.
-          Desde paseos relajantes hasta aventuras emocionantes, encuentra el
-          plan perfecto para ti.
-        </p>
       </div>
-    </div>
 
-    <!--Step 2-->
-    <div class="card-step">
-      <img src="/photos/9.jpg" alt="" />
-      <div class="p-3 relative">
-        <div class="float-wrapper">
-          <tui-badge appearance="accent" size="xl"> 2 </tui-badge>
-          <img src="/chucao/surf.png" alt="" />
+      <!--Step 2-->
+      <div class="card-step">
+        <img class="image-wrapper" src="/photos/9.jpg" alt="" />
+        <span class="wrapper-step lexend-font">2</span>
+        <div class="p-3 relative">
+          <img
+            src="/chucao/surf.png"
+            alt=""
+            class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
+          />
+          <h2
+            tuiTitle="l"
+            class="font-bold text-2xl lexend-font my-2 text-secondary"
+          >
+            Reserva y relajate
+          </h2>
+          <p>
+            Compra tus tickets en segundos y deja el resto en nuestras manos.
+            Con nuestra plataforma, todo es sencillo, rápido y seguro.
+          </p>
         </div>
-        <h2
-          tuiTitle="l"
-          class="font-bold text-2xl lexend-font my-2 text-secondary"
-        >
-          Reserva y relajate
-        </h2>
-        <p>
-          Compra tus tickets en segundos y deja el resto en nuestras manos. Con
-          nuestra plataforma, todo es sencillo, rápido y seguro.
-        </p>
       </div>
-    </div>
 
-    <!--Step 3-->
-    <div class="card-step">
-      <img src="/photos/3.jpg" alt="" />
-      <div class="p-3 relative">
-        <div class="float-wrapper">
-          <tui-badge appearance="accent" size="xl"> 3 </tui-badge>
-          <img src="/chucao/playa.png" alt="" />
+      <!--Step 3-->
+      <div class="card-step">
+        <img class="image-wrapper" src="/photos/3.jpg" alt="" />
+        <span class="wrapper-step lexend-font">3</span>
+        <div class="p-3 relative">
+          <img
+            src="/chucao/playa.png"
+            alt=""
+            class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
+          />
+          <h2
+            tuiTitle="l"
+            class="font-bold text-2xl lexend-font my-2 text-secondary"
+          >
+            Disfruta sin preocupaciones
+          </h2>
+          <p>
+            Llega a la atracción, muestra tu ticket digital y comienza a vivir
+            momentos inolvidables. ¡Tú solo enfócate en disfrutar, nosotros nos
+            encargamos del resto!
+          </p>
         </div>
-        <h2
-          tuiTitle="l"
-          class="font-bold text-2xl lexend-font my-2 text-secondary"
-        >
-          Disfruta sin preocupaciones
-        </h2>
-        <p>
-          Llega a la atracción, muestra tu ticket digital y comienza a vivir
-          momentos inolvidables. ¡Tú solo enfócate en disfrutar, nosotros nos
-          encargamos del resto!
-        </p>
       </div>
     </div>
     <h1
-      class="lexend-font font-bold text-7xl text-center text-white leading-[1.2]"
+      class="lexend-font font-bold text-6xl md:text-8xl lg:text-9xl text-center text-white leading-[1.2] pt-[300px]"
     >
       Es momento de vivir algo único
     </h1>
@@ -138,8 +164,15 @@
       type="button"
       class="w-full"
       appearance="accent"
+      routerLink="/explorar"
     >
       Descubre
     </button>
   </div>
 </section>
+
+<img
+  src="/chucao/treking.png"
+  alt=""
+  class="hidden md:block absolute right-[-10px] bottom-[150px] scale-x-[-1] md:w-[300px] lg:w-[400px]"
+/>

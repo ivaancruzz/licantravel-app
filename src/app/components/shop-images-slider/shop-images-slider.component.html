@@ -5,15 +5,15 @@
   [plugins]="plugins"
 >
   <div class="embla__container h-full">
-    @for(img of images; track img;let i = $index){
-    <div class="embla__slide">
-      <img
-        class="embla__slide__img"
-        [src]="img.file_url"
-        alt="Your alt text"
-        (click)="show(i)"
-      />
-    </div>
+    @for (img of images; track img; let i = $index) {
+      <div class="embla__slide">
+        <img
+          class="embla__slide__img"
+          [src]="img.file_url"
+          alt="Your alt text"
+          (click)="show(i)"
+        />
+      </div>
     }
   </div>
 </div>
@@ -27,7 +27,7 @@
     <img
       *polymorpheusOutlet="images[currentImg] as src"
       alt="preview"
-      [src]="src"
+      [src]="src.file_url"
     />
     <button
       iconStart="@tui.x"

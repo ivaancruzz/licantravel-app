@@ -1,0 +1,37 @@
+<div class="item-card">
+  <div class="img-wrapper bg-slate-100">
+    <img
+      [src]="item.product.product_multimedia[0].file_url"
+      class="object-cover"
+      alt=""
+    />
+  </div>
+
+  <div class="p-3 flex flex-col info-wrapper gap-1">
+    <h1 class="font-lg bold line-clamp-2">{{ item.product.name }}</h1>
+    <div class="flex flex-grow items-end">
+      <h2 class="text-lg font-bold">
+        {{ item.product.price | currency : "CLP" }}
+      </h2>
+    </div>
+
+    @if(view.ticket){
+    <button
+      iconStart="@tui.ticket"
+      size="s"
+      appearance="outline"
+      tuiButton
+      type="button"
+    >
+      x{{ item.quantity }} {{ item.quantity > 1 ? "Tickets" : "Ticket" }}
+    </button>
+    } @else{
+    <div class="flex gap-1">
+      <div class="flex items-center gap-1 text-slate-400 font-normal">
+        <tui-icon icon="@tui.ticket" [style.fontSize.rem]="1" />
+        x{{ item.quantity }} {{ item.quantity > 1 ? "Tickets" : "Ticket" }}
+      </div>
+    </div>
+    }
+  </div>
+</div>

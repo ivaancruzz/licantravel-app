@@ -1,4 +1,4 @@
-import { afterNextRender, Component, ViewChild } from '@angular/core';
+import { afterNextRender, Component, Input, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiSurface } from '@taiga-ui/core';
 import { TuiCardLarge } from '@taiga-ui/layout';
@@ -8,6 +8,7 @@ import {
 } from 'embla-carousel-angular';
 import { categories, productsFilter } from '../../fakedata';
 import { ShopItemComponent } from '../shop-item/shop-item.component';
+import { ProductList } from '../../services/product.service';
 
 @Component({
   selector: 'app-recommended-products',
@@ -16,7 +17,7 @@ import { ShopItemComponent } from '../shop-item/shop-item.component';
   styleUrl: './recommended-products.component.scss',
 })
 export class RecommendedProductsComponent {
-  products = productsFilter;
+  @Input({ required: true }) products: ProductList[] = [];
 
   @ViewChild(EmblaCarouselDirective) emblaRef!: EmblaCarouselDirective;
 

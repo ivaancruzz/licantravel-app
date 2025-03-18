@@ -1,1 +1,61 @@
-<app-user-panel-layout> eaea </app-user-panel-layout>
+<app-user-panel-layout [breadcrumbs]="breadcrumbs">
+  @defer (when !loading) {
+    @if (!order()) {
+      <app-not-found-items></app-not-found-items>
+    } @else {
+      <div tuiCardLarge tuiAppearance="floating">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div tuiTitle>
+            <div tuiSubtitle class="font-normal">Estado</div>
+            <tui-badge appearance="positive" tuiStatus>
+              {{ paymentStatusNames[order()!.payment_status] }}
+            </tui-badge>
+          </div>
+
+          <div tuiTitle>
+            <div tuiSubtitle class="font-normal">Método de pago</div>
+            <span>{{ paymentMethodNames[order()!.payment_method] }}</span>
+          </div>
+
+          <div tuiTitle>
+            <div tuiSubtitle class="font-normal">Fecha del pago</div>
+            <span>{{ order()!.created_at | formatDate }}</span>
+          </div>
+
+          <div tuiTitle class="md:col-span-3">
+            <div tuiSubtitle class="font-normal">Productos</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+              @for (item of screenShotProducts(); track item) {
+                <app-checkout-resume-item
+                  [item]="productItem(item)"
+                  [view]="{ ticket: true }"
+                ></app-checkout-resume-item>
+              }
+            </div>
+          </div>
+
+          <div class="flex items-center md:col-span-3">
+            <h2 class="font-bold text-3xl flex-grow">Total</h2>
+            <div class="font-bold text-2xl">
+              {{ order()!.total | currency: "CLP" }}
+            </div>
+          </div>
+
+          <button
+            class="md:col-span-3"
+            iconStart="@tui.download"
+            appearance="primary"
+            tuiButton
+            type="button"
+          >
+            Comprobante
+          </button>
+        </div>
+      </div>
+    }
+  } @placeholder {
+    <div class="flex justify-center items-center my-auto">
+      <tui-loader />
+    </div>
+  }
+</app-user-panel-layout>

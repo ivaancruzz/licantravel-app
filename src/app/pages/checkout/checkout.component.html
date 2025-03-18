@@ -1,0 +1,51 @@
+<div class="container-x my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+  <div>
+    <tui-stepper
+      tuiConnected
+      [orientation]="
+        (breakpoint$ | async) === 'mobile' ? 'horizontal' : 'vertical'
+      "
+      [activeItemIndex]="activeIndex"
+    >
+      <button stepState="pass" tuiStep type="button">Resumen</button>
+      <button tuiStep type="button">Pagar</button>
+      <button stepState="normal" tuiStep type="button">Disfrutar</button>
+    </tui-stepper>
+  </div>
+
+  <div class="md:col-span-2 flex flex-col gap-5">
+    @if (activeIndex == 0) {
+      <h1 class="text-4xl font-bold">Resumen</h1>
+
+      @for (item of cartService.items(); track item) {
+        <app-item-cart [item]="item"></app-item-cart>
+      }
+    }
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="positive"
+        class="w-full md:order-2"
+        iconStart="@tui.dollar-sign"
+        (click)="toPay()"
+        [loading]="loading"
+      >
+        Pagar {{ cartService.countItems() | currency: "CLP" }}
+      </button>
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="secondary"
+        class="w-full md:order-1"
+        (click)="toExplore()"
+        iconStart="@tui.shopping-cart"
+      >
+        Seguir comprando
+      </button>
+    </div>
+  </div>
+</div>

@@ -16,13 +16,13 @@ export function supabaseClientServer(request: Request, response: Response) {
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
             const cookieStr = `${name}=${value}; ${serializeCookieOptions(
-              options
+              options,
             )}`;
             headers.append('Set-Cookie', cookieStr);
           });
         },
       },
-    }
+    },
   );
 
   return {

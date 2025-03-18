@@ -1,1 +1,232 @@
-<p>register works!</p>
+<section class="background-gradient py-5">
+  <div class="container-x flex flex-col gap-5">
+    <div class="flex justify-center">
+      <img
+        width="150"
+        src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/blink.png"
+        alt=""
+      />
+    </div>
+    <div tuiAppearance="floating" tuiCardLarge class="mt-[-75px]">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <h1 class="text-center text-2xl text-secondary font-bold md:col-span-3">
+          ¡Crea tu cuenta!
+        </h1>
+        <div>
+          <tui-stepper
+            tuiConnected
+            [orientation]="
+              (breakpoint$ | async) === 'mobile' ? 'horizontal' : 'vertical'
+            "
+            [(activeItemIndex)]="activeItemIndex"
+          >
+            <button
+              tuiStep
+              type="button"
+              icon="@tui.user"
+              [stepState]="
+                formFirstStep?.valid || confirmAccount ? 'pass' : 'error'
+              "
+              [disabled]="confirmAccount"
+            >
+              Perfil
+            </button>
+            <button
+              tuiStep
+              type="button"
+              [disabled]="!formFirstStep?.valid || confirmAccount"
+              [stepState]="confirmAccount ? 'pass' : 'normal'"
+            >
+              Credenciales
+            </button>
+
+            <button
+              tuiStep
+              type="button"
+              [disabled]="!formFirstStep?.valid || !formSecondStep?.valid"
+            >
+              Confirmación
+            </button>
+          </tui-stepper>
+        </div>
+        <div class="md:col-span-2">
+          @defer (when confirmAccount !== null) {
+            <!-- Profile -->
+            @if (activeItemIndex === 0) {
+              <form tuiForm="l" [formGroup]="formFirstStep">
+                <tui-textfield>
+                  <label tuiLabel>Nombres</label>
+                  <input
+                    formControlName="first_name"
+                    placeholder="Ej: Jhon"
+                    tuiTextfield
+                  />
+                </tui-textfield>
+
+                <tui-error
+                  formControlName="first_name"
+                  [error]="[] | tuiFieldError | async"
+                />
+
+                <tui-textfield>
+                  <label tuiLabel>Apellidos</label>
+                  <input
+                    formControlName="last_name"
+                    placeholder="Ej: Doe"
+                    tuiTextfield
+                  />
+                </tui-textfield>
+                <tui-error
+                  formControlName="last_name"
+                  [error]="[] | tuiFieldError | async"
+                />
+
+                <tui-input-date formControlName="birthday">
+                  Fecha de nacimiento
+                  <input placeholder="Fecha de nacimiento" tuiTextfieldLegacy />
+                </tui-input-date>
+                <tui-error
+                  formControlName="birthday"
+                  [error]="[] | tuiFieldError | async"
+                />
+                <tui-textfield>
+                  <label tuiLabel
+                    >Rut / Pasaporte / Documento de identidad</label
+                  >
+                  <input
+                    formControlName="document"
+                    mask="A*"
+                    placeholder="Ej: 123456789"
+                    tuiTextfield
+                  />
+                </tui-textfield>
+                <tui-error
+                  formControlName="document"
+                  [error]="[] | tuiFieldError | async"
+                />
+
+                <tui-textfield>
+                  <label tuiLabel>Celular</label>
+                  <input
+                    formControlName="phone"
+                    mask="0*"
+                    placeholder="Código de área + número"
+                    tuiTextfield
+                  />
+                </tui-textfield>
+                <tui-error
+                  formControlName="phone"
+                  [error]="[] | tuiFieldError | async"
+                />
+
+                <app-country-input
+                  formControlName="nationality"
+                ></app-country-input>
+
+                <div tuiGroup [collapsed]="true">
+                  <label appearance="" tuiBlock>
+                    <input
+                      formControlName="gender"
+                      tuiBlock
+                      type="radio"
+                      [value]="Gender.male"
+                    />
+                    Femenino
+                  </label>
+                  <label appearance="" tuiBlock>
+                    <input
+                      formControlName="gender"
+                      tuiBlock
+                      type="radio"
+                      [value]="Gender.female"
+                    />
+                    Masculino </label
+                  ><label appearance="" tuiBlock>
+                    <input
+                      formControlName="gender"
+                      tuiBlock
+                      type="radio"
+                      [value]="Gender.other"
+                    />
+                    Otro
+                  </label>
+                </div>
+                <footer>
+                  <button
+                    class="w-full"
+                    tuiButton
+                    (click)="activeItemIndex = 1"
+                    [disabled]="!formFirstStep.valid"
+                  >
+                    Continuar
+                  </button>
+                </footer>
+              </form>
+            }
+            <!-- Credentials -->
+            @else if (activeItemIndex === 1) {
+              <form tuiForm="l" [formGroup]="formSecondStep">
+                <tui-textfield>
+                  <label tuiLabel>Correo</label>
+                  <input
+                    formControlName="email"
+                    autocomplete="email"
+                    tuiTextfield
+                    type="email"
+                    placeholder="jhon@ejemplo.com"
+                  />
+                </tui-textfield>
+                <tui-error
+                  formControlName="email"
+                  [error]="[] | tuiFieldError | async"
+                />
+                <app-set-password
+                  (onChange)="onChangePassword($event)"
+                ></app-set-password>
+                <footer>
+                  <button
+                    class="w-full"
+                    tuiButton
+                    (click)="register()"
+                    [disabled]="!formSecondStep.valid || !formFirstStep.valid"
+                  >
+                    Registrarme
+                  </button>
+                </footer>
+              </form>
+            } @else if (activeItemIndex === 2) {
+              <div class="flex flex-col items-center justify-center gap-3">
+                <h1 class="text-5xl font-bold text-primary text-center">
+                  {{ confirmMessage }}
+                </h1>
+                @if (confirmAccount) {
+                  <button
+                    iconStart="@tui.tree-palm"
+                    size="l"
+                    tuiButton
+                    type="button"
+                    class="w-full"
+                    appearance="accent"
+                    routerLink="/explorar"
+                  >
+                    Explorar
+                  </button>
+                }
+              </div>
+            }
+          } @placeholder {
+            <div class="flex justify-center items-center my-auto">
+              <tui-loader />
+            </div>
+          }
+          @if (activeItemIndex !== 2) {
+            <p class="text-center mt-4">
+              ¿Ya tienes una cuenta?
+              <a routerLink="/ingresar" tuiLink>Ingresa</a>
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

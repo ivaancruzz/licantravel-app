@@ -1,0 +1,35 @@
+.hint {
+  width: 100%;
+  box-shadow: var(--tui-shadow-popup);
+}
+
+.image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  height: auto;
+  height: 75px;
+  min-width: 100px;
+  width: 100px;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.item {
+  height: 75px;
+}
+
+.item:not(:last-child) {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--tui-border-normal);
+}
+
+.item:hover {
+  h1 {
+    color: var(--color-secondary);
+  }
+}

@@ -1,13 +1,134 @@
-<div class="container-x my-5 flex flex-col gap-5">
-  <tui-breadcrumbs>
-    @for(item of items; track item){
-    <a *tuiItem tuiLink [routerLink]="item.routerLink">
-      {{ item.caption }}
-    </a>
-    }
-  </tui-breadcrumbs>
+<div class="flex flex-col md:flex-row h-full">
+  <div
+    class="hidden md:flex flex-col gap-10 bg-white"
+    [style.border-right]="'1px solid var(--tui-border-normal)'"
+  >
+    <div class="flex flex-col text-start sticky top-[20px]">
+      @if ("scan" | ablePure: "Ticket" | async) {
+        <a
+          class="nav-item"
+          iconStart="@tui.scan"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          role="button"
+          routerLink="/escanear"
+        >
+          Escanear
+        </a>
+      }
+      @if ("administrate" | ablePure: "App" | async) {
+        <a
+          class="nav-item"
+          iconStart="@tui.shield"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          role="button"
+          routerLink="/mis-compras"
+        >
+          Panel de control
+        </a>
+      }
+      @if ("read" | ablePure: "Sale" | async) {
+        <a
+          class="nav-item"
+          iconStart="@tui.shopping-bag"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          role="button"
+          routerLink="/mis-compras"
+        >
+          Mis compras
+        </a>
+      }
+      @if ("read" | ablePure: "Ticket" | async) {
+        <a
+          class="nav-item"
+          iconStart="@tui.ticket"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          role="button"
+          routerLink="/mis-tickets"
+        >
+          Mis tickets
+        </a>
+      }
+      @if ("adjust" | ablePure: "Account" | async) {
+        <tui-accordion class="accordion">
+          <button
+            class="nav-item"
+            iconStart="@tui.settings-2"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            tuiAccordion
+            tuiCell
+          >
+            <span class="font-normal">Ajustes</span>
+          </button>
+          <tui-expand>
+            <div class="flex flex-col">
+              <a
+                routerLink="/ajustes/mis-datos"
+                tuiLink
+                [style.color]="'var(--tui-text-primary)'"
+                class="nav-subitem"
+                >Mis datos</a
+              >
+              <a
+                routerLink="/ajustes/cambiar-clave"
+                tuiLink
+                [style.color]="'var(--tui-text-primary)'"
+                class="nav-subitem"
+                >Cambiar contraseña</a
+              >
+            </div>
+          </tui-expand>
+        </tui-accordion>
+      }
+      <a
+        class="nav-item"
+        iconStart="@tui.log-out"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        (click)="signOut()"
+        role="button"
+      >
+        Salir
+      </a>
+    </div>
+  </div>
 
-  <section>
-    <ng-content></ng-content>
-  </section>
+  <div class="container-x w-full my-5 flex flex-col gap-5">
+    <tui-breadcrumbs>
+      @for (item of breadcrumbs; track item) {
+        @if (item?.routerLink) {
+          <a
+            class="md:text-3xl md:font-semibold"
+            *tuiItem
+            [routerLink]="item.routerLink"
+          >
+            {{ item.caption }}
+          </a>
+        } @else {
+          <span class="md:text-3xl md:font-semibold text-dark" *tuiItem>{{
+            item.caption
+          }}</span>
+        }
+      }
+    </tui-breadcrumbs>
+
+    <section>
+      <ng-content></ng-content>
+    </section>
+  </div>
 </div>

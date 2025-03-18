@@ -1,0 +1,10 @@
+<section class="embla" emblaCarousel [options]="options">
+  <div class="embla__container">
+    @for(ticket of tickets;track ticket){
+    <div class="embla__slide">
+      <app-ticket [ticket]="ticket"></app-ticket>
+    </div>
+    }
+  </div>
+  <div class="embla__dots"></div>
+</section>

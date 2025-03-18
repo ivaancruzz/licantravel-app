@@ -1,36 +1,43 @@
-<div
-  tuiAppearance="floating"
+<button
+  tuiSurface="floating"
   class="shop-item"
   tuiCardMedium
-  (click)="open = !open"
+  (click)="goToProduct()"
 >
-  <app-shop-images-slider
-    ngSkipHydradation
-    [images]="product.product_multimedia"
-    [slider]="slider"
-  ></app-shop-images-slider>
-  <div class="p-3">
-    <h2 tuiTitle="xs">
-      <small tuiSubtitle>
-        <!-- {{ product.provider?.address }} · {{ product.category?.name }} -->
-      </small>
-      <div class="text-secondary">{{ product.title }}</div>
-      <p class="line-clamp-1 font-normal">{{ product.description }}</p>
-      <div tuiSubtitle class="mt-3" [style.color]="'var(--tui-text-primary)'">
-        {{ product.price | currency : "CLP" }}
-        @if(product.price_off) {<del
-          >${{ product.price_off | currency : "CLP" }}</del
-        >}
+  @if (!product.is_visible) {
+    <div
+      [style.background]="'var(--tui-text-negative)'"
+      class="w-full text-center"
+    >
+      <small class="text-white">No publicado </small>
+    </div>
+  }
+  <div class="flex-grow bg-slate-100 wrapper-img">
+    <app-shop-images-slider
+      ngSkipHydradation
+      [images]="product.product_multimedia"
+      [slider]="slider"
+    ></app-shop-images-slider>
+  </div>
+  <div class="p-3 w-full oveflow-hidden text-start">
+    <span tuiTitle="xs">
+      <div class="text-secondary line-clamp-3 leading-5">
+        {{ product.name }}
       </div>
-    </h2>
+      <div tuiSubtitle class="mt-3" [style.color]="'var(--tui-text-primary)'">
+        @if (product.price_off) {
+          <div class="flex flex-col gap-1">
+            <span [style.color]="'var(--tui-text-positive)'">{{
+              product.price_off | currency: "CLP"
+            }}</span>
+            <small class="line-through text-xs">{{
+              product.price | currency: "CLP"
+            }}</small>
+          </div>
+        } @else {
+          {{ product.price | currency: "CLP" }}
+        }
+      </div>
+    </span>
   </div>
-</div>
-
-<ng-template let-observer [(tuiResponsiveDialog)]="open">
-  <div class="container-x">
-    <app-product-layout
-      [product]="product"
-      [dialog]="observer"
-    ></app-product-layout>
-  </div>
-</ng-template>
+</button>

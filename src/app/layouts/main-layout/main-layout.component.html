@@ -1,32 +1,50 @@
-<app-nav></app-nav>
-<ng-content></ng-content>
-<footer class="bg-white" style="border-top: 1px solid var(--tui-border-normal)">
-  <div class="container-x grid grid-cols-1 gap-5 py-5">
-    <div>
-      <h6 class="font-semibold mb-2">Cuenta</h6>
-      <ul class="flex gap-3 text-slate-500 flex-wrap">
-        <li>Mis compras</li>
-        <li>Mis Tickets</li>
-        <li>Mis Datos</li>
-        <li>Recuperar cuenta</li>
-      </ul>
-    </div>
-    <div>
-      <div>
-        <h6 class="font-semibold mb-2">Acerca de LicanTravel</h6>
-        <ul class="flex gap-3 text-slate-500 flex-wrap">
-          <li>¿Como funciona?</li>
-        </ul>
-      </div>
-    </div>
-
-    <div>
-      <h6 class="font-semibold mb-2">Condiciones de uso</h6>
-      <ul class="flex gap-3 text-slate-500 flex-wrap">
-        <li>Políticas de privacidad</li>
-      </ul>
-    </div>
-
-    <span>© 2014-2025 LicanTravel. Todos los derechos reservados.</span>
+<div
+  class="relative"
+  [style.background-color]="'var(--tui-background-base-alt)'"
+>
+  <app-nav></app-nav>
+  <div>
+    <ng-content></ng-content>
   </div>
-</footer>
+  @if ("view" | ablePure: "Footer" | async) {
+    <footer
+      class="bg-white"
+      style="border-top: 1px solid var(--tui-border-normal)"
+    >
+      <div class="container-x grid grid-cols-1 md:grid-cols-3 gap-10 py-5">
+        <div>
+          <h6 class="font-semibold mb-2">Cuenta</h6>
+          <ul class="flex gap-3 text-slate-500 flex-wrap">
+            <li routerLink="/mis-compras">Mis compras</li>
+            <li routerLink="/mis-tickets">Mis Tickets</li>
+            <li routerLink="/ajustes/mis-datos">Mis Datos</li>
+            <li routerLink="/ajustes/cambiar-clave">Recuperar cuenta</li>
+          </ul>
+        </div>
+        <div>
+          <div>
+            <h6 class="font-semibold mb-2">Acerca de LicanTravel</h6>
+            <ul class="flex gap-3 text-slate-500 flex-wrap">
+              <li routerLink="/acerca-de">¿Como funciona?</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h6 class="font-semibold mb-2">Condiciones de uso</h6>
+          <ul class="flex gap-3 text-slate-500 flex-wrap">
+            <li routerLink="/terminos-y-condiciones">
+              Políticas de privacidad
+            </li>
+          </ul>
+        </div>
+        <div class="text-center w-full md:col-span-3">
+          © 2014-2025 LicanTravel. Todos los derechos reservados.
+        </div>
+        <small class="text-center w-full md:col-span-3">
+          Desarrollado por HipLi
+        </small>
+      </div>
+    </footer>
+  }
+</div>

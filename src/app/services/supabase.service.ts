@@ -21,6 +21,11 @@ import { createServerClient, parseCookieHeader } from '@supabase/ssr';
 import { HttpClient } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 
+export interface FetchParams {
+  query?: string;
+  order?: { column: string; ascending: boolean };
+  is?: { column: string; value: any };
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -33,7 +38,7 @@ export class SupabaseService {
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(REQUEST) request: Request,
     @Inject(RESPONSE_INIT) response: Response,
-    @Optional() private transferState?: TransferState
+    @Optional() private transferState?: TransferState,
   ) {
     this.isServer = isPlatformServer(this.platformId);
 
@@ -51,7 +56,7 @@ export class SupabaseService {
               const headers = new Headers(response?.headers);
               cookiesToSet.forEach(({ name, value, options }) => {
                 const cookieStr = `${name}=${value}; ${serializeCookieOptions(
-                  options
+                  options,
                 )}`;
                 headers.append('Set-Cookie', cookieStr);
               });
@@ -79,30 +84,30 @@ export class SupabaseService {
                   .subscribe(
                     (response: any) =>
                       resolve(new Response(JSON.stringify(response))),
-                    (error) => reject(error)
+                    (error) => reject(error),
                   );
               });
             },
           },
-        }
+        },
       );
     } else {
       this.clientBrowser = createClient(
         environment.SUPABASE_URL,
-        environment.SUPABASE_ANON_KEY
+        environment.SUPABASE_ANON_KEY,
       );
     }
   }
 
   async getData<T>(
     key: string,
-    supabaseFetchFn: (client: SupabaseClient) => any
-  ): Promise<{ data: T; error: any }> {
+    supabaseFetchFn: (client: SupabaseClient) => any,
+  ): Promise<{ data: T; error: any; state?: any; count?: any }> {
     const stateKey = makeStateKey<any>(key);
 
     // Server-side: Fetch and store data
     if (this.isServer) {
-      const { data, error } = await supabaseFetchFn(this.client);
+      const { data, error, state, count } = await supabaseFetchFn(this.client);
 
       if (error) {
         console.error(error);
@@ -110,14 +115,24 @@ export class SupabaseService {
 
       this.transferState?.set(stateKey, data);
 
-      return { data, error };
+      return { data, error, state, count };
     }
 
-    if (this.transferState?.hasKey(stateKey)) {
+    //Client side: Parse data from server
+    if (!this.isServer && this.transferState?.hasKey(stateKey)) {
       const data = this.transferState?.get<any>(stateKey, null as any);
       return { data, error: null };
-    } else {
-      throw new Error(`Error al obtener: ${stateKey}`);
     }
+
+    //Client side: Fetch data
+    const { data, error, state, count } = await supabaseFetchFn(
+      this.clientBrowser,
+    );
+
+    if (error) {
+      console.error(error);
+    }
+
+    return { data, error, state, count };
   }
 }

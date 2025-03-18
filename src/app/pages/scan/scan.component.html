@@ -1,0 +1,176 @@
+<section class="background-gradient py-5">
+  <div class="container-x flex flex-col gap-5">
+    <div class="flex justify-center">
+      <img width="150" src="/chucao/emoji_1.svg" alt="" />
+    </div>
+    <div
+      tuiAppearance="floating"
+      tuiCardLarge
+      class="mt-[-75px] relative"
+      [style.padding.rem]="openScan() ? '0' : '1.25'"
+    >
+      @if (validateCode) {
+        <div class="flex items-center gap-2">
+          <button
+            iconStart="@tui.move-left"
+            tuiIconButton
+            size="s"
+            type="button"
+            [style.border-radius.%]="100"
+            (click)="validateCode = false"
+          ></button>
+          <h1 class="text-2xl text-primary font-bold">Validar por código</h1>
+        </div>
+        <tui-input [(ngModel)]="code">
+          Ingrese el código del ticket
+          <input tuiTextfieldLegacy type="text" />
+        </tui-input>
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="primary"
+          class="w-full"
+          (click)="getTicket()"
+        >
+          Validar
+        </button>
+      } @else if (openScan()) {
+        <video #videoElement autoplay></video>
+        <span class="absolute top-0 left-0 p-3">
+          <button
+            iconStart="@tui.move-left"
+            tuiIconButton
+            type="button"
+            [style.border-radius.%]="100"
+            (click)="closeCamera()"
+          ></button>
+        </span>
+      } @else {
+        <div class="text-center">
+          <h1 class="text-center text-4xl text-primary font-bold">
+            QR Scanner
+          </h1>
+
+          <tui-icon icon="@tui.qr-code" [style.font-size.rem]="10" />
+        </div>
+
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="primary"
+          class="w-full"
+          (click)="openCamera()"
+        >
+          Escanear
+        </button>
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="positive"
+          class="w-full"
+          (click)="validateCode = true"
+        >
+          Validar por código
+        </button>
+      }
+    </div>
+  </div>
+</section>
+
+<ng-template
+  let-observer
+  [tuiResponsiveDialogOptions]="options"
+  [(tuiResponsiveDialog)]="ticket"
+>
+  <div class="flex flex-col gap-5">
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Estado</div>
+      <tui-notification
+        [appearance]="ticketStateNames[ticket!.status].color"
+        size="m"
+      >
+        <div tuiTitle [style.padding-inline-end.rem]="2">
+          {{ ticketStateNames[ticket!.status].label }}
+          <div tuiSubtitle>
+            @if (ticket!.status == TicketState.active) {
+              El ticket está activo y puedes usuarlo. Sólo debes acercarte a la
+              atracción y mostrar el código QR.
+            }
+          </div>
+        </div>
+      </tui-notification>
+    </div>
+
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Código</div>
+      <span>#{{ ticket!.code }}</span>
+    </div>
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Atracción</div>
+      <span>{{ ticket!.product.name }}</span>
+    </div>
+
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Lugar</div>
+      <span>{{ ticket!.product.provider.commune }} </span>
+    </div>
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Hora de uso</div>
+      <ul>
+        @for (item of providerOpenDays; track item) {
+          @if (item.open) {
+            <li class="text-sm">
+              <span class="capitalize text-slate-500">{{
+                getDayName(item.day)
+              }}</span>
+
+              <ul>
+                @for (hours of item.hours; track hours) {
+                  <li class="ps-3">- {{ hours.open }} - {{ hours.close }}</li>
+                }
+              </ul>
+            </li>
+          }
+        }
+      </ul>
+    </div>
+
+    <div tuiTitle>
+      <div tuiSubtitle class="font-normal">Cliente</div>
+      <ul>
+        <li>
+          <span class="text-sm text-slate-500">Nombre: </span
+          >{{ ticket!.client.first_name }}
+          {{ ticket!.client.last_name }}
+        </li>
+        <li>
+          <span class="text-sm text-slate-500">Documento: </span>
+          {{ ticket!.client.document }}
+        </li>
+        <li>
+          <span class="text-sm text-slate-500">Email: </span>
+          {{ ticket!.client.email }}
+        </li>
+        <li>
+          <span class="text-sm text-slate-500">Celular: </span>
+          {{ ticket!.client.phone || "Sin número de contacto" }}
+        </li>
+      </ul>
+    </div>
+    @if (ticket!.status == TicketState.active) {
+      <button
+        size="l"
+        tuiButton
+        type="button"
+        appearance="primary"
+        class="w-full"
+        (click)="validate()"
+      >
+        Validar
+      </button>
+    }
+  </div>
+</ng-template>

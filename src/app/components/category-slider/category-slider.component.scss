@@ -2,16 +2,17 @@
   margin: auto;
   --slide-height: 19rem;
   --slide-spacing: var(--gap) * 3;
-  --slide-size: 40%;
+  --slide-size: 9rem;
   --slide-spacing-sm: 1.6rem;
   --slide-size-sm: 50%;
   --slide-spacing-lg: 2rem;
-  --slide-size-lg: calc(100% / 3);
+  --slide-size-lg: calc(100% / 5);
 }
 .embla__viewport {
   overflow: hidden;
 }
 .embla__container {
+  display: flex;
   backface-visibility: hidden;
   display: flex;
   touch-action: pan-y pinch-zoom;
@@ -19,20 +20,24 @@
 .embla__slide {
   min-width: 0;
   flex: 0 0 var(--slide-size);
-  padding-left: var(--slide-spacing);
+  padding-left: var(--slide-spacing) !important;
 }
-@media (min-width: 750px) {
-  .embla__slide {
-    flex: 0 0 var(--slide-size-sm);
-    padding-left: var(--slide-spacing-sm);
+
+@media only screen and (min-width: 768px) {
+  .embla__container {
+    margin-left: 0px;
+  }
+
+  .emla__slide {
+    --slide-size: 10rem;
+  }
+
+  .embla {
+    --slide-height: 25rem !important;
+    padding-left: 0;
   }
 }
-@media (min-width: 1200px) {
-  .embla__slide {
-    flex: 0 0 var(--slide-size-lg);
-    padding-left: var(--slide-spacing-lg);
-  }
-}
+
 .embla__slide__number {
   box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
   border-radius: var(--border-radius);

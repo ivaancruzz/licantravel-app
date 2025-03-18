@@ -1,0 +1,84 @@
+<div
+  #wrapperSearch
+  outsideClick
+  (click)="openHint()"
+  (clickOutside)="hint = false"
+  (keydown)="handleKeyDown($event)"
+  (keydown.esc)="hint = false"
+  tabindex="0"
+>
+  <tui-textfield
+    iconStart="@tui.search"
+    tuiHint
+    tuiHintDirection="bottom"
+    [tuiHintManual]="hint"
+  >
+    <label tuiLabel>Buscar</label>
+    <input
+      placeholder="Cabañas, Treking, Parapente, etc"
+      tuiTextfield
+      [(ngModel)]="searchValue"
+      (input)="search()"
+    />
+    <tui-hint
+      *tuiHint
+      class="hint"
+      [style.max-width.px]="wrapperSearch.offsetWidth"
+    >
+      <div class="flex flex-col gap-4 text-dark">
+        @if (products().length) {
+          @if (recentSearchService.items().length && !searchValue) {
+            <tui-badge appearance="accent" size="s">Historial</tui-badge>
+          }
+          @for (product of products(); track product) {
+            <div
+              tabindex="0"
+              #productItem
+              class="flex gap-2 item cursor-pointer"
+              (click)="goToProduct(product)"
+              (keydown)="handleKeyDown($event)"
+              (keydown.esc)="hint = false"
+              (keydown.enter)="goToProduct(product)"
+            >
+              <div class="image-wrapper bg-slate-100">
+                <img [src]="product.product_multimedia[0].file_url" alt="" />
+              </div>
+
+              <div class="flex flex-col">
+                <h1 class="text-lg font-bold line-clamp-1">
+                  {{ product.name }}
+                </h1>
+                <small class="flex items-center gap-2 text-sm">
+                  <tui-icon
+                    icon="@tui.map-pin"
+                    [style.width.px]="15"
+                    [style.height.px]="15"
+                  />
+                  {{ product.provider.commune }}
+                </small>
+                <p class="line-clamp-1">{{ product.description }}</p>
+              </div>
+              @if (product.recent) {
+                <button
+                  tuiButton
+                  size="s"
+                  appearance="flat-destructive"
+                  (click)="removeRecent($event, product.id)"
+                  tuiIconButton
+                  type="button"
+                  iconStart="@tui.x"
+                >
+                  Remover
+                </button>
+              }
+            </div>
+          }
+        } @else {
+          <div class="flex justify-center text-slate-500">
+            No se encontraron resultados
+          </div>
+        }
+      </div>
+    </tui-hint>
+  </tui-textfield>
+</div>

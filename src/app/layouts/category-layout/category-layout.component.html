@@ -1,0 +1,116 @@
+<div class="overflow-hidden">
+  <div class="header-wrapper">
+    <div
+      [ngStyle]="{
+        'background-image': ' url(' + this.category()?.picture + ')',
+      }"
+      class="image-wrapper"
+    ></div>
+
+    <div class="title-wrapper">
+      <img [src]="category()?.icon" alt="" width="100" />
+      <h1 class="text-5xl lexend-font">{{ category()?.name }}</h1>
+    </div>
+  </div>
+
+  <div class="container-x flex gap-10 mb-5">
+    @if ((breakpoint$ | async) !== "mobile") {
+      <div class="flex flex-col gap-5">
+        <div class="flex items-center gap-2 font-semibold text-slate-500">
+          <tui-icon
+            icon="@tui.tags"
+            [style.color]="'var(--tui-background-accent-1)'"
+          />
+          Categorías
+        </div>
+
+        <ul>
+          @for (category of categories(); track category) {
+            <li>
+              <a
+                [class]="categoryIsActive(category.slug)"
+                (click)="goToCategory(category.slug)"
+                tuiLink
+                >{{ category.name }}</a
+              >
+            </li>
+          }
+        </ul>
+      </div>
+    }
+    <div class="flex flex-col gap-5 w-full">
+      <!--Filters-->
+      <div class="flex justify-end gap-5">
+        <button
+          iconStart="@tui.filter"
+          size="s"
+          tuiButton
+          type="button"
+          appearance="outline"
+          (click)="openFilter = true"
+        >
+          {{ filterSelected.label }}
+        </button>
+      </div>
+      <!--Items-->
+      @defer (when products() !== null) {
+        @if (!products()?.length) {
+          <app-not-found-items></app-not-found-items>
+        } @else {
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            @for (product of products(); track product) {
+              <app-shop-item
+                ngSkipHydration
+                [product]="product"
+              ></app-shop-item>
+            }
+          </div>
+          <tui-pagination
+            [index]="currentPage()"
+            [length]="pages()"
+            (indexChange)="goToPage($event)"
+          />
+        }
+      } @placeholder {
+        <tui-loader />
+      }
+    </div>
+  </div>
+
+  @if ((breakpoint$ | async) === "mobile") {
+    <div class="container-x overflow-hidden">
+      <h2 class="font-semibold mb-2">Explora otras categorías</h2>
+      <app-category-slider
+        [categories]="categories()"
+        ngSkipHydration
+      ></app-category-slider>
+    </div>
+  }
+</div>
+<ng-template
+  let-observer
+  [tuiResponsiveDialogOptions]="options"
+  [(tuiResponsiveDialog)]="openFilter"
+>
+  <form
+    orientation="vertical"
+    tuiGroup
+    class="group"
+    [collapsed]="true"
+    class="w-full mt-3"
+  >
+    @for (option of filterOptions; track option; let i = $index) {
+      <label tuiBlock [style.justify-content]="'space-between'">
+        {{ option.label }}
+        <input
+          tuiRadio
+          [(ngModel)]="filterSelected"
+          [ngModelOptions]="{ standalone: true }"
+          type="radio"
+          [value]="option"
+          (click)="handleFilter(option)"
+        />
+      </label>
+    }
+  </form>
+</ng-template>

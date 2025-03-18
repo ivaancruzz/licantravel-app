@@ -1,0 +1,19 @@
+.item-card {
+  display: flex;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--tui-border-normal);
+  background-color: white;
+  overflow: hidden;
+  position: relative;
+}
+.info-wrapper {
+  flex: 1;
+  border-right: 1px solid var(--tui-border-normal);
+}
+
+.img-wrapper {
+  min-width: 120px;
+  max-width: 120px;
+  height: auto;
+  display: flex;
+}

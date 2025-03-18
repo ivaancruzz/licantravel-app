@@ -1,5 +1,16 @@
-<tui-root class="h-100">
-  <app-main-layout>
-    <router-outlet />
-  </app-main-layout>
-</tui-root>
+<div class="relative h-full">
+  <div
+    class="fixed top-0 h-[100vh] w-[100vw] bg-white overflow-hidden z-[1000] flex justify-center items-center"
+    [ngClass]="loading ? 'show-loading' : 'hidden-loading'"
+  >
+    <div class="logo-animated">
+      <img src="/logo/short.svg" alt="" />
+    </div>
+  </div>
+
+  <tui-root class="h-full">
+    <app-main-layout>
+      <router-outlet />
+    </app-main-layout>
+  </tui-root>
+</div>

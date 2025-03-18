@@ -1,4 +1,9 @@
-.category-header {
+@media only screen and (min-width: 768px) {
+  .header-wrapper {
+    height: 350px !important;
+    min-height: 350px !important;
+    max-height: 350px !important;
+  }
 }
 
 .header-wrapper {
@@ -32,4 +37,8 @@
     align-items: center;
     justify-content: center;
   }
+}
+
+.is-active {
+  color: var(--tui-background-accent-2);
 }

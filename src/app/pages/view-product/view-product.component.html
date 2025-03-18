@@ -1,13 +1,26 @@
 <div class="container-x my-5 flex flex-col gap-5">
-  <app-product-layout [product]="product"></app-product-layout>
+  @if (product()) {
+    <app-product-layout [product]="produtModel"></app-product-layout>
+  } @else {
+    <app-not-found-items></app-not-found-items>
+  }
+</div>
 
-  <div>
-    <h2 class="font-semibold mb-2">Te puede interezar</h2>
-    <app-recommended-products></app-recommended-products>
-  </div>
+<div class="container-x overflow-hidden flex flex-col gap-5 w-[100vw]">
+  @if (recommendedProducts().length) {
+    <div>
+      <h2 class="font-semibold mb-2">Te puede interezar</h2>
+      <app-recommended-products
+        [products]="recommendedProducts()"
+      ></app-recommended-products>
+    </div>
+  }
 
   <div>
     <h2 class="font-semibold mb-2">Explora otras categorías</h2>
-    <app-category-slider ngSkipHydration></app-category-slider>
+    <app-category-slider
+      ngSkipHydration
+      [categories]="categories()"
+    ></app-category-slider>
   </div>
 </div>

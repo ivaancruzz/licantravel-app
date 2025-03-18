@@ -1,0 +1,59 @@
+<div class="item-card">
+  <div class="img-wrapper bg-slate-100">
+    <img [src]="item.product.product_multimedia[0].file_url" alt="" />
+  </div>
+
+  <div class="p-3 flex flex-col info-wrapper">
+    <h1 class="text-lg font-bold line-clamp-2">{{ item.product.name }}</h1>
+    <div class="flex flex-grow items-end">
+      <h2 class="text-2xl font-bold">
+        {{ item.product.price | currency : "CLP" }}
+      </h2>
+    </div>
+  </div>
+
+  <div class="flex flex-col">
+    <button
+      iconStart="@tui.plus"
+      size="m"
+      appearance="flat"
+      tuiButton
+      tuiIconButton
+      type="button"
+      [style.border-radius.px]="0"
+      (click)="add()"
+    >
+      +
+    </button>
+    <span
+      class="flex-grow quantity-wrapper text-lg flex justify-center items-center"
+    >
+      {{ item.quantity }}
+    </span>
+
+    <button
+      iconStart="@tui.minus"
+      size="m"
+      appearance="flat"
+      tuiButton
+      tuiIconButton
+      type="button"
+      [style.border-radius.px]="0"
+      (click)="decrase()"
+    >
+      -
+    </button>
+  </div>
+  <span class="absolute top-0 left-0 p-1">
+    <button
+      iconStart="@tui.trash"
+      size="s"
+      appearance="primary-destructive"
+      tuiButton
+      tuiIconButton
+      type="button"
+      (click)="remove()"
+      [style.border-radius.px]="50"
+    ></button>
+  </span>
+</div>

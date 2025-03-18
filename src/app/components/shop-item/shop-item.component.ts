@@ -11,7 +11,7 @@ import {
   TuiResponsiveDialogOptions,
 } from '@taiga-ui/addon-mobile';
 import { TuiAppearance, TuiButton, TuiIcon, TuiSurface } from '@taiga-ui/core';
-import { TuiTile } from '@taiga-ui/kit';
+import { TuiSkeleton, TuiTile } from '@taiga-ui/kit';
 import { TuiCardMedium } from '@taiga-ui/layout';
 import {
   EmblaCarouselDirective,
@@ -32,6 +32,7 @@ import { ProductList } from '../../services/product.service';
     ShopImagesSliderComponent,
     CurrencyPipe,
     TuiResponsiveDialog,
+    TuiSurface,
   ],
   templateUrl: './shop-item.component.html',
   styleUrl: './shop-item.component.scss',
@@ -41,5 +42,7 @@ export class ShopItemComponent {
   @Input() product!: ProductList;
   @Input() slider = true;
 
-  protected open = false;
+  goToProduct() {
+    location.href = `categoria/${this.product.category.slug}/${this.product.slug}`;
+  }
 }

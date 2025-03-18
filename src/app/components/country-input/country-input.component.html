@@ -1,0 +1,37 @@
+<tui-combo-box [formControl]="value" (ngModelChange)="onValueChange($event)">
+  Nacionalidad
+
+  <ng-container *tuiDataList>
+    <cdk-virtual-scroll-viewport
+      *tuiLet="
+        countriesService.countries | tuiFilterByInput: matcherString as items
+      "
+      appendOnly
+      tuiScrollable
+      class="scroll"
+      [itemSize]="48"
+      [style.height.px]="items.length * (48 + 8)"
+    >
+      <tui-data-list #list>
+        <button
+          *cdkVirtualFor="let item of items"
+          tuiOption
+          type="button"
+          [value]="item.name"
+        >
+          <div class="flex items-center gap-1">
+            <img
+              [alt]="item.name"
+              [src]="countriesService.getCodeByCountry(item.name) | tuiFlag"
+              width="30"
+              [style.border-radius.%]="50"
+            />
+            <span>
+              {{ item.name }}
+            </span>
+          </div>
+        </button>
+      </tui-data-list>
+    </cdk-virtual-scroll-viewport>
+  </ng-container>
+</tui-combo-box>

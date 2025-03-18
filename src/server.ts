@@ -15,32 +15,25 @@ import { supabaseClientServer } from './utils/supabaseServer';
 const angularAppEngine = new AngularAppEngine();
 
 export async function netlifyAppEngineHandler(
-  request: Request
+  request: Request,
 ): Promise<Response> {
   let context: any = getContext();
-
   const url = new URL(request.url);
-  const cookiesToHeader: { name: string; value: string; options: any }[] = [];
-
-  // Create Supabase SSR client for each request
-
-  // Handle API routes
-  // if (url.pathname.includes('categoria') && request.method === 'GET') {
-  //   const segments = url.pathname.split('/').filter(Boolean);
-  //   if (segments[1] !== 'aventura') {
-  //     return new Response('Not found', { status: 404 });
-  //   }
-  // }
   const response = await angularAppEngine.handle(request, context);
 
-  if (url.pathname === '/login' && request.method === 'POST') {
-    const { client, headers } = supabaseClientServer(
-      request,
-      response as Response
-    );
-    const body = await request.json();
+  const { client, headers } = supabaseClientServer(
+    request,
+    response as Response,
+  );
 
-    const { error } = await client.auth.signInWithPassword(body);
+  if (url.pathname === '/set-session' && request.method === 'POST') {
+    const body = await request.json();
+    const { access_token, refresh_token } = body;
+
+    const { error } = await client.auth.setSession({
+      access_token,
+      refresh_token,
+    });
     if (error) {
       return new Response(error.message, {
         status: error.status,
@@ -57,7 +50,7 @@ export async function netlifyAppEngineHandler(
   if (url.pathname === '/signout' && request.method === 'GET') {
     const { client, headers } = supabaseClientServer(
       request,
-      response as Response
+      response as Response,
     );
     const cookies = parseCookieHeader(request.headers.get('Cookie') || '');
 

@@ -1,5 +1,6 @@
 import {
   Component,
+  inject,
   Inject,
   makeStateKey,
   Optional,
@@ -10,7 +11,13 @@ import {
   TransferState,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TuiButton, TuiHint, TuiSurface, TuiTextfield } from '@taiga-ui/core';
+import {
+  TuiAlertService,
+  TuiButton,
+  TuiHint,
+  TuiSurface,
+  TuiTextfield,
+} from '@taiga-ui/core';
 import { TuiCardLarge, TuiCell, TuiHeader } from '@taiga-ui/layout';
 import { categories, featured_products, productsFilter } from '../../fakedata';
 import { RouterLink } from '@angular/router';
@@ -19,9 +26,10 @@ import { CategorySliderComponent } from '../../components/category-slider/catego
 import { ShopItemComponent } from '../../components/shop-item/shop-item.component';
 import { TuiBadge, TuiTile } from '@taiga-ui/kit';
 import { CategoryService } from '../../services/category.service';
-import { isPlatformServer, JsonPipe } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer, JsonPipe } from '@angular/common';
 import { Tables } from '../../lib/database.types';
 import { ProductList, ProductService } from '../../services/product.service';
+import { SearchComponent } from '../../components/search/search.component';
 @Component({
   selector: 'app-home',
   imports: [
@@ -32,22 +40,53 @@ import { ProductList, ProductService } from '../../services/product.service';
     TuiButton,
     JsonPipe,
     TuiBadge,
+    SearchComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
+  private readonly alerts = inject(TuiAlertService);
   products = signal<ProductList[]>([]);
+  categories = signal<Tables<'category'>[]>([]);
   isServer = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    @Inject(PLATFORM_ID) private platformId: string,
+  ) {}
 
   async ngOnInit() {
+    this.getCategories();
+    this.getProdcuts();
+  }
+
+  async getProdcuts() {
     try {
-      const res = await this.productService.fetchProducts();
+      const res = await this.productService.getTop10Products();
       this.products.set(res);
     } catch (e) {
       console.log(e);
     }
+  }
+
+  async getCategories() {
+    try {
+      const data = await this.categoryService.fetchCategories();
+      this.categories.set(data);
+    } catch (e: any) {
+      console.error(e);
+      this.alerts
+        .open('Error al obtener las categorías' + e.message, {
+          label: 'Error',
+          appearance: 'negative',
+        })
+        .subscribe();
+    }
+  }
+
+  get isBrowserOnly(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
 }

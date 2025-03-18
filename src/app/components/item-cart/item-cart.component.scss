@@ -1,0 +1,23 @@
+.item-card {
+  display: flex;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--tui-border-normal);
+  overflow: hidden;
+  position: relative;
+}
+.info-wrapper {
+  flex: 1;
+  border-right: 1px solid var(--tui-border-normal);
+}
+.quantity-wrapper {
+  border-top: 1px solid var(--tui-border-normal);
+  border-bottom: 1px solid var(--tui-border-normal);
+}
+.img-wrapper {
+  min-width: 120px;
+  min-height: 120px;
+  max-width: 120px;
+  max-height: 120px;
+  display: flex;
+  align-items: center;
+}
