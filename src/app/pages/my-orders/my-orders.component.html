@@ -7,67 +7,74 @@
 
     <div class="w-full flex overflow-x-auto pb-2">
       <form tuiGroup class="group" [formGroup]="formFilter">
-        @for(filter of filters;track filter){
-
-        <label appearance="" tuiBlock>
-          <input
-            formControlName="filter"
-            tuiBlock
-            type="radio"
-            [value]="filter.value"
-            (input)="handleFilter(filter.value)"
-          />
-          {{ filter.label }}
-        </label>
+        @for (filter of filters; track filter) {
+          <label appearance="" tuiBlock>
+            <input
+              formControlName="filter"
+              tuiBlock
+              type="radio"
+              [value]="filter.value"
+              (input)="handleFilter(filter.value)"
+            />
+            {{ filter.label }}
+          </label>
         }
       </form>
     </div>
 
-    @defer( when !loading() ){ @if(!orders().length){
-    <app-not-found-items></app-not-found-items>
-    }@else{ @for(order of orders();track order){
-    <a [routerLink]="['/mis-compras', order.sale_code]">
-      <button
-        tuiCardMedium
-        tuiSurface="floating"
-        type="button"
-        style="width: 100%; block-size: auto"
-        class="gap-2"
-      >
-        <div class="flex items-center justify-between w-full">
-          <h2 tuiTitle class="text-lg">#{{ order.sale_code }}</h2>
-          <tui-badge appearance="positive" tuiStatus>
-            {{ paymentStatusNames[order.payment_status] }}
-          </tui-badge>
-        </div>
+    @defer (when !loading()) {
+      @if (!orders().length) {
+        <app-not-found-items></app-not-found-items>
+      } @else {
+        @for (order of orders(); track order) {
+          <a [routerLink]="['/mis-compras', order.sale_code]">
+            <button
+              tuiCardMedium
+              tuiSurface="floating"
+              type="button"
+              style="width: 100%; block-size: auto"
+              class="gap-2"
+            >
+              <div class="flex items-center justify-between w-full">
+                <h2 tuiTitle class="text-lg">#{{ order.sale_code }}</h2>
+                <tui-badge appearance="positive" tuiStatus>
+                  {{ paymentStatusNames[order.payment_status] }}
+                </tui-badge>
+              </div>
 
-        <span tuiSubtitle class="text-sm mt-3">
-          Fecha y hora: {{ order.created_at | formatDate }}</span
-        >
+              <span tuiSubtitle class="text-sm mt-3">
+                Fecha y hora: {{ order.created_at | formatDate }}</span
+              >
 
-        <div class="flex gap-5">
-          <span class="flex gap-2 items-center">
-            <tui-icon icon="@tui.ticket" [style.height.px]="18"></tui-icon>
-            {{ countTickets(order) }}
-          </span>
-          <span class="flex gap-2 items-center">
-            <tui-icon icon="@tui.banknote" [style.height.px]="18"></tui-icon>
-            {{ order.total | currency : "CLP" }}
-          </span>
-        </div>
-      </button>
-    </a>
-    }
-    <tui-pagination
-      [index]="currentPage"
-      [length]="pages"
-      (indexChange)="goToPage($event)"
-    />
-
-    } } @placeholder{
-    <div class="flex justify-center items-center my-auto">
-      <tui-loader />
-    </div>
+              <div class="flex gap-5">
+                <span class="flex gap-2 items-center">
+                  <tui-icon
+                    icon="@tui.ticket"
+                    [style.height.px]="18"
+                  ></tui-icon>
+                  {{ countTickets(order) }}
+                </span>
+                <span class="flex gap-2 items-center">
+                  <tui-icon
+                    icon="@tui.banknote"
+                    [style.height.px]="18"
+                  ></tui-icon>
+                  {{ order.total | currency: "CLP" }}
+                </span>
+              </div>
+            </button>
+          </a>
+        }
+        <tui-pagination
+          [index]="currentPage"
+          [length]="pages"
+          (indexChange)="goToPage($event)"
+        />
+      }
+    } @placeholder {
+      <div class="flex justify-center items-center my-auto">
+        <tui-loader />
+      </div>
     }
   </div>
 </app-user-panel-layout>

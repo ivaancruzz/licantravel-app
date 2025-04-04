@@ -1,5 +1,12 @@
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { Component, forwardRef, inject, Input } from '@angular/core';
+import {
+  Component,
+  effect,
+  forwardRef,
+  inject,
+  input,
+  Input,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -41,6 +48,7 @@ import { CountriesService } from './countries.service';
   ],
 })
 export class CountryInputComponent implements ControlValueAccessor {
+  disabled = input(false);
   value: FormControl = new FormControl('');
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -58,7 +66,12 @@ export class CountryInputComponent implements ControlValueAccessor {
     );
   };
 
-  constructor(public countriesService: CountriesService) {}
+  constructor(public countriesService: CountriesService) {
+    effect(() => {
+      console.log(this.disabled());
+      this.disabled() ? this.value.disable() : this.value.enable();
+    });
+  }
 
   writeValue(value: string | null): void {
     const countryName = this.countriesService.getNameByCountryCode(value || '');

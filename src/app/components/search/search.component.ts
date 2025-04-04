@@ -61,7 +61,6 @@ export class SearchComponent {
     }
     try {
       const res = await this.productService.searchProducts(this.searchValue);
-      console.log(res);
       this.products.set(res);
     } catch (e) {
       console.log(e);
@@ -73,7 +72,7 @@ export class SearchComponent {
       ...product,
       recent: true,
     });
-    location.href = `categoria/${product.category.slug}/${product.slug}`;
+    location.href = `categoria/${product.categories.slug}/${product.slug}`;
   }
 
   removeRecent(event: Event, productId: string) {

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TuiItem } from '@taiga-ui/cdk';
 import {
   TuiAppearance,
@@ -10,10 +10,12 @@ import {
 } from '@taiga-ui/core';
 import { TuiBreadcrumbs } from '@taiga-ui/kit';
 import { TuiCell } from '@taiga-ui/layout';
-import { UserService } from '../../services/user.service';
-import { AblePurePipe } from '@casl/angular';
-import { AsyncPipe } from '@angular/common';
+import { Role, UserService } from '../../services/user.service';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { TuiAccordion } from '@taiga-ui/experimental';
+import { NAV } from '../main-layout/nav/nav';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-panel-layout',
@@ -26,10 +28,12 @@ import { TuiAccordion } from '@taiga-ui/experimental';
     TuiButton,
     TuiCell,
     RouterLink,
-    AblePurePipe,
     AsyncPipe,
     TuiAppearance,
     TuiIcon,
+    NgxPermissionsModule,
+    RouterLinkActive,
+    NgClass,
   ],
   templateUrl: './user-panel-layout.component.html',
   styleUrl: './user-panel-layout.component.scss',
@@ -41,10 +45,16 @@ export class UserPanelLayoutComponent {
     routerLinkActiveOptions?: any;
   }[] = [];
 
+  Role = Role;
+
   constructor(
     private router: Router,
     private userService: UserService,
   ) {}
+
+  isActive(url: string) {
+    return this.router.url.includes(url);
+  }
 
   public toExplore(): void {
     this.router.navigate(['/explorar'], {
@@ -62,9 +72,5 @@ export class UserPanelLayoutComponent {
 
   public toLogin(): void {
     this.router.navigate(['/ingresar']);
-  }
-
-  async signOut() {
-    await this.userService.signOut();
   }
 }

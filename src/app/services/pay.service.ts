@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { FunctionsHttpError } from '@supabase/supabase-js';
 
 export interface Preference {
   id: string;
@@ -7,9 +8,13 @@ export interface Preference {
 }
 
 export interface PreferenceItem {
-  title: string;
+  id: string;
   quantity: number;
-  unit_price: number;
+}
+export enum PaymentStatus {
+  approved = 'approved',
+  failure = 'failure',
+  pending = 'pending',
 }
 
 @Injectable({
@@ -20,11 +25,30 @@ export class PayService {
 
   async getPreference(items: PreferenceItem[]): Promise<Preference> {
     const { data, error } =
+      await this.supabaseService.clientBrowser.functions.invoke('mercadopago', {
+        body: { items },
+      });
+    if (error && error instanceof FunctionsHttpError) {
+      const errorMessage = await error.context.json();
+      throw errorMessage;
+    }
+    return data;
+  }
+
+  async getPaymentStatus(
+    paymentId: string,
+  ): Promise<{ status: PaymentStatus; saleId: string }> {
+    const { data, error } =
       await this.supabaseService.clientBrowser.functions.invoke(
-        'create-preference-mp',
-        { body: { items } },
+        `mercadopago/${paymentId}`,
+        {
+          method: 'GET',
+        },
       );
-    if (error) throw error;
+    if (error && error instanceof FunctionsHttpError) {
+      const errorMessage = await error.context.json();
+      throw errorMessage;
+    }
     return data;
   }
 }

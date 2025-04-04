@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, effect, EventEmitter, input, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -26,6 +26,7 @@ import { TuiForm } from '@taiga-ui/layout';
   styleUrl: './set-password.component.scss',
 })
 export class SetPasswordComponent {
+  disabled = input(false);
   @Output() onChange = new EventEmitter<string>();
 
   form: FormGroup;
@@ -42,6 +43,9 @@ export class SetPasswordComponent {
       password: ['', [Validators.required, Validators.minLength(8)]],
       repeatPassword: ['', [Validators.required]],
     });
+    effect(() => {
+      this.disabled() ? this.form.disable() : this.form.enable();
+    });
 
     this.form.valueChanges.subscribe(() => {
       this.validatePassword();
@@ -56,7 +60,7 @@ export class SetPasswordComponent {
     this.passwordValidations.hasLowerCase = /[a-z]/.test(password);
     this.passwordValidations.hasNumber = /[0-9]/.test(password);
     this.passwordValidations.hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(
-      password
+      password,
     );
   }
 

@@ -8,10 +8,10 @@ import { Tables } from '../lib/database.types';
 export class CategoryService {
   constructor(private supabaseService: SupabaseService) {}
 
-  async fetchCategories(): Promise<Tables<'category'>[]> {
+  async fetchCategories(): Promise<Tables<'categories'>[]> {
     const { data, error } = await this.supabaseService.getData<
-      Tables<'category'>[]
-    >('categories', (client) => client.from('category').select('*'));
+      Tables<'categories'>[]
+    >('categories', (client) => client.from('categories').select('*'));
 
     if (error) throw error;
 

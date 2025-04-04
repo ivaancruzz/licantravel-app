@@ -73,6 +73,8 @@ export class TicketComponent {
   constructor(private ticketService: TicketService) {}
 
   async ngOnInit() {
+    console.log(this.ticket.products.product_multimedia);
+    this.ticket.products.product_multimedia.sort((a, b) => a.order - b.order);
     if (this.goToPage) return;
 
     try {

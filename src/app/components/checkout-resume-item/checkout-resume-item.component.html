@@ -8,30 +8,42 @@
   </div>
 
   <div class="p-3 flex flex-col info-wrapper gap-1">
-    <h1 class="font-lg bold line-clamp-2">{{ item.product.name }}</h1>
+    <h1
+      class="font-bold line-clamp-2"
+      [ngClass]="
+        !item.product.is_visible && !item.product.is_deleted
+          ? ''
+          : ' underline text-primary cursor-pointer'
+      "
+      (click)="goTo()"
+    >
+      {{ item.product.name }}
+    </h1>
     <div class="flex flex-grow items-end">
       <h2 class="text-lg font-bold">
-        {{ item.product.price | currency : "CLP" }}
+        {{ item.product.price | currency: "CLP" }}
       </h2>
     </div>
 
-    @if(view.ticket){
-    <button
-      iconStart="@tui.ticket"
-      size="s"
-      appearance="outline"
-      tuiButton
-      type="button"
-    >
-      x{{ item.quantity }} {{ item.quantity > 1 ? "Tickets" : "Ticket" }}
-    </button>
-    } @else{
-    <div class="flex gap-1">
-      <div class="flex items-center gap-1 text-slate-400 font-normal">
-        <tui-icon icon="@tui.ticket" [style.fontSize.rem]="1" />
+    @if (view.ticket) {
+      <button
+        iconStart="@tui.ticket"
+        size="s"
+        appearance="outline"
+        tuiButton
+        type="button"
+        [routerLink]="['/mis-tickets']"
+        [queryParams]="{ sale: sale }"
+      >
         x{{ item.quantity }} {{ item.quantity > 1 ? "Tickets" : "Ticket" }}
+      </button>
+    } @else {
+      <div class="flex gap-1">
+        <div class="flex items-center gap-1 text-slate-400 font-normal">
+          <tui-icon icon="@tui.ticket" [style.fontSize.rem]="1" />
+          x{{ item.quantity }} {{ item.quantity > 1 ? "Tickets" : "Ticket" }}
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>

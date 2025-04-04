@@ -9,11 +9,13 @@
 
     <div class="title-wrapper">
       <img [src]="category()?.icon" alt="" width="100" />
-      <h1 class="text-5xl lexend-font">{{ category()?.name }}</h1>
+      <h1 class="text-5xl lexend-font w-full truncate">
+        {{ category()?.name }}
+      </h1>
     </div>
   </div>
 
-  <div class="container-x flex gap-10 mb-5">
+  <div class="container-x grid grid-cols-1 md:grid-cols-5 gap-10 mb-5">
     @if ((breakpoint$ | async) !== "mobile") {
       <div class="flex flex-col gap-5">
         <div class="flex items-center gap-2 font-semibold text-slate-500">
@@ -24,21 +26,26 @@
           Categorías
         </div>
 
-        <ul>
-          @for (category of categories(); track category) {
-            <li>
-              <a
-                [class]="categoryIsActive(category.slug)"
-                (click)="goToCategory(category.slug)"
-                tuiLink
-                >{{ category.name }}</a
-              >
-            </li>
-          }
-        </ul>
+        @if (categories()?.length) {
+          <ul>
+            @for (category of categories(); track category) {
+              <li>
+                <a
+                  [class]="categoryIsActive(category.slug)"
+                  style="overflow-wrap: anywhere"
+                  (click)="goToCategory(category.slug)"
+                  tuiLink
+                  >{{ category.name }}</a
+                >
+              </li>
+            }
+          </ul>
+        } @else {
+          <small>No hay categorías</small>
+        }
       </div>
     }
-    <div class="flex flex-col gap-5 w-full">
+    <div class="flex flex-col gap-5 w-full md:col-span-4">
       <!--Filters-->
       <div class="flex justify-end gap-5">
         <button

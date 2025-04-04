@@ -9,9 +9,8 @@ import {
   UserMetadata,
   UserResponse,
 } from '@supabase/supabase-js';
-import { HttpClient } from '@angular/common/http';
 import { rejects } from 'assert';
-import { TablesUpdate } from '../lib/database.types';
+import { Tables, TablesUpdate } from '../lib/database.types';
 
 export enum Role {
   anon = 'anon',
@@ -38,13 +37,10 @@ export interface MetadataAdmin extends UserMetadata {
 })
 export class UserService {
   transferStateKey = 'user';
-  _session = signal<AuthSession | null>(null);
+  _session = signal<User | undefined | null>(undefined);
   _isAuthenticated = signal<boolean>(false);
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private httpClient: HttpClient,
-  ) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   async signIn(email: string, password: string) {
     const { data, error } =
@@ -72,7 +68,7 @@ export class UserService {
     return data;
   }
 
-  async updateUser(body: TablesUpdate<'client'>) {
+  async updateUser(body: TablesUpdate<'clients'>) {
     const { data, error } =
       await this.supabaseService.clientBrowser.auth.updateUser({
         data: body,
@@ -91,14 +87,36 @@ export class UserService {
       throw errorMessage;
     }
 
+    this._session.set(data?.user);
+
     return data?.user;
   }
 
+  async getSession(): Promise<
+    | {
+        session: AuthSession;
+      }
+    | {
+        session: null;
+      }
+  > {
+    const { data, error } =
+      await this.supabaseService.clientBrowser.auth.getSession();
+
+    if (error) throw error;
+
+    return data;
+  }
+
   async confirmAccount(userId: string) {
-    const { data, error } = await this.supabaseService.clientBrowser
-      .from('client')
+    const table =
+      this._session()?.role === Role.client ? 'clients' : 'providers';
+
+    const { error } = await this.supabaseService.clientBrowser
+      .from(table)
       .update({ is_active: true })
-      .eq('user_id', userId);
+      .eq('user_id', this._session()?.id);
+
     if (error) throw error;
   }
 
@@ -122,7 +140,7 @@ export class UserService {
       await this.supabaseService.clientBrowser.auth.resetPasswordForEmail(
         email,
         {
-          redirectTo: `${location.origin}/cambiar-clave`,
+          redirectTo: `${location.origin}/ajustes/cambiar-clave`,
         },
       );
 
@@ -137,27 +155,37 @@ export class UserService {
       password,
     });
 
-    if (error && error instanceof FunctionsHttpError) {
-      const errorMessage = await error.context.json();
-      throw errorMessage;
-    }
+    if (error) throw error;
+  }
+
+  async getClientProfile(): Promise<Tables<'clients'> | null> {
+    const { data, error } = await this.supabaseService.clientBrowser
+      .from('clients')
+      .select('*')
+      .eq('user_id', this._session()?.id)
+      .single();
+
+    console.log(data, error);
+
+    if (error) throw error;
+
+    return data;
+  }
+
+  async updateProfile(body: TablesUpdate<'clients'>) {
+    const { error } = await this.supabaseService.clientBrowser
+      .from('clients')
+      .update(body)
+      .eq('user_id', this._session()?.id);
+
+    if (error) throw error;
   }
 
   async acceptInvitation(password: string) {
     const { data, error } =
-      await this.supabaseService.clientBrowser.functions.invoke(
-        'accept_invitation',
-        {
-          body: {
-            password,
-          },
-        },
-      );
-
-    if (error && error instanceof FunctionsHttpError) {
-      const errorMessage = await error.context.json();
-      throw errorMessage;
-    }
+      await this.supabaseService.clientBrowser.auth.updateUser({
+        password,
+      });
 
     return data;
   }

@@ -6,7 +6,7 @@ import {
   Injector,
   signal,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import {
   TuiAlertService,
   TuiBreakpointService,
@@ -28,7 +28,13 @@ import {
 import { Role, UserService } from '../../../services/user.service';
 import { Session, User } from '@supabase/supabase-js';
 import { SupabaseService } from '../../../services/supabase.service';
-import { AsyncPipe, CurrencyPipe, JsonPipe } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  JsonPipe,
+  NgClass,
+  NgTemplateOutlet,
+} from '@angular/common';
 import { Cart, CartService } from '../../../services/cart.service';
 import {
   TuiResponsiveDialog,
@@ -36,12 +42,14 @@ import {
 } from '@taiga-ui/addon-mobile';
 import { ItemCartComponent } from '../../../components/item-cart/item-cart.component';
 import { error } from 'console';
-import { AblePipe, AblePurePipe } from '@casl/angular';
 import { TuiAccordion } from '@taiga-ui/experimental';
 import { TuiCell } from '@taiga-ui/layout';
 import { NotFoundItemsComponent } from '../../../components/not-found-items/not-found-items.component';
 import { environment } from '../../../../environments/environment';
 import { SearchComponent } from '../../../components/search/search.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { NAV } from './nav';
+import { ClickOutsideDirective } from '../../../directives/outside-click.directive';
 
 @Component({
   selector: 'app-nav',
@@ -52,19 +60,23 @@ import { SearchComponent } from '../../../components/search/search.component';
     TuiDrawer,
     TuiPopup,
     RouterLink,
+    RouterLinkActive,
     TuiLink,
     TuiIcon,
     JsonPipe,
     TuiResponsiveDialog,
     ItemCartComponent,
     CurrencyPipe,
-    AblePurePipe,
     AsyncPipe,
     TuiAccordion,
     TuiCell,
     TuiHint,
     NotFoundItemsComponent,
     SearchComponent,
+    NgxPermissionsModule,
+    NgTemplateOutlet,
+    NgClass,
+    ClickOutsideDirective,
   ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss',
@@ -82,8 +94,11 @@ export class NavComponent {
   openCart = false;
   cartItems: Cart[] = [];
   Role = Role;
-  protected hintShown = false;
+  NAV = NAV;
   protected panelUrl = environment.PANEL_URL;
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  protected user: User | undefined | null = null;
+  hintShown = false;
 
   constructor(
     private router: Router,
@@ -91,11 +106,15 @@ export class NavComponent {
     public supabaseService: SupabaseService,
     public cartService: CartService,
   ) {}
-  protected toggleHint(): void {
-    this.hintShown = !this.hintShown;
+
+  ngOnInit() {
+    const user = this.userService._session();
+
+    this.user = user ? { ...user } : null;
   }
+
   public onClose(): void {
-    this.toggleHint();
+    this.hintShown = false;
     this.open.set(false);
   }
 
@@ -123,14 +142,19 @@ export class NavComponent {
   async signOut() {
     this.onClose();
     await this.userService.signOut();
+    location.href = '/';
+  }
+
+  isActive(url: string) {
+    return this.router.url.includes(url);
   }
 
   get userName() {
-    return `${this.userService._session()?.user.user_metadata['first_name']} ${this.userService._session()?.user.user_metadata['last_name']}`;
+    return `${this.userService._session()?.user_metadata['first_name']} ${this.userService._session()?.user_metadata['last_name']}`;
   }
 
   get displayName() {
-    return this.userService._session()?.user.user_metadata['display_name'];
+    return this.userService._session()?.user_metadata['display_name'];
   }
 
   get inHome() {

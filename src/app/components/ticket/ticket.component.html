@@ -30,11 +30,13 @@
   <div [ngClass]="!goToPage ? 'box' : ''">
     <div class="wrapper-border">
       <div class="wrapper-img">
-        <img [src]="ticket.product.product_multimedia[0].file_url" alt="" />
+        <img [src]="ticket.products.product_multimedia[0].file_url" alt="" />
       </div>
-      <div class="wrapper-img last">
-        <img [src]="ticket.product.product_multimedia[0].file_url" alt="" />
-      </div>
+      @if (ticket.products.product_multimedia.length > 1) {
+        <div class="wrapper-img last">
+          <img [src]="ticket.products.product_multimedia[1].file_url" alt="" />
+        </div>
+      }
       <div class="chucao-wrapper">
         <img
           src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/summer.png"
@@ -59,7 +61,7 @@
           class="font-extrabold leading-6 uppercase text-primary mt-2"
           style="font-size: 1.5rem"
         >
-          {{ ticket.product.name }}
+          <span class="line-clamp-4">{{ ticket.products.name }}</span>
           <span class="text-secondary block">ticket</span>
         </h1>
       </div>

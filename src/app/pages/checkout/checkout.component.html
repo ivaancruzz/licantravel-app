@@ -7,9 +7,33 @@
       "
       [activeItemIndex]="activeIndex"
     >
-      <button stepState="pass" tuiStep type="button">Resumen</button>
-      <button tuiStep type="button">Pagar</button>
-      <button stepState="normal" tuiStep type="button">Disfrutar</button>
+      <button stepState="pass" tuiStep type="button" [disabled]="status">
+        Resumen
+      </button>
+      <button
+        tuiStep
+        type="button"
+        [disabled]="status == PaymentStatus.approved || !status"
+        [stepState]="
+          !status
+            ? 'normal'
+            : status == PaymentStatus.approved
+              ? 'pass'
+              : status == PaymentStatus.pending
+                ? 'normal'
+                : 'error'
+        "
+      >
+        Pagar
+      </button>
+      <button
+        stepState="normal"
+        tuiStep
+        type="button"
+        [disabled]="status != PaymentStatus.approved"
+      >
+        Disfrutar
+      </button>
     </tui-stepper>
   </div>
 
@@ -20,32 +44,91 @@
       @for (item of cartService.items(); track item) {
         <app-item-cart [item]="item"></app-item-cart>
       }
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="positive"
+          class="w-full md:order-2"
+          iconStart="@tui.dollar-sign"
+          (click)="toPay()"
+          [loading]="loading"
+        >
+          Pagar {{ cartService.countItems() | currency: "CLP" }}
+        </button>
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="secondary"
+          class="w-full md:order-1"
+          (click)="toExplore()"
+          iconStart="@tui.shopping-cart"
+        >
+          Seguir comprando
+        </button>
+      </div>
     }
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      <button
-        size="l"
-        tuiButton
-        type="button"
-        appearance="positive"
-        class="w-full md:order-2"
-        iconStart="@tui.dollar-sign"
-        (click)="toPay()"
-        [loading]="loading"
-      >
-        Pagar {{ cartService.countItems() | currency: "CLP" }}
-      </button>
-      <button
-        size="l"
-        tuiButton
-        type="button"
-        appearance="secondary"
-        class="w-full md:order-1"
-        (click)="toExplore()"
-        iconStart="@tui.shopping-cart"
-      >
-        Seguir comprando
-      </button>
-    </div>
+    @if (activeIndex == 1) {
+      <div class="flex flex-col items-center gap-3">
+        <h1
+          class="text-4xl font-bold"
+          [ngClass]="
+            status == PaymentStatus.pending ? 'text-primary' : 'text-danger'
+          "
+        >
+          @if (status == PaymentStatus.pending) {
+            Pago en proceso
+          } @else {
+            Pago rechazado
+          }
+        </h1>
+        <p>
+          @if (status == PaymentStatus.pending) {
+            Estamos verificando tu pago. Por favor, espere.
+          } @else {
+            Tu pago ha sido rechazado, intenta nuevamente.
+          }
+        </p>
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="secondary"
+          class="w-full md:order-2"
+          iconStart="@tui.rotate-ccw"
+          (click)="reload()"
+        >
+          @if (status == PaymentStatus.pending) {
+            Actualizar
+          } @else {
+            Reintentar
+          }
+        </button>
+      </div>
+    }
+    @if (activeIndex == 2) {
+      <div class="flex flex-col items-center gap-3">
+        <img
+          src="{{ NGX_STORAGE_RESOURCES }}/chucao_playa.png"
+          alt=""
+          class="w-[50%]"
+        />
+        <h1 class="text-4xl font-bold text-secondary">¡Felicidades!</h1>
+        <p>Gracias por tu compra. Tus tickets se han generado correctamente.</p>
+        <button
+          size="l"
+          tuiButton
+          type="button"
+          appearance="primary"
+          class="w-full md:order-2"
+          iconStart="@tui.ticket"
+          [routerLink]="['/mis-tickets']"
+        >
+          Mis tickets
+        </button>
+      </div>
+    }
   </div>
 </div>

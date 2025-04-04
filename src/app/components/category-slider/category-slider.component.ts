@@ -16,7 +16,6 @@ import {
   EmblaCarouselDirective,
   EmblaCarouselType,
 } from 'embla-carousel-angular';
-import { categories } from '../../fakedata';
 import { TuiSurface } from '@taiga-ui/core';
 import {
   ActivatedRoute,
@@ -47,7 +46,7 @@ import {
   styleUrl: './category-slider.component.scss',
 })
 export class CategorySliderComponent {
-  @Input({ required: true }) categories: Tables<'category'>[] = [];
+  @Input({ required: true }) categories: Tables<'categories'>[] = [];
 
   @ViewChild(EmblaCarouselDirective) emblaRef!: EmblaCarouselDirective;
 

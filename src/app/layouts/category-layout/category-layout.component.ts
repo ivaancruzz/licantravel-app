@@ -38,7 +38,6 @@ import {
   TuiPagination,
   TuiRadio,
 } from '@taiga-ui/kit';
-import { categories } from '../../fakedata';
 import { ShopItemComponent } from '../../components/shop-item/shop-item.component';
 import { TuiBlockStatus } from '@taiga-ui/layout';
 import { NotFoundItemsComponent } from '../../components/not-found-items/not-found-items.component';
@@ -50,7 +49,7 @@ import {
 } from '@taiga-ui/addon-mobile';
 import { TuiScrollService } from '@taiga-ui/cdk/services';
 import { SearchComponent } from '../../components/search/search.component';
-export interface CategoryView extends TablesUpdate<'category'> {
+export interface CategoryView extends TablesUpdate<'categories'> {
   picture: string;
 }
 
@@ -104,7 +103,7 @@ export class CategoryLayoutComponent {
   pages = input.required<number>();
   currentPage = input.required<number>();
   currentFilter = input.required<FilterProductType>();
-  categories = input.required<Tables<'category'>[]>();
+  categories = input.required<Tables<'categories'>[]>();
   category = input.required<CategoryView | undefined>();
   products = input.required<any[] | null>();
 

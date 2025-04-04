@@ -1,0 +1,57 @@
+services:
+  app-local:
+    env_file:
+      - .env.local
+    build:
+      context: .
+      target: local # Usa la etapa "local"
+      args:
+        NGX_ENV: local
+        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
+        NGX_PANEL_URL: ${NGX_PANEL_URL}
+        NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
+        NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
+        NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
+        NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app/src
+      - /app/src/node_modules
+    command: ["npm", "run", "start"]
+
+  app-dev:
+    env_file:
+      - .env.development
+    build:
+      context: .
+      target: final # Usa la última etapa
+      args:
+        NGX_ENV: development
+        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
+        NGX_PANEL_URL: ${NGX_PANEL_URL}
+        NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
+        NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
+        NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
+        NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+    ports:
+      - "4000:4000"
+    command: ["node", "server/server.mjs"]
+
+  app-prod:
+    build:
+      context: .
+      target: final # Usa la última etapa
+      args:
+        NGX_ENV: production
+        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
+        NGX_PANEL_URL: ${NGX_PANEL_URL}
+        NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
+        NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
+        NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
+        NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+    env_file:
+      - .env.production
+    ports:
+      - "4000:4000"
+    command: ["node", "server/server.mjs"]

@@ -15,7 +15,11 @@ import {
   TuiLink,
   TuiTextfield,
 } from '@taiga-ui/core';
-import { TuiFieldErrorPipe, TuiPassword } from '@taiga-ui/kit';
+import {
+  TuiButtonLoading,
+  TuiFieldErrorPipe,
+  TuiPassword,
+} from '@taiga-ui/kit';
 import { UserService } from '../../services/user.service';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 import { RouterLink } from '@angular/router';
@@ -23,6 +27,9 @@ import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { AlertConfirmEmailComponent } from '../../components/alert-confirm-email/alert-confirm-email.component';
 import { of, switchMap, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { NgxTurnstileModule, NgxTurnstileFormsModule } from 'ngx-turnstile';
+import { showErrorMessage } from '../../helpers/build-error-messages';
 
 @Component({
   selector: 'app-login',
@@ -40,12 +47,19 @@ import { Router } from '@angular/router';
     RouterLink,
     TuiLink,
     TuiPassword,
+    NgxTurnstileModule,
+    NgxTurnstileFormsModule,
+    TuiButtonLoading,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   form!: FormGroup;
+  supabaseUrl = environment.SUPABASE_URL;
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  NGX_TURNSTILE_KEY = environment.NGX_TURNSTILE_KEY;
+
   private readonly alerts = inject(TuiAlertService);
   private readonly alertConfirmEmail = this.alerts
     .open<boolean>(new PolymorpheusComponent(AlertConfirmEmailComponent), {
@@ -71,14 +85,11 @@ export class LoginComponent {
               },
             );
           } catch (e: any) {
-            console.error(e);
-            return this.alerts.open(
-              'Error al enviar el correo de confirmacion' + e?.message,
-              {
-                label: 'Error',
-                appearance: 'negative',
-              },
-            );
+            showErrorMessage({
+              baseMessage: 'Error al enviar el correo de confirmación',
+              alert: this.alerts,
+              errorApi: e.message,
+            });
           }
         }
 
@@ -86,6 +97,7 @@ export class LoginComponent {
       }),
       takeUntil(inject(Router).events),
     );
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -95,17 +107,19 @@ export class LoginComponent {
   ngOnInit() {
     this.form = this.fb.group({
       email: [
-        'test@gmail.com',
+        '',
         [
           Validators.required,
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ],
       ],
-      password: ['123456', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      tokenControl: ['', [Validators.required]],
     });
   }
 
   async login() {
+    this.isLoading = true;
     try {
       await this.userService.signIn(
         this.form.value.email,
@@ -115,14 +129,23 @@ export class LoginComponent {
       await this.sleep(500);
       location.href = '/';
     } catch (e: any) {
+      let error = e?.message;
       if (e.code === 'email_not_confirmed') {
         this.alertConfirmEmail.subscribe();
         return;
+      } else if (e.code === 'validation_failed') {
+        error = 'Debe ingresar un usuario y contraseña';
+      } else if (e.code === 'invalid_credentials') {
+        error = 'Credenciales incorrectas';
       }
 
-      this.alerts
-        .open(e.message, { label: 'Error', appearance: 'negative' })
-        .subscribe();
+      showErrorMessage({
+        baseMessage: 'Error al iniciar sesión',
+        alert: this.alerts,
+        errorApi: error,
+      });
+    } finally {
+      this.isLoading = false;
     }
   }
 

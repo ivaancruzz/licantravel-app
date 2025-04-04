@@ -6,7 +6,6 @@ import {
   REQUEST,
   signal,
 } from '@angular/core';
-import { productsFilter } from '../../fakedata';
 import { ProductLayoutComponent } from '../../layouts/product-layout/product-layout.component';
 import { RecommendedProductsComponent } from '../../components/recommended-products/recommended-products.component';
 import { CategorySliderComponent } from '../../components/category-slider/category-slider.component';
@@ -17,6 +16,7 @@ import { TuiAlertService } from '@taiga-ui/core';
 import { NotFoundItemsComponent } from '../../components/not-found-items/not-found-items.component';
 import { CategoryService } from '../../services/category.service';
 import { Tables } from '../../lib/database.types';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-view-product',
@@ -33,16 +33,16 @@ export class ViewProductComponent {
   private readonly alerts = inject(TuiAlertService);
   product = signal<ProductList | null>(null);
   recommendedProducts = signal<ProductList[]>([]);
-  categories = signal<Tables<'category'>[]>([]);
+  categories = signal<Tables<'categories'>[]>([]);
   slug = '';
 
   constructor(
     @Inject(REQUEST) private request: Request,
     private supabaseService: SupabaseService,
     private productService: ProductService,
-
+    @Inject(PLATFORM_ID) private platformId: string,
     private categoryService: CategoryService,
-    private route: Router
+    private route: Router,
   ) {}
 
   async ngOnInit() {
@@ -73,7 +73,7 @@ export class ViewProductComponent {
     try {
       const res = await this.productService.getTop10ProductsByCategory(
         categorySlug,
-        productSlug
+        productSlug,
       );
 
       this.recommendedProducts.set(res);
@@ -105,5 +105,9 @@ export class ViewProductComponent {
 
   get produtModel() {
     return this.product() as ProductList;
+  }
+
+  get isBrowserOnly(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
 }

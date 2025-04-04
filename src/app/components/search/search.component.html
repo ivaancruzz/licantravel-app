@@ -10,6 +10,7 @@
   <tui-textfield
     iconStart="@tui.search"
     tuiHint
+    tuiHintAppearance="dark"
     tuiHintDirection="bottom"
     [tuiHintManual]="hint"
   >
@@ -44,7 +45,7 @@
                 <img [src]="product.product_multimedia[0].file_url" alt="" />
               </div>
 
-              <div class="flex flex-col">
+              <div class="flex flex-col flex-grow">
                 <h1 class="text-lg font-bold line-clamp-1">
                   {{ product.name }}
                 </h1>
@@ -54,7 +55,7 @@
                     [style.width.px]="15"
                     [style.height.px]="15"
                   />
-                  {{ product.provider.commune }}
+                  {{ product.providers.commune }}
                 </small>
                 <p class="line-clamp-1">{{ product.description }}</p>
               </div>

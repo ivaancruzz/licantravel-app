@@ -1,7 +1,11 @@
 <section class="background-gradient py-5">
   <div class="container-x flex flex-col gap-5">
     <div class="flex justify-center">
-      <img width="150" src="/chucao/emoji_1.svg" alt="" />
+      <img
+        width="150"
+        src="{{ NGX_STORAGE_RESOURCES }}/chucao_happy.png"
+        alt=""
+      />
     </div>
     <div
       tuiAppearance="floating"
@@ -95,10 +99,7 @@
         <div tuiTitle [style.padding-inline-end.rem]="2">
           {{ ticketStateNames[ticket!.status].label }}
           <div tuiSubtitle>
-            @if (ticket!.status == TicketState.active) {
-              El ticket está activo y puedes usuarlo. Sólo debes acercarte a la
-              atracción y mostrar el código QR.
-            }
+            {{ ticketStateNames[ticket!.status].providerMessage }}
           </div>
         </div>
       </tui-notification>
@@ -110,12 +111,12 @@
     </div>
     <div tuiTitle>
       <div tuiSubtitle class="font-normal">Atracción</div>
-      <span>{{ ticket!.product.name }}</span>
+      <span>{{ ticket!.products.name }}</span>
     </div>
 
     <div tuiTitle>
       <div tuiSubtitle class="font-normal">Lugar</div>
-      <span>{{ ticket!.product.provider.commune }} </span>
+      <span>{{ ticket!.products.providers.commune }} </span>
     </div>
     <div tuiTitle>
       <div tuiSubtitle class="font-normal">Hora de uso</div>
@@ -143,20 +144,20 @@
       <ul>
         <li>
           <span class="text-sm text-slate-500">Nombre: </span
-          >{{ ticket!.client.first_name }}
-          {{ ticket!.client.last_name }}
+          >{{ ticket!.clients.first_name }}
+          {{ ticket!.clients.last_name }}
         </li>
         <li>
           <span class="text-sm text-slate-500">Documento: </span>
-          {{ ticket!.client.document }}
+          {{ ticket!.clients.document }}
         </li>
         <li>
           <span class="text-sm text-slate-500">Email: </span>
-          {{ ticket!.client.email }}
+          {{ ticket!.clients.email }}
         </li>
         <li>
           <span class="text-sm text-slate-500">Celular: </span>
-          {{ ticket!.client.phone || "Sin número de contacto" }}
+          {{ ticket!.clients.phone || "Sin número de contacto" }}
         </li>
       </ul>
     </div>

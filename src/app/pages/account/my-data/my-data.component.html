@@ -1,5 +1,5 @@
 <app-user-panel-layout [breadcrumbs]="breadcrumbs">
-  @if (user?.role === Role.client) {
+  @if (userService._session()?.role === Role.client) {
     <form tuiForm="l" [formGroup]="form">
       <tui-textfield>
         <label tuiLabel>Correo</label>
@@ -46,7 +46,7 @@
         [error]="[] | tuiFieldError | async"
       />
 
-      <tui-input-date formControlName="birthday">
+      <tui-input-date formControlName="birthday" [max]="max">
         Fecha de nacimiento
         <input placeholder="Fecha de nacimiento" tuiTextfieldLegacy />
       </tui-input-date>
@@ -99,9 +99,10 @@
       <footer>
         <button
           tuiButton
-          (click)="register()"
+          (click)="save()"
           [disabled]="!form.valid"
           iconStart="@tui.save"
+          [loading]="loading"
           class="w-full"
         >
           Guardar
@@ -120,16 +121,21 @@
       </tui-notification>
       <div tuiTitle>
         <div tuiSubtitle class="font-normal">Correo</div>
-        <span>{{ user?.email }}</span>
+        <span>{{ userService._session()?.email }}</span>
       </div>
       <div tuiTitle>
         <div tuiSubtitle class="font-normal">Nombre para mostrar</div>
-        <span>{{ user.user_metadata!["display_name"] }}</span>
+        <span>{{
+          (userService._session()?.user_metadata)!["display_name"]
+        }}</span>
       </div>
       <div tuiTitle>
         <div tuiSubtitle class="font-normal">RUT</div>
         <span
-          >{{ (user?.user_metadata)!["document"] || "Sin registrar" }}
+          >{{
+            (userService._session()?.user_metadata)!["document"] ||
+              "Sin registrar"
+          }}
         </span>
       </div>
       <div tuiTitle>
@@ -138,17 +144,22 @@
           ><a
             tuiLink
             target="_blank"
-            [href]="user.user_metadata['google_maps_link']"
-            >{{ (user?.user_metadata)!["address"] }} -
-            {{ (user?.user_metadata)!["region"] }},
-            {{ (user?.user_metadata)!["commune"] }}
+            [href]="
+              (userService._session()?.user_metadata)!['google_maps_link']
+            "
+            >{{ (userService._session()?.user_metadata)!["address"] }} -
+            {{ (userService._session()?.user_metadata)!["region"] }},
+            {{ (userService._session()?.user_metadata)!["commune"] }}
           </a></span
         >
       </div>
       <div tuiTitle>
         <div tuiSubtitle class="font-normal">Horarios</div>
         <ul>
-          @for (item of (user?.user_metadata)!["open_days"]; track item) {
+          @for (
+            item of (userService._session()?.user_metadata)!["open_days"];
+            track item
+          ) {
             @if (item.open) {
               <li class="text-sm">
                 <span class="capitalize text-slate-500">{{

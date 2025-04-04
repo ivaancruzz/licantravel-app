@@ -1,110 +1,90 @@
-<div class="flex flex-col md:flex-row h-full">
+<div class="flex flex-col md:flex-row wrapper-panel">
   <div
-    class="hidden md:flex flex-col gap-10 bg-white"
+    class="hidden md:flex flex-col gap-10 bg-white w-[250px]"
     [style.border-right]="'1px solid var(--tui-border-normal)'"
   >
     <div class="flex flex-col text-start sticky top-[20px]">
-      @if ("scan" | ablePure: "Ticket" | async) {
-        <a
-          class="nav-item"
-          iconStart="@tui.scan"
-          [style.--tui-icon-size.rem]="1.2"
-          [style.color]="'var(--tui-text-primary)'"
-          [style.font-size.rem]="1.2"
-          tuiLink
-          role="button"
-          routerLink="/escanear"
-        >
-          Escanear
-        </a>
-      }
-      @if ("administrate" | ablePure: "App" | async) {
-        <a
-          class="nav-item"
-          iconStart="@tui.shield"
-          [style.--tui-icon-size.rem]="1.2"
-          [style.color]="'var(--tui-text-primary)'"
-          [style.font-size.rem]="1.2"
-          tuiLink
-          role="button"
-          routerLink="/mis-compras"
-        >
-          Panel de control
-        </a>
-      }
-      @if ("read" | ablePure: "Sale" | async) {
-        <a
-          class="nav-item"
-          iconStart="@tui.shopping-bag"
-          [style.--tui-icon-size.rem]="1.2"
-          [style.color]="'var(--tui-text-primary)'"
-          [style.font-size.rem]="1.2"
-          tuiLink
-          role="button"
-          routerLink="/mis-compras"
-        >
-          Mis compras
-        </a>
-      }
-      @if ("read" | ablePure: "Ticket" | async) {
-        <a
-          class="nav-item"
-          iconStart="@tui.ticket"
-          [style.--tui-icon-size.rem]="1.2"
-          [style.color]="'var(--tui-text-primary)'"
-          [style.font-size.rem]="1.2"
-          tuiLink
-          role="button"
-          routerLink="/mis-tickets"
-        >
-          Mis tickets
-        </a>
-      }
-      @if ("adjust" | ablePure: "Account" | async) {
-        <tui-accordion class="accordion">
-          <button
-            class="nav-item"
-            iconStart="@tui.settings-2"
-            [style.--tui-icon-size.rem]="1.2"
-            [style.color]="'var(--tui-text-primary)'"
-            [style.font-size.rem]="1.2"
-            tuiAccordion
-            tuiCell
-          >
-            <span class="font-normal">Ajustes</span>
-          </button>
-          <tui-expand>
-            <div class="flex flex-col">
-              <a
-                routerLink="/ajustes/mis-datos"
-                tuiLink
-                [style.color]="'var(--tui-text-primary)'"
-                class="nav-subitem"
-                >Mis datos</a
-              >
-              <a
-                routerLink="/ajustes/cambiar-clave"
-                tuiLink
-                [style.color]="'var(--tui-text-primary)'"
-                class="nav-subitem"
-                >Cambiar contraseña</a
-              >
-            </div>
-          </tui-expand>
-        </tui-accordion>
-      }
       <a
+        *ngxPermissionsOnly="[Role.provider]"
         class="nav-item"
-        iconStart="@tui.log-out"
+        iconStart="@tui.scan"
         [style.--tui-icon-size.rem]="1.2"
         [style.color]="'var(--tui-text-primary)'"
         [style.font-size.rem]="1.2"
         tuiLink
-        (click)="signOut()"
         role="button"
+        routerLink="/escanear"
       >
-        Salir
+        Escanear
       </a>
+
+      <a
+        *ngxPermissionsOnly="[Role.client]"
+        class="nav-item"
+        iconStart="@tui.shopping-bag"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        role="button"
+        routerLink="/mis-compras"
+        routerLinkActive="active-link"
+      >
+        Mis compras
+      </a>
+
+      <a
+        *ngxPermissionsOnly="[Role.client]"
+        class="nav-item"
+        iconStart="@tui.ticket"
+        [style.--tui-icon-size.rem]="1.2"
+        [style.color]="'var(--tui-text-primary)'"
+        [style.font-size.rem]="1.2"
+        tuiLink
+        role="button"
+        routerLink="/mis-tickets"
+        routerLinkActive="active-link"
+      >
+        Mis tickets
+      </a>
+
+      <tui-accordion
+        class="accordion"
+        *ngxPermissionsOnly="[Role.client, Role.provider]"
+      >
+        <button
+          class="nav-item"
+          iconStart="@tui.settings-2"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          [ngClass]="isActive('/ajustes') ? 'active-link' : ''"
+          [tuiAccordion]="isActive('/ajustes')"
+          tuiCell
+        >
+          <span class="font-normal">Ajustes</span>
+        </button>
+        <tui-expand>
+          <div class="flex flex-col">
+            <a
+              routerLink="/ajustes/mis-datos"
+              routerLinkActive="active-link"
+              tuiLink
+              [style.color]="'var(--tui-text-primary)'"
+              class="nav-subitem"
+              >Mis datos</a
+            >
+            <a
+              routerLink="/ajustes/cambiar-clave"
+              routerLinkActive="active-link"
+              tuiLink
+              [style.color]="'var(--tui-text-primary)'"
+              class="nav-subitem"
+              >Cambiar contraseña</a
+            >
+          </div>
+        </tui-expand>
+      </tui-accordion>
     </div>
   </div>
 
@@ -127,7 +107,7 @@
       }
     </tui-breadcrumbs>
 
-    <section>
+    <section class="h-full">
       <ng-content></ng-content>
     </section>
   </div>

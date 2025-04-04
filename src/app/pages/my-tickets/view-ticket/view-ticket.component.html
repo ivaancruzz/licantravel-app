@@ -6,44 +6,48 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div class="h-full order-1 md:order-2">
           <div class="w-full flex flex-col gap-5 sticky top-[20px]">
-            <tui-notification appearance="negative" size="m">
-              <div tuiTitle [style.padding-inline-end.rem]="2">
-                Recuerda
-                <div tuiSubtitle>
-                  <ul class="text-xs">
-                    <li>No compartas este código QR con terceros.</li>
-                    <li>
-                      Evita tomar capturas de pantalla o publicar el QR en redes
-                      sociales.
-                    </li>
-                    <li>
-                      Cualquier uso no autorizado será responsabilidad del
-                      titular del ticket.
-                    </li>
-                  </ul>
+            @if (ticket()?.status == TicketState.active) {
+              <tui-notification appearance="negative" size="m">
+                <div tuiTitle [style.padding-inline-end.rem]="2">
+                  Recuerda
+                  <div tuiSubtitle>
+                    <ul class="text-xs">
+                      <li>No compartas este código QR con terceros.</li>
+                      <li>
+                        Evita tomar capturas de pantalla o publicar el QR en
+                        redes sociales.
+                      </li>
+                      <li>
+                        Cualquier uso no autorizado será responsabilidad del
+                        titular del ticket.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </tui-notification>
+              </tui-notification>
+            }
             <app-ticket
               [goToPage]="false"
               [flipped]="flipped()"
               [ticket]="ticket()!"
             ></app-ticket>
-            <button
-              iconStart="@tui.qr-code"
-              appearance="primary"
-              class="w-full"
-              tuiButton
-              type="button"
-              (click)="flipped.set(!flipped())"
-            >
-              @if (flipped()) {
-                Mostrar
-              } @else {
-                Ocultar
-              }
-              QR
-            </button>
+            @if (ticket()?.status == TicketState.active) {
+              <button
+                iconStart="@tui.qr-code"
+                appearance="primary"
+                class="w-full"
+                tuiButton
+                type="button"
+                (click)="flipped.set(!flipped())"
+              >
+                @if (flipped()) {
+                  Mostrar
+                } @else {
+                  Ocultar
+                }
+                QR
+              </button>
+            }
           </div>
         </div>
         <div class="order-2 md:order-1">
@@ -61,10 +65,7 @@
                 <div tuiTitle [style.padding-inline-end.rem]="2">
                   {{ ticketStateNames[ticket()!.status].label }}
                   <div tuiSubtitle>
-                    @if (ticket()!.status == TicketState.active) {
-                      El ticket está activo y puedes usuarlo. Sólo debes
-                      acercarte a la atracción y mostrar el código QR.
-                    }
+                    {{ ticketStateNames[ticket()!.status].clientMessage }}
                   </div>
                 </div>
               </tui-notification>
@@ -75,16 +76,29 @@
               <span>#{{ ticket()!.code }}</span>
             </div>
             <div tuiTitle>
+              <div tuiSubtitle class="font-normal">Generado</div>
+              <span>{{ ticket()!.created_at | formatDate }}</span>
+            </div>
+            <div tuiTitle>
               <div tuiSubtitle class="font-normal">Atracción</div>
-              <span>{{ ticket()!.product.name }}</span>
+              <span
+                [ngClass]="
+                  !ticket()!.products.is_visible &&
+                  !ticket()!.products.is_deleted
+                    ? ''
+                    : 'underline text-primary cursor-pointer'
+                "
+                (click)="goToProduct()"
+                >{{ ticket()!.products.name }}</span
+              >
             </div>
 
             <div tuiTitle>
               <div tuiSubtitle class="font-normal">Lugar</div>
               <span
-                >{{ ticket()!.product.provider.commune }}
+                >{{ ticket()!.products.providers.commune }}
                 <a
-                  [href]="ticket()!.product.provider.google_maps_link"
+                  [href]="ticket()!.products.providers.google_maps_link"
                   target="_blank"
                   tuiLink
                   >¿Como llegar?</a
@@ -120,6 +134,7 @@
                 appearance="primary"
                 tuiButton
                 type="button"
+                (click)="downloadTicket()"
               >
                 Descargar Ticket
               </button>

@@ -6,7 +6,6 @@ import {
   EmblaCarouselDirective,
   EmblaCarouselType,
 } from 'embla-carousel-angular';
-import { categories, productsFilter } from '../../fakedata';
 import { ShopItemComponent } from '../shop-item/shop-item.component';
 import { ProductList } from '../../services/product.service';
 

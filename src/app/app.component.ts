@@ -24,8 +24,11 @@ import { SupabaseService } from './services/supabase.service';
 import { Role, UserService } from './services/user.service';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
-import { CaslService } from './services/casl.service';
-
+import {
+  NgxPermissionsModule,
+  NgxPermissionsService,
+  NgxRolesService,
+} from 'ngx-permissions';
 dayjs.locale('es');
 
 @Component({
@@ -41,7 +44,7 @@ export class AppComponent {
     private userService: UserService,
     private supabaseService: SupabaseService,
     private httpClient: HttpClient,
-    private caslService: CaslService,
+    private ngxPermissionsService: NgxPermissionsService,
     private router: Router,
   ) {}
 
@@ -55,51 +58,39 @@ export class AppComponent {
       this.loading = false;
     }, 200);
 
-    const { data } = this.supabaseService.clientBrowser.auth.onAuthStateChange(
-      (event, session) => {
-        if (event !== 'PASSWORD_RECOVERY') {
+    this.supabaseService.clientBrowser.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          if (!session) return;
+
+          this.ngxPermissionsService.loadPermissions([
+            session?.user.role as Role,
+          ]);
           this.userService._isAuthenticated.set(!!session);
-          this.userService._session.set(session);
-        }
-
-        if (!session) {
-          this.caslService.updateAbility(Role.anon);
-        }
-
-        if (event === 'SIGNED_IN') {
-          if (!session) return;
-
-          console.log('SIGNED_IN');
-
-          this.setSession(session.access_token, session.refresh_token);
-          this.caslService.updateAbility(session.user.role as Role);
+          this.userService._session.set(session.user);
+          await this.setSession(session.access_token, session.refresh_token);
         } else if (event === 'SIGNED_OUT') {
-          this.httpClient.get('signout').subscribe((res) => {
-            this.caslService.removeAbility();
-            location.href = '/';
-          });
-        } else if (event === 'PASSWORD_RECOVERY') {
-          // handle password recovery event
-        } else if (event === 'TOKEN_REFRESHED') {
-          if (!session) return;
-          console.log('TOKEN_REFRESHED');
-          this.setSession(session.access_token, session.refresh_token);
-          this.caslService.updateAbility(session.user.role as Role);
-        } else if (event === 'USER_UPDATED') {
-          console.log('USER_UPDATED');
-
-          // handle user updated event
+          await fetch('signout', { method: 'GET' });
+          location.href = '/';
         }
       },
     );
   }
 
-  setSession(access_token: string, refresh_token: string) {
-    this.httpClient
-      .post('/set-session', {
-        access_token: access_token,
-        refresh_token: refresh_token,
-      })
-      .subscribe();
+  async setSession(access_token: string, refresh_token: string) {
+    try {
+      await fetch('/set-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_token: access_token,
+          refresh_token: refresh_token,
+        }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

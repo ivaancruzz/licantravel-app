@@ -6,21 +6,26 @@
   }
 </div>
 
-<div class="container-x overflow-hidden flex flex-col gap-5 w-[100vw]">
-  @if (recommendedProducts().length) {
-    <div>
-      <h2 class="font-semibold mb-2">Te puede interezar</h2>
-      <app-recommended-products
-        [products]="recommendedProducts()"
-      ></app-recommended-products>
-    </div>
-  }
+@if (isBrowserOnly) {
+  <div class="container-x overflow-hidden flex flex-col gap-5 w-[100vw]">
+    @if (recommendedProducts()?.length) {
+      <div>
+        <h2 class="font-semibold mb-2">Te puede interezar</h2>
+        <app-recommended-products
+          ngSkipHydration
+          [products]="recommendedProducts()"
+        ></app-recommended-products>
+      </div>
+    }
 
-  <div>
-    <h2 class="font-semibold mb-2">Explora otras categorías</h2>
-    <app-category-slider
-      ngSkipHydration
-      [categories]="categories()"
-    ></app-category-slider>
+    @if (categories()?.length) {
+      <div>
+        <h2 class="font-semibold mb-2">Explora otras categorías</h2>
+        <app-category-slider
+          ngSkipHydration
+          [categories]="categories()"
+        ></app-category-slider>
+      </div>
+    }
   </div>
-</div>
+}

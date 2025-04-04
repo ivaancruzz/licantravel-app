@@ -43,6 +43,6 @@ export class ShopItemComponent {
   @Input() slider = true;
 
   goToProduct() {
-    location.href = `categoria/${this.product.category.slug}/${this.product.slug}`;
+    location.href = `categoria/${this.product.categories.slug}/${this.product.slug}`;
   }
 }

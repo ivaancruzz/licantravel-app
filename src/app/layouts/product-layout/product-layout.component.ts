@@ -14,16 +14,20 @@ import { ShopImagesSliderComponent } from '../../components/shop-images-slider/s
 import { ProductList } from '../../services/product.service';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { ThumbnailsProductComponent } from '../../components/thumbnails-product/thumbnails-product.component';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { Role } from '../../services/user.service';
 
 @Component({
   selector: 'app-product-layout',
   imports: [
     CommonModule,
     TuiAppearance,
-    ShopImagesSliderComponent,
+    ThumbnailsProductComponent,
     CurrencyPipe,
     TuiButton,
     TuiIcon,
+    NgxPermissionsModule,
   ],
   templateUrl: './product-layout.component.html',
   styleUrl: './product-layout.component.scss',
@@ -33,6 +37,7 @@ export class ProductLayoutComponent {
   @Input() product!: ProductList;
   @Input() dialog: any = undefined;
   inCart = signal<boolean>(false);
+  Role = Role;
   constructor(private cartService: CartService) {
     afterNextRender(() => {
       this.inCart.set(this.cartService.exist(this.product.id));
@@ -46,7 +51,7 @@ export class ProductLayoutComponent {
   }
 
   goToProduct() {
-    location.href = `categoria/${this.product.category.slug}/${this.product.slug}`;
+    location.href = `categoria/${this.product.categories.slug}/${this.product.slug}`;
   }
 
   addToCart() {

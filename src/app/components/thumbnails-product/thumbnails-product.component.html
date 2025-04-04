@@ -1,0 +1,56 @@
+<div class="embla w-full h-full">
+  <div class="embla__viewport" emblaCarousel [options]="optionsMain">
+    <div class="embla__container h-full">
+      @for (img of images(); track img; let i = $index) {
+        <div class="embla__slide">
+          <div class="embla__slide__number" (click)="show(i)">
+            <img [src]="img.file_url" alt="Your alt text" />
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  @if (images().length > 1) {
+    <div class="embla-thumbs">
+      <div
+        class="embla-thumbs__viewport"
+        emblaCarousel
+        [options]="optionsThumbs"
+      >
+        <div class="embla-thumbs__container">
+          @for (img of images(); track img; let i = $index) {
+            <div class="embla-thumbs__slide">
+              <button type="button" class="embla-thumbs__slide__number">
+                <img [src]="img.file_url" alt="Your alt text" />
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<ng-template #preview let-preview>
+  <tui-preview
+    [rotatable]="false"
+    [zoomable]="true"
+    (tuiSwipe)="onSwipe($event)"
+  >
+    <tui-preview-pagination [length]="images().length" [(index)]="currentImg" />
+    <img
+      *polymorpheusOutlet="images()[currentImg] as src"
+      alt="preview"
+      [src]="src.file_url"
+    />
+    <button
+      iconStart="@tui.x"
+      tuiIconButton
+      tuiPreviewAction
+      type="button"
+      (click)="preview.complete()"
+    >
+      Close
+    </button>
+  </tui-preview>
+</ng-template>

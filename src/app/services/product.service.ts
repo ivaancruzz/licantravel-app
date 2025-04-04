@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { FetchParams, SupabaseService } from './supabase.service';
-import { Tables } from '../lib/database.types';
+import { Database, Tables } from '../lib/database.types';
 import { getRange } from '../helpers/paginate';
 import { FilterProductType } from '../layouts/category-layout/category-layout.component';
 
-export interface ProductList extends Tables<'product'> {
-  category: { name: string; icon: string; slug: string };
-  provider: Tables<'provider'>;
-  product_multimedia: Tables<'product_multimedia'>[];
+export interface ProductMultimedia {
+  file_type: Database['public']['Enums']['file_types'] | null;
+  file_url: string;
+  id: string;
+  order: number;
+}
+
+export interface ProductList extends Tables<'products'> {
+  categories: { name: string; icon: string; slug: string };
+  providers: Tables<'providers'>;
+  product_multimedia: ProductMultimedia[];
 }
 
 export interface PagingParams {
@@ -22,9 +29,8 @@ export interface PagingParams {
   providedIn: 'root',
 })
 export class ProductService {
-  readonly pageLimit = 2;
-  readonly defaultQuery =
-    '*, category!inner(name, icon, slug), provider(*), product_multimedia(id, *)';
+  readonly pageLimit = 15;
+  readonly defaultQuery = '*, categories!inner(name, icon, slug), providers(*)';
   constructor(private supabaseService: SupabaseService) {}
 
   async fetchProducts(options: FetchParams = {}) {
@@ -34,7 +40,7 @@ export class ProductService {
       'products',
       (client) => {
         let queryBuilder = client
-          .from('product')
+          .from('products')
           .select(this.defaultQuery + query);
         if (order) {
           queryBuilder = queryBuilder.order(order.column, {
@@ -64,7 +70,7 @@ export class ProductService {
       ProductList[]
     >('explore', (client) => {
       const queryBuilder = client
-        .from('product')
+        .from('products')
         .select(this.defaultQuery, { count: 'exact' })
         .range(from, to);
       if (filter?.by === 'created') {
@@ -93,10 +99,10 @@ export class ProductService {
       `top10_products_by_${categorySlug || 'all'}`,
       (client) => {
         let queryBuilder = client
-          .from('product')
+          .from('products')
           .select(this.defaultQuery)
           .neq('slug', productSlug)
-          .eq('category.slug', categorySlug)
+          .eq('categories.slug', categorySlug)
           .limit(10);
 
         return queryBuilder;
@@ -113,7 +119,7 @@ export class ProductService {
       'top10_products',
       (client) =>
         client
-          .from('product')
+          .from('products')
           .select(this.defaultQuery)
           .limit(10)
           .order('created_at', { ascending: false }),
@@ -128,7 +134,10 @@ export class ProductService {
     const { data, error } = await this.supabaseService.getData<ProductList[]>(
       'featured_products',
       (client) =>
-        client.from('product').select(this.defaultQuery).is('is_feature', true),
+        client
+          .from('products')
+          .select(this.defaultQuery)
+          .is('is_feature', true),
     );
 
     if (error) throw error;
@@ -140,7 +149,7 @@ export class ProductService {
     const { data, error } = await this.supabaseService.getData<ProductList[]>(
       slug,
       (client) =>
-        client.from('product').select(this.defaultQuery).eq('slug', slug),
+        client.from('products').select(this.defaultQuery).eq('slug', slug),
     );
     if (error) throw error;
 
@@ -149,7 +158,7 @@ export class ProductService {
 
   async searchProducts(query: string): Promise<ProductList[]> {
     const { data, error } = await this.supabaseService.clientBrowser
-      .from('product')
+      .from('products')
       .select(this.defaultQuery)
       .textSearch('name', `${query}:*`);
 

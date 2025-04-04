@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import {
   TuiAlertService,
   TuiAppearance,
+  TuiButton,
   TuiGroup,
   TuiIcon,
   TuiLoader,
@@ -21,7 +22,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   TuiBlock,
   TuiRadio,
@@ -29,6 +30,7 @@ import {
   TuiBadge,
   TuiStatus,
   TuiPagination,
+  TuiChip,
 } from '@taiga-ui/kit';
 import { TuiCardMedium } from '@taiga-ui/layout';
 import { NotFoundItemsComponent } from '../../components/not-found-items/not-found-items.component';
@@ -36,6 +38,8 @@ import { FormatDatePipe } from '../../helpers/pipes/format-date.pipe';
 import { UserPanelLayoutComponent } from '../../layouts/user-panel-layout/user-panel-layout.component';
 import { TicketComponent } from '../../components/ticket/ticket.component';
 import { TicketSliderComponent } from '../../components/ticket-slider/ticket-slider.component';
+import { showErrorMessage } from '../../helpers/build-error-messages';
+import { ProductList } from '../../services/product.service';
 
 @Component({
   selector: 'app-my-tickets',
@@ -62,18 +66,17 @@ import { TicketSliderComponent } from '../../components/ticket-slider/ticket-sli
     TuiLoader,
     TicketComponent,
     TicketSliderComponent,
+    TuiChip,
+    TuiButton,
   ],
   templateUrl: './my-tickets.component.html',
   styleUrl: './my-tickets.component.scss',
 })
 export class MyTicketsComponent {
   private readonly alerts = inject(TuiAlertService);
-  activeTickets = signal<{ productName: string; tickets: TicketList[] }[]>([]);
-  tickets = signal<TicketList[]>([]);
+  tickets = signal<{ productName: string; tickets: TicketList[] }[]>([]);
   ticketStateNames = ticketStateNames;
   ticketState = TicketState;
-  currentPage = 0;
-  pages = 0;
   protected readonly filters = [
     {
       label: 'Activos',
@@ -85,7 +88,7 @@ export class MyTicketsComponent {
     },
     {
       label: 'Cancelados',
-      value: TicketState.expired,
+      value: TicketState.canceled,
     },
     {
       label: 'Todos',
@@ -102,53 +105,38 @@ export class MyTicketsComponent {
     },
   ];
 
-  filter: TicketState | undefined = TicketState.active;
+  filterByStatus: TicketState | undefined = TicketState.active;
+  filterBySale = '';
 
   loading = signal(false);
-  constructor(private ticketService: TicketService) {}
+  constructor(
+    private ticketService: TicketService,
+    private route: ActivatedRoute,
+  ) {}
 
   async ngOnInit() {
-    await this.getActiveTickets();
-
-    const res = await this.ticketService.generateQR("prueba")
-    console.log(res)
+    console.log(this.route.snapshot.queryParams['sale']);
+    if (this.route.snapshot.queryParams['sale']) {
+      this.filterBySale = this.route.snapshot.queryParams['sale'];
+    }
+    await this.getTickets();
   }
 
   async getTickets() {
     this.loading.set(true);
     try {
       const { data, count } = await this.ticketService.fetchTickets({
-        page: this.currentPage,
-        filter: this.filter,
+        byStatus: this.filterByStatus,
+        bySale: this.filterBySale,
       });
-      this.tickets.set(data);
-      this.pages = Math.ceil(count / this.ticketService.pageLimit);
-    } catch (e: any) {
-      console.error(e);
-      this.alerts
-        .open('Error al obtener los tickets' + e?.message, {
-          label: 'Error',
-          appearance: 'negative',
-        })
-        .subscribe();
-    } finally {
-      this.loading.set(false);
-    }
-  }
 
-  async getActiveTickets() {
-    this.loading.set(true);
-    try {
-      const res = await this.ticketService.fetchActiveTickets();
-      this.activeTickets.set(this.groupTicketsByProduct(res));
+      this.tickets.set(this.groupTicketsByProduct(data));
     } catch (e: any) {
-      console.error(e);
-      this.alerts
-        .open('Error al obtener los tickets activos' + e?.message, {
-          label: 'Error',
-          appearance: 'negative',
-        })
-        .subscribe();
+      showErrorMessage({
+        baseMessage: 'Error al obtener los tickets',
+        alert: this.alerts,
+        errorApi: e?.message,
+      });
     } finally {
       this.loading.set(false);
     }
@@ -159,14 +147,18 @@ export class MyTicketsComponent {
   ): { productName: string; tickets: TicketList[] }[] {
     const grouped = tickets.reduce(
       (acc, ticket) => {
-        const productId = ticket.product.id;
+        const product = ticket.sales.products.find(
+          (p) => p.id == ticket.product_id,
+        ) as ProductList;
+        const productId = product.id;
+
         if (!acc[productId]) {
           acc[productId] = {
-            productName: ticket.product.name,
+            productName: product.name,
             tickets: [],
           };
         }
-        acc[productId].tickets.push(ticket);
+        acc[productId].tickets.push({ ...ticket, products: product });
         return acc;
       },
       {} as {
@@ -177,19 +169,14 @@ export class MyTicketsComponent {
     return Object.values(grouped);
   }
 
-  handleFilter(filter: string) {
-    this.currentPage = 0;
-    this.filter = filter as TicketState | undefined;
-
-    if (filter === TicketState.active) {
-      this.getActiveTickets();
-    } else {
-      this.getTickets();
-    }
+  removeFilterBySale() {
+    this.filterBySale = '';
+    this.getTickets();
   }
 
-  goToPage(page: number) {
-    this.currentPage = page;
+  handleFilter(filter: string) {
+    this.filterByStatus = filter as TicketState | undefined;
+
     this.getTickets();
   }
 }

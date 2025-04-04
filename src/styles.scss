@@ -9,6 +9,8 @@ body {
 @theme {
   --color-primary: #21a0ff;
   --color-secondary: #ff8f00;
+  --color-success: var(--tui-text-positive);
+  --color-danger: var(--tui-text-negative);
   --color-dark: #404040;
 }
 
@@ -111,4 +113,8 @@ tui-sheet-dialog {
   .t-content {
     padding: 0 20px;
   }
+}
+
+.active-link {
+  color: var(--color-secondary) !important;
 }

@@ -1,7 +1,11 @@
 <section class="background-gradient pt-5">
   <div class="container-x">
     <div class="search-wrapper">
-      <img src="/chucao/emoji_1.svg" width="100" alt="Imágen de Chucao feliz" />
+      <img
+        src="{{ NGX_STORAGE_RESOURCES }}/chucao_happy.png"
+        width="100"
+        alt="Imágen de Chucao feliz"
+      />
       <article class="card w-full">
         <p class="text-center text-secondary md:text-2xl md:font-semibold">
           Descubre tu siguiente aventura en
@@ -27,41 +31,58 @@
 </section>
 
 <!--Carrousel-->
-<div class="relative">
-  <section class="container-x pt-5">
-    <h2 class="font-semibold mb-2 md:text-lg">Lo que tenemos para ti</h2>
-    <div class="overflow-hidden" style="border-radius: var(--border-radius)">
-      <app-featured-products></app-featured-products>
-    </div>
-  </section>
-  <img
-    src="/chucao/señal.png"
-    alt=""
-    class="hidden md:block absolute right-[150px] bottom-0 scale-x-[-1] md:w-[200px] lg:w-[300px]"
-  />
-</div>
+@if (isBrowserOnly && featuredProducts().length) {
+  <div class="relative">
+    <section class="container-x pt-5">
+      <h2 class="font-semibold mb-2 md:text-lg">Lo que tenemos para ti</h2>
+      <div class="overflow-hidden" style="border-radius: var(--border-radius)">
+        <app-featured-products
+          [products]="featuredProducts()"
+        ></app-featured-products>
+      </div>
+    </section>
+    <img
+      src="/chucao/señal.png"
+      alt=""
+      class="hidden md:block absolute right-[150px] bottom-0 scale-x-[-1] md:w-[200px] lg:w-[300px]"
+    />
+  </div>
+}
 
 <!--Released products -->
-<section class="background-gradient-short pb-5">
+<section class="pb-5">
   <div class="container-x flex flex-col gap-5">
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-      @for (product of products(); track product) {
-        <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
-      }
-    </div>
-    <button
-      iconStart="@tui.telescope"
-      size="l"
-      tuiButton
-      type="button"
-      class="w-full"
-      appearance="accent"
-      routerLink="/explorar"
-    >
-      Explorar
-    </button>
+    @if (products().length) {
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        @for (product of products(); track product) {
+          <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
+        }
+      </div>
+      <button
+        iconStart="@tui.telescope"
+        size="l"
+        tuiButton
+        type="button"
+        class="w-full"
+        appearance="accent"
+        routerLink="/explorar"
+      >
+        Explorar
+      </button>
+    } @else {
+      <h2 class="text-slate-500 text-center font-semibold">
+        No hay productos por ahora
+      </h2>
+    }
   </div>
 </section>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+  <path
+    fill="#21a0ff"
+    fill-opacity="1"
+    d="M0,288L17.1,277.3C34.3,267,69,245,103,202.7C137.1,160,171,96,206,90.7C240,85,274,139,309,181.3C342.9,224,377,256,411,266.7C445.7,277,480,267,514,234.7C548.6,203,583,149,617,154.7C651.4,160,686,224,720,240C754.3,256,789,224,823,197.3C857.1,171,891,149,926,160C960,171,994,213,1029,224C1062.9,235,1097,213,1131,213.3C1165.7,213,1200,235,1234,202.7C1268.6,171,1303,85,1337,74.7C1371.4,64,1406,128,1423,160L1440,192L1440,320L1422.9,320C1405.7,320,1371,320,1337,320C1302.9,320,1269,320,1234,320C1200,320,1166,320,1131,320C1097.1,320,1063,320,1029,320C994.3,320,960,320,926,320C891.4,320,857,320,823,320C788.6,320,754,320,720,320C685.7,320,651,320,617,320C582.9,320,549,320,514,320C480,320,446,320,411,320C377.1,320,343,320,309,320C274.3,320,240,320,206,320C171.4,320,137,320,103,320C68.6,320,34,320,17,320L0,320Z"
+  ></path>
+</svg>
 
 <!--Information -->
 <section class="bg-primary py-[150px] relative">

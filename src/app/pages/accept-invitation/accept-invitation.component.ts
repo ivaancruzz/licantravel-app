@@ -1,6 +1,11 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
   TuiAlertService,
@@ -11,10 +16,17 @@ import {
   TuiLink,
   TuiTextfield,
 } from '@taiga-ui/core';
-import { TuiFieldErrorPipe, TuiPassword } from '@taiga-ui/kit';
+import {
+  TuiButtonLoading,
+  TuiFieldErrorPipe,
+  TuiPassword,
+} from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 import { UserService } from '../../services/user.service';
 import { SetPasswordComponent } from '../../components/set-password/set-password.component';
+import { environment } from '../../../environments/environment';
+import { NgxTurnstileFormsModule, NgxTurnstileModule } from 'ngx-turnstile';
+import { showErrorMessage } from '../../helpers/build-error-messages';
 
 @Component({
   selector: 'app-accept-invitation',
@@ -33,6 +45,10 @@ import { SetPasswordComponent } from '../../components/set-password/set-password
     TuiLink,
     SetPasswordComponent,
     TuiPassword,
+    NgxTurnstileModule,
+    FormsModule,
+    NgxTurnstileFormsModule,
+    TuiButtonLoading,
   ],
   templateUrl: './accept-invitation.component.html',
   styleUrl: './accept-invitation.component.scss',
@@ -40,6 +56,11 @@ import { SetPasswordComponent } from '../../components/set-password/set-password
 export class AcceptInvitationComponent {
   private readonly alerts = inject(TuiAlertService);
   password = '';
+  tokenControl = '';
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  NGX_TURNSTILE_KEY = environment.NGX_TURNSTILE_KEY;
+
+  loading = false;
 
   constructor(private userService: UserService) {}
 
@@ -48,12 +69,19 @@ export class AcceptInvitationComponent {
   }
 
   async acceptInvitation() {
+    this.loading = true;
     try {
       await this.userService.acceptInvitation(this.password);
 
-      // location.href = '/';
+      location.href = '/registro';
     } catch (e: any) {
-      console.error(e);
+      showErrorMessage({
+        baseMessage: 'Error al aceptar la invitación, intentalo de nuevo',
+        alert: this.alerts,
+        errorApi: e?.message,
+      });
+    } finally {
+      this.loading = false;
     }
   }
 }

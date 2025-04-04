@@ -1,59 +1,62 @@
 <app-user-panel-layout [breadcrumbs]="breadcrumbs">
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-5 h-full">
     <!-- <tui-textfield iconStart="@tui.search">
         <label tuiLabel>Buscar</label>
         <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
       </tui-textfield> -->
 
-    <div class="w-full flex overflow-x-auto pb-2">
-      <form tuiGroup class="group" [formGroup]="formFilter">
-        @for (filter of filters; track filter) {
-          <label appearance="" tuiBlock>
-            <input
-              formControlName="filter"
-              tuiBlock
-              type="radio"
-              [value]="filter.value"
-              (input)="handleFilter(filter.value)"
-            />
-            {{ filter.label }}
-          </label>
-        }
-      </form>
-    </div>
+    @if (filterBySale) {
+      <div class="flex justify-end">
+        <tui-chip appearance="primary" size="m">
+          Compra #{{ filterBySale }}
+          <button
+            iconStart="@tui.x"
+            tuiIconButton
+            type="button"
+            routerLink="/my-tickets"
+            (click)="removeFilterBySale()"
+          >
+            Remove
+          </button>
+        </tui-chip>
+      </div>
+    } @else {
+      <div class="w-full flex overflow-x-auto pb-2">
+        <form tuiGroup class="group" [formGroup]="formFilter">
+          @for (filter of filters; track filter) {
+            <label appearance="" tuiBlock>
+              <input
+                formControlName="filter"
+                tuiBlock
+                type="radio"
+                [value]="filter.value"
+                (input)="handleFilter(filter.value)"
+              />
+              {{ filter.label }}
+            </label>
+          }
+        </form>
+      </div>
+    }
 
     @defer (when !loading()) {
-      @if (filter !== ticketState.active) {
-        @if (!tickets().length) {
+      @if (!tickets().length) {
+        <div class="h-full">
           <app-not-found-items></app-not-found-items>
-        } @else {
-          @for (ticket of tickets(); track ticket) {
-            <app-ticket [ticket]="ticket"></app-ticket>
-          }
-
-          <tui-pagination
-            [index]="currentPage"
-            [length]="pages"
-            (indexChange)="goToPage($event)"
-          />
-        }
+        </div>
       } @else {
-        @if (!activeTickets().length) {
-          <app-not-found-items></app-not-found-items>
-        } @else {
-          @for (item of activeTickets(); track item) {
-            <div class="flex flex-col gap-1">
-              <h1 class="text-lg">
-                <tui-badge>
-                  {{ item.tickets.length }}
-                  {{ item.tickets.length > 1 ? "Tickets" : "Ticket" }}
-                </tui-badge>
-                <span class="ms-2 font-bold">{{ item.productName }}</span>
-              </h1>
+        @for (item of tickets(); track item) {
+          <div class="flex flex-col gap-1">
+            <h1 class="text-lg">
+              <tui-badge>
+                {{ item.tickets.length }}
+                {{ item.tickets.length > 1 ? "Tickets" : "Ticket" }}
+              </tui-badge>
+              <span class="ms-2 font-bold">{{ item.productName }}</span>
+            </h1>
 
-              <app-ticket-slider [tickets]="item.tickets"></app-ticket-slider>
-            </div>
-          }
+            <app-ticket-slider [tickets]="item.tickets"></app-ticket-slider>
+          </div>
         }
       }
     } @placeholder {

@@ -16,13 +16,11 @@ import {
   FilterProduct,
   FilterProductType,
 } from '../../layouts/category-layout/category-layout.component';
-import { categories, productsFilter } from '../../fakedata';
 import {
   CommonModule,
   isPlatformBrowser,
   isPlatformServer,
 } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Tables, TablesInsert } from '../../lib/database.types';
 import { environment } from '../../../environments/environment';
 import {
@@ -46,15 +44,15 @@ export class ExploreComponent {
   private readonly alerts = inject(TuiAlertService);
 
   products = signal<ProductList[] | null>(null);
-  categories = signal<Tables<'category'>[]>([]);
+  categories = signal<Tables<'categories'>[]>([]);
   currentPage = signal(0);
   currentFilter = signal<FilterProductType>('created');
   pages = signal(0);
   loading = signal(false);
   category = signal<CategoryView>({
-    icon: `${environment.SUPABASE_URL}/storage/v1/object/public/resources/category-icon/explore.png`,
+    icon: `${environment.NGX_STORAGE_RESOURCES}/icon_explore.png`,
     name: 'Explorar',
-    picture: `${environment.SUPABASE_URL}/storage/v1/object/public/resources/category-icon/explore_bg.jpg`,
+    picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.jpg`,
     slug: '/explorar',
   });
 

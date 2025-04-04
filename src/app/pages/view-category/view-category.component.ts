@@ -24,7 +24,7 @@ export class ViewCategoryComponent {
   private readonly alerts = inject(TuiAlertService);
 
   products = signal<ProductList[] | null>(null);
-  categories = signal<Tables<'category'>[]>([]);
+  categories = signal<Tables<'categories'>[]>([]);
   currentPage = signal(0);
   currentFilter = signal<FilterProductType>('created');
   pages = signal(0);
@@ -69,7 +69,7 @@ export class ViewCategoryComponent {
         id: matchCategory.id,
         icon: matchCategory.icon as string,
         name: matchCategory.name,
-        picture: `${environment.SUPABASE_URL}/storage/v1/object/public/resources/category-icon/explore_bg.jpg`,
+        picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.jpg`,
         slug: `/categoria/${matchCategory.slug}`,
       });
     } else {

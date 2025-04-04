@@ -1,25 +1,20 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-  <div class="md:col-span-2 bg-slate-100">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  <div>
     <div
-      class="h-[300px] md:h-[500px] overflow-hidden flex justify-center items-center sticky top-0"
+      class="h-auto overflow-hidden flex md:sticky md:top-[30px]"
       style="border-radius: var(--border-radius)"
     >
-      <app-shop-images-slider
+      <app-thumbnails-product
         [images]="product.product_multimedia"
-        [previewImgs]="true"
-      ></app-shop-images-slider>
+      ></app-thumbnails-product>
     </div>
   </div>
   <div class="mt-5 flex flex-col gap-5">
     <h2 tuiTitle="xs">
       <div class="text-secondary font-bold text-4xl">{{ product.name }}</div>
-      <div
-        tuiSubtitle
-        class="font-bold text-3xl"
-        [style.color]="'var(--tui-text-primary)'"
-      >
+      <div tuiSubtitle [style.color]="'var(--tui-text-primary)'">
         @if (product.price_off) {
-          <div class="flex gap-2 items-center">
+          <div class="flex gap-2 items-center" class="font-bold text-3xl">
             <span [style.color]="'var(--tui-text-positive)'">{{
               product.price_off | currency: "CLP"
             }}</span>
@@ -28,7 +23,9 @@
             }}</span>
           </div>
         } @else {
-          {{ product.price | currency: "CLP" }}
+          <span class="font-bold text-3xl">
+            {{ product.price | currency: "CLP" }}</span
+          >
         }
       </div>
       <div tuiSubtitle class="text-slate-500">
@@ -37,39 +34,43 @@
           [style.width.px]="15"
           [style.height.px]="15"
         />
-        {{ product.provider?.commune }}
+        {{ product.providers?.commune }}
       </div>
     </h2>
 
-    <button
-      [iconStart]="inCart() ? '@tui.check' : '@tui.shopping-cart'"
-      size="l"
-      tuiButton
-      type="button"
-      [appearance]="inCart() ? 'positive' : 'primary'"
-      [disabled]="inCart()"
-      class="w-full"
-      (click)="addToCart()"
-    >
-      @if (inCart()) {
-        Añadido
-      } @else {
-        Añadir al carrito
-      }
-    </button>
-    @if (inCart()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
       <button
+        *ngxPermissionsOnly="[Role.client, Role.anon]"
+        [iconStart]="inCart() ? '@tui.check' : '@tui.shopping-cart'"
         size="l"
         tuiButton
         type="button"
-        appearance="secondary-destructive"
+        [appearance]="inCart() ? 'positive' : 'primary'"
+        [disabled]="inCart()"
         class="w-full"
-        (click)="removeFromCart()"
+        (click)="addToCart()"
       >
-        Quitar del carrito
+        @if (inCart()) {
+          Añadido
+        } @else {
+          Añadir al carrito
+        }
       </button>
-    }
-    <p>
+      @if (inCart()) {
+        <button
+          *ngxPermissionsOnly="[Role.client, Role.anon]"
+          size="l"
+          tuiButton
+          type="button"
+          appearance="secondary-destructive"
+          class="w-full"
+          (click)="removeFromCart()"
+        >
+          Quitar del carrito
+        </button>
+      }
+    </div>
+    <p class="whitespace-pre-line">
       {{ product.description }}
     </p>
   </div>

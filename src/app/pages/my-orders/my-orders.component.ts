@@ -40,6 +40,7 @@ import {
 import { FormatDatePipe } from '../../helpers/pipes/format-date.pipe';
 import { RouterLink } from '@angular/router';
 import { NotFoundItemsComponent } from '../../components/not-found-items/not-found-items.component';
+import { showErrorMessage } from '../../helpers/build-error-messages';
 
 @Component({
   selector: 'app-my-orders',
@@ -122,13 +123,11 @@ export class MyOrdersComponent {
       this.orders.set(data);
       this.pages = Math.ceil(count / this.saleService.pageLimit);
     } catch (e: any) {
-      console.error(e);
-      this.alerts
-        .open('Error al obtener las compras' + e?.message, {
-          label: 'Error',
-          appearance: 'negative',
-        })
-        .subscribe();
+      showErrorMessage({
+        baseMessage: 'Error al obtener las compras',
+        alert: this.alerts,
+        errorApi: e?.message,
+      });
     } finally {
       this.loading.set(false);
     }
@@ -141,9 +140,9 @@ export class MyOrdersComponent {
   }
 
   countTickets(sale: SaleList) {
-    const count = sale.sale_products.reduce(
+    const count = sale.sales_products.reduce(
       (acc, item) => acc + item.quantity,
-      0
+      0,
     );
     return `x${count} ${count > 1 ? 'Tickets' : 'Ticket'}`;
   }

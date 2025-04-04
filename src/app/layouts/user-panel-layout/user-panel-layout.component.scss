@@ -1,3 +1,6 @@
+.wrapper-panel {
+  min-height: calc(100vh - 95px);
+}
 .nav-item {
   text-wrap: nowrap;
   padding: 20px 30px !important;
@@ -13,6 +16,8 @@
   border-left: 2px solid var(--tui-border-normal);
   margin-left: 20px;
   padding-left: 10px;
+  padding-right: 30px;
+  text-wrap: nowrap;
 }
 
 .accordion {

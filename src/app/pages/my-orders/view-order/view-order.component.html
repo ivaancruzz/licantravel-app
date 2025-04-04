@@ -28,6 +28,7 @@
               @for (item of screenShotProducts(); track item) {
                 <app-checkout-resume-item
                   [item]="productItem(item)"
+                  [sale]="order()!.sale_code"
                   [view]="{ ticket: true }"
                 ></app-checkout-resume-item>
               }
@@ -40,16 +41,6 @@
               {{ order()!.total | currency: "CLP" }}
             </div>
           </div>
-
-          <button
-            class="md:col-span-3"
-            iconStart="@tui.download"
-            appearance="primary"
-            tuiButton
-            type="button"
-          >
-            Comprobante
-          </button>
         </div>
       </div>
     }

@@ -3,14 +3,14 @@
     <a href="/">
       @if ((breakpoint$ | async) === "mobile") {
         <img
-          src="/logo/short.svg"
+          src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_short.svg"
           alt="Logo LicanTravel"
           height="50"
           style="max-height: 50px; height: 50px"
         />
       } @else {
         <img
-          src="/logo/long.svg"
+          src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_long.svg"
           alt="Logo LicanTravel"
           height="50"
           style="max-height: 50px; height: 50px"
@@ -22,53 +22,52 @@
   @if (
     !supabaseService.isServer && (breakpoint$ | async) !== "mobile" && !inHome
   ) {
-    <div class="flex-grow">
+    <div class="flex-grow" *ngxPermissionsExcept="[Role.provider]">
       <app-search></app-search>
     </div>
   }
 
-  @if ("read" | ablePure: "Product" | async) {
-    @if ((breakpoint$ | async) === "mobile") {
-      <button
-        iconStart="@tui.compass"
-        tuiButton
-        tuiIconButton
-        type="button"
-        appearance="accent"
-        (click)="toExplore()"
-      >
-        Explorar
-      </button>
-    } @else {
-      <button
-        iconStart="@tui.compass"
-        tuiButton
-        type="button"
-        appearance="accent"
-        (click)="toExplore()"
-      >
-        Explorar
-      </button>
+  @if ((breakpoint$ | async) === "mobile") {
+    <button
+      *ngxPermissionsExcept="[Role.provider]"
+      iconStart="@tui.compass"
+      tuiButton
+      tuiIconButton
+      type="button"
+      appearance="accent"
+      (click)="toExplore()"
+    >
+      Explorar
+    </button>
+  } @else {
+    <button
+      *ngxPermissionsExcept="[Role.provider]"
+      iconStart="@tui.compass"
+      tuiButton
+      type="button"
+      appearance="accent"
+      (click)="toExplore()"
+    >
+      Explorar
+    </button>
+  }
+
+  <tui-badged-content *ngxPermissionsOnly="[Role.client, Role.anon]">
+    @if (cartService.items().length > 0) {
+      <tui-badge-notification size="l" tuiSlot="top">
+        {{ cartService.items().length }}
+      </tui-badge-notification>
     }
-  }
-  @if ("buy" | ablePure: "Cart" | async) {
-    <tui-badged-content>
-      @if (cartService.items().length > 0) {
-        <tui-badge-notification size="l" tuiSlot="top">
-          {{ cartService.items().length }}
-        </tui-badge-notification>
-      }
-      <button
-        iconStart="@tui.shopping-cart"
-        tuiIconButton
-        appearance="outline"
-        type="button"
-        (click)="openCart = true"
-      >
-        Carrito de compras
-      </button>
-    </tui-badged-content>
-  }
+    <button
+      iconStart="@tui.shopping-cart"
+      tuiIconButton
+      appearance="outline"
+      type="button"
+      (click)="openCart = true"
+    >
+      Carrito de compras
+    </button>
+  </tui-badged-content>
 
   @if ((breakpoint$ | async) === "mobile") {
     <button
@@ -81,10 +80,13 @@
       Menú
     </button>
   } @else {
+    <!--Dekstop-->
+
     <button
-      [tuiHint]="howToBuyTooltip"
-      [tuiHintShowDelay]="0"
-      [tuiHintHideDelay]="200"
+      [tuiHint]="menuDesktop"
+      [tuiHintManual]="hintShown"
+      tuiHintAppearance="dark"
+      (click)="hintShown = !hintShown"
       tuiHintDirection="bottom"
       iconStart="@tui.user"
       appearance="outline"
@@ -92,161 +94,11 @@
       type="button"
     >
       Mi cuenta
-
-      <!--Dekstop-->
-      <ng-template #howToBuyTooltip>
-        @if (!userService._isAuthenticated()) {
-          <div class="flex flex-col gap-2 text-dark">
-            <h1 class="font-semibold text-lg">¡Bienvenido!</h1>
-            <p>Parece que aún no iniciaste sesión</p>
-            <button
-              iconStart="@tui.log-in"
-              size="xl"
-              appearance="primary"
-              tuiButton
-              type="button"
-              class="w-100"
-              (click)="toLogin()"
-            >
-              Ingresar
-            </button>
-            <button
-              iconStart="@tui.user-plus"
-              size="xl"
-              appearance="outline"
-              tuiButton
-              type="button"
-              class="w-100"
-              (click)="toRegister()"
-            >
-              Crear cuenta
-            </button>
-          </div>
-        } @else {
-          <div class="flex flex-col gap-5 text-end">
-            <h1 class="text-slate-500">
-              Hola,
-              @if (userService._session()?.user?.role === Role.provider) {
-                {{ displayName }}
-              } @else {
-                {{ userName }}
-              }
-            </h1>
-            @if ("scan" | ablePure: "Ticket" | async) {
-              <a
-                class="nav-item"
-                iconStart="@tui.scan"
-                [style.--tui-icon-size.rem]="1.2"
-                [style.color]="'var(--tui-text-primary)'"
-                [style.font-size.rem]="1.2"
-                tuiLink
-                role="button"
-                routerLink="/escanear"
-                (click)="onClose()"
-              >
-                Escanear
-              </a>
-            }
-            @if ("administrate" | ablePure: "App" | async) {
-              <a
-                class="nav-item"
-                iconStart="@tui.shield"
-                [style.--tui-icon-size.rem]="1.2"
-                [style.color]="'var(--tui-text-primary)'"
-                [style.font-size.rem]="1.2"
-                tuiLink
-                role="button"
-                [href]="panelUrl"
-                _target="_blank"
-                (click)="onClose()"
-              >
-                Panel de control
-              </a>
-            }
-            @if ("read" | ablePure: "Sale" | async) {
-              <a
-                class="nav-item"
-                iconStart="@tui.shopping-bag"
-                [style.--tui-icon-size.rem]="1.2"
-                [style.color]="'var(--tui-text-primary)'"
-                [style.font-size.rem]="1.2"
-                tuiLink
-                role="button"
-                routerLink="/mis-compras"
-                (click)="onClose()"
-              >
-                Mis compras
-              </a>
-            }
-            @if ("read" | ablePure: "Ticket" | async) {
-              <a
-                class="nav-item"
-                iconStart="@tui.ticket"
-                [style.--tui-icon-size.rem]="1.2"
-                [style.color]="'var(--tui-text-primary)'"
-                [style.font-size.rem]="1.2"
-                tuiLink
-                role="button"
-                routerLink="/mis-tickets"
-                (click)="onClose()"
-              >
-                Mis tickets
-              </a>
-            }
-            @if ("adjust" | ablePure: "Account" | async) {
-              <tui-accordion class="accordion">
-                <button
-                  class="nav-item"
-                  iconStart="@tui.settings-2"
-                  [style.--tui-icon-size.rem]="1.2"
-                  [style.color]="'var(--tui-text-primary)'"
-                  [style.font-size.rem]="1.2"
-                  tuiAccordion
-                  tuiCell
-                >
-                  <span class="font-normal">Ajustes</span>
-                </button>
-                <tui-expand>
-                  <div class="flex flex-col">
-                    <a
-                      routerLink="ajustes/mis-datos"
-                      (click)="onClose()"
-                      [style.color]="'var(--tui-text-primary)'"
-                      tuiLink
-                      class="nav-subitem mt-2"
-                      >Mis datos</a
-                    >
-                    <a
-                      routerLink="ajustes/cambiar-clave"
-                      (click)="onClose()"
-                      [style.color]="'var(--tui-text-primary)'"
-                      class="nav-subitem"
-                      >Cambiar contraseña</a
-                    >
-                  </div>
-                </tui-expand>
-              </tui-accordion>
-            }
-            <a
-              class="nav-item"
-              iconStart="@tui.log-out"
-              [style.--tui-icon-size.rem]="1.2"
-              [style.color]="'var(--tui-text-primary)'"
-              [style.font-size.rem]="1.2"
-              tuiLink
-              (click)="signOut()"
-              role="button"
-            >
-              Salir
-            </a>
-          </div>
-        }
-      </ng-template>
     </button>
   }
 
   @if ((breakpoint$ | async) === "mobile" && !inHome) {
-    <div class="basis-full">
+    <div class="basis-full" *ngxPermissionsExcept="[Role.provider]">
       <app-search></app-search>
     </div>
   }
@@ -261,150 +113,15 @@
   (click.self)="onClose()"
 >
   <div class="flex flex-col gap-10">
-    <img src="/logo/long.svg" alt="" class="w-100" />
-    @if (!userService._isAuthenticated()) {
-      <button
-        iconStart="@tui.log-in"
-        size="xl"
-        appearance="primary"
-        tuiButton
-        type="button"
-        class="w-100"
-        (click)="toLogin()"
-      >
-        Ingresar
-      </button>
-      <button
-        iconStart="@tui.user-plus"
-        size="xl"
-        appearance="outline"
-        tuiButton
-        type="button"
-        class="w-100"
-        (click)="toRegister()"
-      >
-        Crear cuenta
-      </button>
+    <img
+      src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_long.svg"
+      alt=""
+      class="w-100"
+    />
+    @if (!userService._session()) {
+      <ng-container *ngTemplateOutlet="login"></ng-container>
     } @else {
-      <div class="flex flex-col text-end gap-5">
-        <span class="text-slate-500"
-          >Hola,
-          @if (userService._session()?.user?.role === Role.provider) {
-            {{ displayName }}
-          } @else {
-            {{ userName }}
-          }
-        </span>
-
-        @if ("scan" | ablePure: "Ticket" | async) {
-          <a
-            class="nav-item"
-            iconStart="@tui.scan"
-            [style.--tui-icon-size.rem]="1.2"
-            [style.color]="'var(--tui-text-primary)'"
-            [style.font-size.rem]="1.2"
-            tuiLink
-            role="button"
-            routerLink="/escanear"
-            (click)="onClose()"
-          >
-            Escanear
-          </a>
-        }
-        @if ("administrate" | ablePure: "App" | async) {
-          <a
-            class="nav-item"
-            iconStart="@tui.shield"
-            [style.--tui-icon-size.rem]="1.2"
-            [style.color]="'var(--tui-text-primary)'"
-            [style.font-size.rem]="1.2"
-            tuiLink
-            role="button"
-            routerLink="/mis-compras"
-            (click)="onClose()"
-          >
-            Panel de control
-          </a>
-        }
-        @if ("read" | ablePure: "Sale" | async) {
-          <a
-            class="nav-item"
-            iconStart="@tui.shopping-bag"
-            [style.--tui-icon-size.rem]="1.2"
-            [style.color]="'var(--tui-text-primary)'"
-            [style.font-size.rem]="1.2"
-            tuiLink
-            role="button"
-            routerLink="/mis-compras"
-            (click)="onClose()"
-          >
-            Mis compras
-          </a>
-        }
-        @if ("read" | ablePure: "Ticket" | async) {
-          <a
-            class="nav-item"
-            iconStart="@tui.ticket"
-            [style.--tui-icon-size.rem]="1.2"
-            [style.color]="'var(--tui-text-primary)'"
-            [style.font-size.rem]="1.2"
-            tuiLink
-            role="button"
-            routerLink="/mis-tickets"
-            (click)="onClose()"
-          >
-            Mis tickets
-          </a>
-        }
-        @if ("adjust" | ablePure: "Account" | async) {
-          <tui-accordion class="accordion">
-            <button
-              class="nav-item"
-              iconStart="@tui.settings-2"
-              iconEnd="@tui.chevron-down"
-              [style.--tui-icon-size.rem]="1.2"
-              [style.color]="'var(--tui-text-primary)'"
-              [style.font-size.rem]="1.2"
-              tuiAccordion
-              tuiCell
-            >
-              <span class="font-normal">Ajustes</span>
-            </button>
-            <tui-expand>
-              <div class="flex flex-col">
-                <a
-                  routerLink="/ajustes/mis-datos"
-                  (click)="onClose()"
-                  tuiLink
-                  [style.color]="'var(--tui-text-primary)'"
-                  class="nav-subitem"
-                  >Mis datos</a
-                >
-                <a
-                  routerLink="/ajustes/cambiar-clave"
-                  (click)="onClose()"
-                  tuiLink
-                  [style.color]="'var(--tui-text-primary)'"
-                  class="nav-subitem"
-                  >Cambiar contraseña</a
-                >
-              </div>
-            </tui-expand>
-          </tui-accordion>
-        }
-        <a
-          class="nav-item"
-          iconStart="@tui.log-out"
-          [style.--tui-icon-size.rem]="1.2"
-          [style.color]="'var(--tui-text-primary)'"
-          [style.font-size.rem]="1.2"
-          tuiLink
-          (click)="signOut()"
-          role="button"
-        >
-          Salir
-        </a>
-      </div>
+      <ng-container *ngTemplateOutlet="menu"></ng-container>
     }
   </div>
 </tui-drawer>
@@ -444,6 +161,122 @@
       </button>
     } @else {
       <app-not-found-items></app-not-found-items>
+    }
+  </div>
+</ng-template>
+
+<!--Login-->
+<ng-template #login>
+  <button
+    iconStart="@tui.log-in"
+    size="xl"
+    appearance="primary"
+    tuiButton
+    type="button"
+    class="w-100"
+    (click)="toLogin()"
+  >
+    Ingresar
+  </button>
+  <button
+    iconStart="@tui.user-plus"
+    size="xl"
+    appearance="outline"
+    tuiButton
+    type="button"
+    class="w-100"
+    (click)="toRegister()"
+  >
+    Crear cuenta
+  </button>
+</ng-template>
+
+<!--Menu-->
+<ng-template #menu>
+  <div class="flex flex-col gap-5 text-end">
+    <h1 class="text-slate-500">
+      Hola,
+      @if (userService._session()?.role === Role.provider) {
+        {{ displayName }}
+      } @else {
+        {{ userName }}
+      }
+    </h1>
+    @for (item of NAV; track item) {
+      @if (!item.submenu) {
+        <a
+          class="nav-item"
+          *ngxPermissionsOnly="item.permissions"
+          [iconStart]="item?.icon"
+          [style.--tui-icon-size.rem]="1.2"
+          [style.color]="'var(--tui-text-primary)'"
+          [style.font-size.rem]="1.2"
+          tuiLink
+          role="button"
+          [routerLink]="item.href"
+          routerLinkActive="active-link"
+          (click)="onClose()"
+        >
+          {{ item.label }}
+        </a>
+      } @else {
+        <tui-accordion class="accordion" *ngxPermissionsOnly="item.permissions">
+          <button
+            class="nav-item"
+            [ngClass]="isActive(item.href || '') ? 'active-link' : ''"
+            [iconStart]="item.icon"
+            [style.--tui-icon-size.rem]="1.2"
+            [style.color]="'var(--tui-text-primary)'"
+            [style.font-size.rem]="1.2"
+            [tuiAccordion]="isActive('/ajustes')"
+            tuiCell
+          >
+            <span class="font-normal">{{ item.label }}</span>
+          </button>
+          <tui-expand>
+            <div class="flex flex-col">
+              @for (subitem of item.submenu; track subitem) {
+                <a
+                  [routerLink]="subitem.href"
+                  routerLinkActive="active-link"
+                  (click)="onClose()"
+                  [style.color]="'var(--tui-text-primary)'"
+                  tuiLink
+                  class="nav-subitem mt-2"
+                  >{{ subitem.label }}</a
+                >
+              }
+            </div>
+          </tui-expand>
+        </tui-accordion>
+      }
+    }
+
+    <a
+      class="nav-item"
+      iconStart="@tui.log-out"
+      [style.--tui-icon-size.rem]="1.2"
+      [style.color]="'var(--tui-text-primary)'"
+      [style.font-size.rem]="1.2"
+      tuiLink
+      (click)="signOut()"
+      role="button"
+    >
+      Salir
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #menuDesktop>
+  <div outsideClick (clickOutside)="hintShown = false">
+    @if (!userService._session()) {
+      <div class="flex flex-col gap-2 text-dark">
+        <h1 class="font-semibold text-lg">¡Bienvenido!</h1>
+        <p>Parece que aún no iniciaste sesión</p>
+        <ng-container *ngTemplateOutlet="login"></ng-container>
+      </div>
+    } @else {
+      <ng-container *ngTemplateOutlet="menu"></ng-container>
     }
   </div>
 </ng-template>

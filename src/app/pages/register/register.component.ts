@@ -26,6 +26,7 @@ import {
 } from '@taiga-ui/core';
 import {
   TuiBlock,
+  TuiButtonLoading,
   TuiConnected,
   TuiDataListWrapper,
   TuiFieldErrorPipe,
@@ -36,9 +37,9 @@ import {
   TuiStepper,
   TuiStringifyContentPipe,
 } from '@taiga-ui/kit';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass } from '@angular/common';
 import { TuiComboBoxModule, TuiInputDateModule } from '@taiga-ui/legacy';
-import { TuiDay, TuiLet } from '@taiga-ui/cdk';
+import { TuiDay, TuiDayRange, TuiLet } from '@taiga-ui/cdk';
 import { NgxMaskDirective } from 'ngx-mask';
 import country from 'country-list-js';
 import { SignUpWithPasswordCredentials } from '@supabase/supabase-js';
@@ -48,6 +49,9 @@ import { SetPasswordComponent } from '../../components/set-password/set-password
 import { CountryInputComponent } from '../../components/country-input/country-input.component';
 import { RouterLink } from '@angular/router';
 import { CountriesService } from '../../components/country-input/countries.service';
+import { environment } from '../../../environments/environment';
+import { NgxTurnstileModule, NgxTurnstileFormsModule } from 'ngx-turnstile';
+import dayjs from 'dayjs';
 @Component({
   selector: 'app-register',
   imports: [
@@ -86,6 +90,10 @@ import { CountriesService } from '../../components/country-input/countries.servi
     CountryInputComponent,
     TuiLink,
     RouterLink,
+    NgxTurnstileModule,
+    NgxTurnstileFormsModule,
+    NgClass,
+    TuiButtonLoading,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -97,13 +105,7 @@ export class RegisterComponent {
   formSecondStep!: FormGroup;
   Gender = Gender;
   activeItemIndex = 0;
-  passwordValidations = {
-    hasMinLength: false,
-    hasUpperCase: false,
-    hasLowerCase: false,
-    hasNumber: false,
-    hasSpecialChar: false,
-  };
+
   protected readonly matcherString = (
     country: any,
     search: string,
@@ -117,8 +119,12 @@ export class RegisterComponent {
     );
   };
 
-  confirmAccount: boolean | null = null;
-  confirmMessage = 'No pudimos confirmar tu cuenta';
+  accountStatus: 'IN_PROGRESS' | 'PENDING' | 'CONFIRMED' = 'IN_PROGRESS';
+  isLoading = false;
+  confirmMessage = '';
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  NGX_TURNSTILE_KEY = environment.NGX_TURNSTILE_KEY;
+  protected max = TuiDay.currentLocal();
 
   constructor(
     private userService: UserService,
@@ -127,24 +133,14 @@ export class RegisterComponent {
   ) {}
 
   async ngOnInit() {
-    const user = await this.userService.getUser();
-    this.confirmAccount = !!user?.confirmed_at;
-
-    if (user?.confirmed_at) {
-      this.activeItemIndex = 2; // confirm
-      this.confirmMessage = 'Tu cuenta ha sido confirmada';
-      if (this.confirmAccount && user.user_metadata['is_active'] === false) {
-        await this.userService.confirmAccount(user.id);
-      }
-      return;
-    }
+    if (await this.accountIsValid()) return;
 
     this.formFirstStep = this.fb.group({
       first_name: ['', [Validators.required]],
       last_name: ['', [Validators.required]],
       phone: ['', [Validators.minLength(10)]],
       document: ['', [Validators.required]],
-      gender: [Gender.male, [Validators.required]],
+      gender: [Gender.female, [Validators.required]],
       birthday: [undefined, [Validators.required]],
       nationality: ['', [Validators.required]],
     });
@@ -158,14 +154,49 @@ export class RegisterComponent {
         ],
       ],
       password: ['', [Validators.required, Validators.min(8)]],
+      tokenControl: ['', [Validators.required]],
     });
   }
 
+  async accountIsValid() {
+    this.isLoading = true;
+    try {
+      let user;
+
+      if (this.userService._session()) {
+        user = this.userService._session();
+      } else {
+        user = await this.userService.getUser();
+      }
+
+      const isConfirmed = !!user?.confirmed_at;
+      if (isConfirmed) {
+        this.accountStatus = 'CONFIRMED';
+        this.confirmMessage = 'Tu cuenta ha sido confirmada.';
+
+        if (!user?.user_metadata['is_active']) {
+          console.log('confirmado');
+          await this.userService.confirmAccount(user?.id as string);
+        }
+
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.log(e);
+      return false;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
   async register() {
+    this.isLoading = true;
     try {
       const nationality = this.countriesService.getCodeByCountry(
         this.nationality?.value,
       );
+      console.log(this.nationality?.value);
       const body: SignUpWithPasswordCredentials = {
         email: this.formSecondStep.value.email,
         password: this.formSecondStep.value.password,
@@ -179,8 +210,9 @@ export class RegisterComponent {
       };
 
       await this.userService.register(body);
-      this.activeItemIndex = 2;
-      this.confirmMessage = 'Revisa tu correo para confirmar tu cuenta';
+      this.accountStatus = 'PENDING';
+      this.confirmMessage =
+        'Para continuar, revisa tu correo y confirma tu cuenta.';
     } catch (e: any) {
       console.error(e);
       this.alerts
@@ -189,6 +221,8 @@ export class RegisterComponent {
           appearance: 'negative',
         })
         .subscribe();
+    } finally {
+      this.isLoading = false;
     }
   }
 

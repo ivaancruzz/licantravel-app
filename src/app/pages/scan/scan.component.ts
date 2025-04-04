@@ -29,6 +29,7 @@ import {
 import dayjs from 'dayjs';
 import { ProviderOpenDays } from '../../services/provider.service';
 import QrScanner from 'qr-scanner';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-scan',
@@ -49,6 +50,8 @@ export class ScanComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   private readonly alerts = inject(TuiAlertService);
   qrScanner: QrScanner | null = null;
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  NGX_TURNSTILE_KEY = environment.NGX_TURNSTILE_KEY;
 
   openScan = signal(false);
   validateCode = false;
@@ -84,8 +87,8 @@ export class ScanComponent {
         );
         this.qrScanner.start();
       }, 500);
-      // await this.qrScanner?.setCamera(facingModeOrDeviceId);
     } catch (error) {
+      alert('error');
       this.alerts
         .open('No diste permiso para acceder a la cámara.', {
           label: 'Error',
@@ -105,10 +108,11 @@ export class ScanComponent {
 
   async getTicket() {
     try {
-      this.ticket = await this.ticketService.getTicket({
+      const res = await this.ticketService.getTicket({
         code: this.code,
         id: this.id,
       });
+      this.ticket = { ...res, products: res.sales.products[0] };
     } catch (e: any) {
       console.error(e);
       this.closeCamera();
@@ -134,6 +138,7 @@ export class ScanComponent {
           autoClose: 10000,
         })
         .subscribe();
+      this.code = '';
     } catch (e) {
       this.alerts
         .open('Error al validar el ticket.', {
@@ -149,7 +154,7 @@ export class ScanComponent {
   }
 
   get providerOpenDays() {
-    return this.ticket?.product.provider
+    return this.ticket?.products.providers
       ?.open_days as unknown as ProviderOpenDays[];
   }
 }

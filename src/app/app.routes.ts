@@ -15,41 +15,63 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { MyTicketsComponent } from './pages/my-tickets/my-tickets.component';
 import { ViewTicketComponent } from './pages/my-tickets/view-ticket/view-ticket.component';
 import { AcceptInvitationComponent } from './pages/accept-invitation/accept-invitation.component';
-import { authGuard } from './guards/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { ScanComponent } from './pages/scan/scan.component';
 import { MyDataComponent } from './pages/account/my-data/my-data.component';
 import { ChangePasswordComponent } from './pages/account/change-password/change-password.component';
 import { ViewCategoryComponent } from './pages/view-category/view-category.component';
+import { LoggedGuard } from './guards/logged.guard';
+import { NgxPermissionsGuard, ngxPermissionsGuard } from 'ngx-permissions';
+import { permission } from 'process';
+import { Role } from './services/user.service';
+import { on } from 'events';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    canActivate: [authGuard],
+    canActivate: [ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client, Role.anon, Role.supervisor, Role.superadmin],
+        redirectTo: '/escanear',
+      },
+    },
   },
   {
     path: 'ingresar',
     component: LoginComponent,
+    canActivate: [LoggedGuard],
   },
   {
     path: 'registro',
     component: RegisterComponent,
+    canActivate: [LoggedGuard],
   },
   {
     path: 'recuperar',
     component: RecoveryPasswordComponent,
+    canActivate: [LoggedGuard],
   },
   {
     path: 'cambiar-clave',
     component: ResetPasswordComponent,
   },
   {
-    path: 'aceptar-invitacion',
+    path: 'aceptar-invitacion', // ‼️Importante: Esta ruta es una ruta de redireccion utilizada en supabase functions
     component: AcceptInvitationComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'escanear',
     component: ScanComponent,
+    canActivate: [ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'explorar',

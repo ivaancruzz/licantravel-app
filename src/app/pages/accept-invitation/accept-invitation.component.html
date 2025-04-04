@@ -1,19 +1,19 @@
 <section class="background-gradient py-5">
-  <div class="container-x flex flex-col gap-5">
+  <div class="container-x flex flex-col gap-5 items-center">
     <div class="flex justify-center">
       <img
         width="150"
-        src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/star_eyes.png"
+        src="{{ NGX_STORAGE_RESOURCES }}/chucao_star_eyes.png"
         alt=""
       />
     </div>
     <div
       tuiAppearance="floating"
       tuiCardLarge
-      class="mt-[-75px]"
+      class="mt-[-75px] justify-center"
       [style.minHeight.px]="300"
     >
-      <h1 class="text-center text-2xl text-secondary font-bold">
+      <h1 class="text-center text-3xl text-secondary font-bold">
         ¡Bienvenido!
       </h1>
       <p>
@@ -25,12 +25,22 @@
         (onChange)="onChangePassword($event)"
       ></app-set-password>
 
+      <div class="text-center">
+        <ngx-turnstile
+          [(ngModel)]="tokenControl"
+          [siteKey]="NGX_TURNSTILE_KEY"
+          theme="light"
+          language="es"
+        ></ngx-turnstile>
+      </div>
+
       <button
         tuiButton
         iconStart="@tui.check"
         (click)="acceptInvitation()"
         (keyup.enter)="acceptInvitation()"
-        [disabled]="!password"
+        [loading]="loading"
+        [disabled]="!password || !tokenControl"
       >
         Terminar
       </button>

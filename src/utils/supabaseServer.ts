@@ -1,15 +1,17 @@
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
 import { environment } from '../environments/environment';
+import { OutgoingHttpHeaders } from 'http';
+import { Request, Response } from 'express';
 
-export function supabaseClientServer(request: Request, response: Response) {
-  const headers = new Headers(response?.headers);
+export function supabaseClientServer(request: Request, res: Response) {
+  const headers = new Headers();
   const client = createServerClient(
     environment.SUPABASE_URL,
     environment.SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
-          const cookieHeader = request.headers.get('Cookie') || '';
+          const cookieHeader = request.header('Cookie') || '';
 
           return parseCookieHeader(cookieHeader);
         },

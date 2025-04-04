@@ -7,10 +7,12 @@ import {
   tuiAppearance,
   TuiButton,
   TuiIcon,
+  TuiLink,
 } from '@taiga-ui/core';
 import { ShopImagesSliderComponent } from '../shop-images-slider/shop-images-slider.component';
 import { CurrencyPipe, JsonPipe } from '@angular/common';
 import { TuiTile } from '@taiga-ui/kit';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-item-cart',
@@ -23,6 +25,8 @@ import { TuiTile } from '@taiga-ui/kit';
     CurrencyPipe,
     TuiButton,
     TuiIcon,
+    TuiLink,
+    RouterLink,
   ],
   templateUrl: './item-cart.component.html',
   styleUrl: './item-cart.component.scss',
@@ -30,7 +34,18 @@ import { TuiTile } from '@taiga-ui/kit';
 export class ItemCartComponent {
   @Input({ required: true }) item!: Cart;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+  ) {}
+
+  ngOnInit() {
+    this.item.product.product_multimedia.sort((a, b) => a.order - b.order);
+  }
+
+  goTo() {
+    location.href = `/categoria/${this.item.product.categories.slug}/${this.item.product.slug}`;
+  }
 
   add() {
     this.cartService.add(this.item);

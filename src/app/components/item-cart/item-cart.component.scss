@@ -14,10 +14,13 @@
   border-bottom: 1px solid var(--tui-border-normal);
 }
 .img-wrapper {
-  min-width: 120px;
-  min-height: 120px;
-  max-width: 120px;
-  max-height: 120px;
-  display: flex;
-  align-items: center;
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+
+  img {
+    object-fit: cover;
+    height: 100%;
+  }
 }

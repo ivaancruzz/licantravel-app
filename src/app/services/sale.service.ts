@@ -4,9 +4,9 @@ import { ProductList } from './product.service';
 import { Tables } from '../lib/database.types';
 import { getRange } from '../helpers/paginate';
 
-export type SaleList = Tables<'sale'> & {
-  sale_products: { product: ProductList; quantity: number }[];
-  client: { email: string };
+export type SaleList = Tables<'sales'> & {
+  sales_products: { products: ProductList; quantity: number }[];
+  clients: { email: string };
 };
 
 export interface PagingParams {
@@ -56,21 +56,22 @@ export const creationTypeNames = {
   providedIn: 'root',
 })
 export class SaleService {
-  readonly pageLimit = 2;
+  readonly pageLimit = 15;
   constructor(private supabaseService: SupabaseService) {}
 
   async fetchSales(
     { page, filter }: PagingParams = {
       page: 0,
-    }
+    },
   ): Promise<{ data: SaleList[]; count: any }> {
     const [from, to] = getRange({ page, limit: this.pageLimit });
 
     const queryBuilder = this.supabaseService.clientBrowser
-      .from('sale')
-      .select('*,client(email), sale_products(product(*), quantity)', {
+      .from('sales')
+      .select('*,clients(email), sales_products(products(*), quantity)', {
         count: 'exact',
       })
+      .order('created_at', { ascending: false })
       .range(from, to);
 
     if (filter) {
@@ -86,8 +87,8 @@ export class SaleService {
 
   async getOrder(code: string): Promise<SaleList> {
     const { data, error } = await this.supabaseService.clientBrowser
-      .from('sale')
-      .select('*,client(email), sale_products(product(*), quantity)')
+      .from('sales')
+      .select('*,clients(email), sales_products(products(*), quantity)')
       .eq('sale_code', code)
       .single();
 

@@ -19,6 +19,8 @@ import { TuiFieldErrorPipe, TuiLike } from '@taiga-ui/kit';
 import { AsyncPipe } from '@angular/common';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { NgxTurnstileFormsModule, NgxTurnstileModule } from 'ngx-turnstile';
 
 @Component({
   selector: 'app-recovery-password',
@@ -35,12 +37,17 @@ import { RouterLink } from '@angular/router';
     TuiForm,
     TuiLink,
     RouterLink,
+    NgxTurnstileModule,
+    NgxTurnstileFormsModule,
   ],
   templateUrl: './recovery-password.component.html',
   styleUrl: './recovery-password.component.scss',
 })
 export class RecoveryPasswordComponent {
   form!: FormGroup;
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
+  NGX_TURNSTILE_KEY = environment.NGX_TURNSTILE_KEY;
+
   private readonly alerts = inject(TuiAlertService);
 
   constructor(
@@ -57,6 +64,7 @@ export class RecoveryPasswordComponent {
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ],
       ],
+      tokenControl: ['', [Validators.required]],
     });
   }
 
@@ -74,7 +82,7 @@ export class RecoveryPasswordComponent {
           },
         )
         .subscribe();
-      this.form.get('email')?.setValue('');
+      this.form.disable();
     } catch (e: any) {
       console.error(e);
       this.alerts

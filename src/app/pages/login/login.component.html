@@ -3,7 +3,7 @@
     <div class="flex justify-center">
       <img
         width="150"
-        src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/star_eyes.png"
+        src="{{ NGX_STORAGE_RESOURCES }}/chucao_happy.png"
         alt=""
       />
     </div>
@@ -46,7 +46,17 @@
           formControlName="password"
           [error]="[] | tuiFieldError | async"
         />
-        <a routerLink="/recuperar" tuiLink>¿Olvidaste tu contraseña?</a>
+        <span>
+          <a routerLink="/recuperar" tuiLink>¿Olvidaste tu contraseña?</a></span
+        >
+        <div class="text-center">
+          <ngx-turnstile
+            [siteKey]="NGX_TURNSTILE_KEY"
+            theme="light"
+            formControlName="tokenControl"
+            language="es"
+          ></ngx-turnstile>
+        </div>
 
         <footer>
           <button
@@ -55,6 +65,7 @@
             class="w-full"
             (click)="login()"
             [disabled]="!form.valid"
+            [loading]="isLoading"
           >
             Ingresar
           </button>

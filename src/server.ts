@@ -4,11 +4,12 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { response } from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AngularAppEngine } from '@angular/ssr';
 import { supabaseClientServer } from './utils/supabaseServer';
+import { parseCookieHeader } from '@supabase/ssr';
 
 const angularAppEngine = new AngularAppEngine();
 
@@ -16,6 +17,7 @@ const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
+app.use(express.json());
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -29,44 +31,34 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
-app.use('/set-session', async (req, res) => {
-  // const { client, headers } = supabaseClientServer(
-  //   req,
-  //   res as Response,
-  // );
-  // const body = await req.body.json();
-  //   const { access_token, refresh_token } = body;
-  //   const { error } = await client.auth.setSession({
-  //     access_token,
-  //     refresh_token,
-  //   });
-  //   if (error) {
-  //     return new Response(error.message, {
-  //       status: error.status,
-  //     });
-  //   }
-  //   return new Response(res?.body, {
-  //     status: res?.status,
-  //     statusText: response?.statusText,
-  //     headers,
-  //   });
+app.post('/set-session', async (req, res) => {
+  const { client, headers } = supabaseClientServer(req, res);
+  const { access_token, refresh_token } = req.body;
+  const { error } = await client.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  console.log(refresh_token);
+  if (error) {
+    return res.status(error.status || 500).json(error.message);
+  }
+  return res
+    .status(200)
+    .setHeaders(headers)
+    .json({ message: 'Login SSR success' });
 });
 
-app.use('/signout', (req, res) => {
-  // const { client, headers } = supabaseClientServer(
-  //   request,
-  //   response as Response,
-  // );
-  // const cookies = parseCookieHeader(request.headers.get('Cookie') || '');
-  // cookies.forEach(({ name, value }) => {
-  //   const cookie = `${name}=`;
-  //   headers.append('Set-Cookie', cookie);
-  // });
-  // return new Response(response?.body, {
-  //   status: response?.status,
-  //   statusText: response?.statusText,
-  //   headers,
-  // });
+app.get('/signout', (req, res) => {
+  const { client, headers } = supabaseClientServer(req, res);
+  const cookies = parseCookieHeader(req.header('Cookie') || '');
+  cookies.forEach(({ name, value }) => {
+    const cookie = `${name}=`;
+    headers.append('Set-Cookie', cookie);
+  });
+  return res
+    .status(200)
+    .setHeaders(headers)
+    .send({ message: 'Logout SSR success' });
 });
 
 /**

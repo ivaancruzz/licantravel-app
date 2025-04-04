@@ -4,18 +4,35 @@
   </div>
 
   <div class="p-3 flex flex-col info-wrapper">
-    <h1 class="text-lg font-bold line-clamp-2">{{ item.product.name }}</h1>
+    <a
+      class="font-bold line-clamp-2 underline text-primary cursor-pointer"
+      (click)="goTo()"
+      >{{ item.product.name }}</a
+    >
     <div class="flex flex-grow items-end">
-      <h2 class="text-2xl font-bold">
-        {{ item.product.price | currency : "CLP" }}
-      </h2>
+      <div [style.color]="'var(--tui-text-primary)'">
+        @if (item.product.price_off) {
+          <div class="flex gap-3 items-center" class="font-bold text-lg">
+            <span [style.color]="'var(--tui-text-positive)'">{{
+              item.product.price_off | currency: "CLP"
+            }}</span>
+            <span class="line-through font-normal text-sm">{{
+              item.product.price | currency: "CLP"
+            }}</span>
+          </div>
+        } @else {
+          <span class="font-semibold">
+            {{ item.product.price | currency: "CLP" }}</span
+          >
+        }
+      </div>
     </div>
   </div>
 
   <div class="flex flex-col">
     <button
       iconStart="@tui.plus"
-      size="m"
+      size="s"
       appearance="flat"
       tuiButton
       tuiIconButton
@@ -33,7 +50,7 @@
 
     <button
       iconStart="@tui.minus"
-      size="m"
+      size="s"
       appearance="flat"
       tuiButton
       tuiIconButton

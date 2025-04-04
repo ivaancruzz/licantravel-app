@@ -19,7 +19,6 @@ import {
   TuiTextfield,
 } from '@taiga-ui/core';
 import { TuiCardLarge, TuiCell, TuiHeader } from '@taiga-ui/layout';
-import { categories, featured_products, productsFilter } from '../../fakedata';
 import { RouterLink } from '@angular/router';
 import { FeaturedProductsComponent } from '../../components/featured-products/featured-products.component';
 import { CategorySliderComponent } from '../../components/category-slider/category-slider.component';
@@ -30,6 +29,7 @@ import { isPlatformBrowser, isPlatformServer, JsonPipe } from '@angular/common';
 import { Tables } from '../../lib/database.types';
 import { ProductList, ProductService } from '../../services/product.service';
 import { SearchComponent } from '../../components/search/search.component';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-home',
   imports: [
@@ -48,8 +48,11 @@ import { SearchComponent } from '../../components/search/search.component';
 export class HomeComponent {
   private readonly alerts = inject(TuiAlertService);
   products = signal<ProductList[]>([]);
-  categories = signal<Tables<'category'>[]>([]);
+  categories = signal<Tables<'categories'>[]>([]);
+  featuredProducts = signal<ProductList[]>([]);
+
   isServer = false;
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
 
   constructor(
     private productService: ProductService,
@@ -60,6 +63,7 @@ export class HomeComponent {
   async ngOnInit() {
     this.getCategories();
     this.getProdcuts();
+    this.getFeaturedProducts();
   }
 
   async getProdcuts() {
@@ -83,6 +87,15 @@ export class HomeComponent {
           appearance: 'negative',
         })
         .subscribe();
+    }
+  }
+
+  async getFeaturedProducts() {
+    try {
+      const res = await this.productService.getFeaturedProducts();
+      this.featuredProducts.set(res);
+    } catch (e) {
+      console.log(e);
     }
   }
 

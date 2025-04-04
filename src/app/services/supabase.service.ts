@@ -49,7 +49,7 @@ export class SupabaseService {
         {
           cookies: {
             getAll() {
-              const cookieHeader = request.headers.get('Cookie') || '';
+              const cookieHeader = request?.headers.get('Cookie') || '';
               return parseCookieHeader(cookieHeader);
             },
             setAll(cookiesToSet) {

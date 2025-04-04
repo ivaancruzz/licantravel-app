@@ -36,6 +36,7 @@ import {
   TuiFilterByInputPipe,
   TUI_COUNTRIES,
   TuiFade,
+  TuiButtonLoading,
 } from '@taiga-ui/kit';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
 import { TuiInputDateModule, TuiComboBoxModule } from '@taiga-ui/legacy';
@@ -45,6 +46,8 @@ import { User } from '@supabase/supabase-js';
 import dayjs from 'dayjs';
 import { CountryInputComponent } from '../../../components/country-input/country-input.component';
 import { CountriesService } from '../../../components/country-input/countries.service';
+import { showErrorMessage } from '../../../helpers/build-error-messages';
+import { Tables } from '../../../lib/database.types';
 
 @Component({
   selector: 'app-my-data',
@@ -84,6 +87,7 @@ import { CountriesService } from '../../../components/country-input/countries.se
     TuiLink,
     TuiNotification,
     TuiFade,
+    TuiButtonLoading,
   ],
   templateUrl: './my-data.component.html',
   styleUrl: './my-data.component.scss',
@@ -94,8 +98,11 @@ export class MyDataComponent {
   countries: any[] = [];
   form!: FormGroup;
   Gender = Gender;
-  user!: User;
+  user!: Tables<'clients'>;
+  clientProfile: Tables<'clients'> | null = null;
   Role = Role;
+  loading = false;
+  protected max = TuiDay.currentLocal();
   protected breadcrumbs = [
     {
       caption: 'Ajustes',
@@ -105,75 +112,66 @@ export class MyDataComponent {
     },
   ];
 
-  protected readonly matcherString = (
-    country: any,
-    search: string,
-  ): boolean => {
-    return (
-      country.name
-        .split(' ')
-        .pop()
-        ?.toLowerCase()
-        .startsWith(search.toLowerCase()) ?? false
-    );
-  };
-
   constructor(
-    private userService: UserService,
+    public userService: UserService,
     private fb: FormBuilder,
     public countriesService: CountriesService,
-  ) {
-    effect(() => {
-      const user = this.userService._session()?.user;
-      if (user) {
-        this.user = user;
-        const birthday = dayjs(this.user.user_metadata['birthday']);
-
-        this.form.patchValue({
-          email: this.user.email,
-          first_name: this.user.user_metadata['first_name'],
-          last_name: this.user.user_metadata['last_name'],
-          phone: this.user.user_metadata['phone'],
-          document: this.user.user_metadata['document'],
-          gender: this.user.user_metadata['gender'],
-          birthday: new TuiDay(
-            birthday.year(),
-            birthday.month(),
-            birthday.date(),
-          ),
-          nationality: this.user.user_metadata['nationality'],
-        });
-
-        this.form.updateValueAndValidity();
-      }
-    });
-  }
+  ) {}
 
   async ngOnInit() {
     this.buildFormClient();
+
+    if (this.userService._session()?.role === Role.client) {
+      this.clientProfile = await this.userService.getClientProfile();
+
+      this.form.patchValue({
+        ...this.clientProfile,
+        birthday: new TuiDay(
+          dayjs(this.clientProfile?.birthday).year(),
+          dayjs(this.clientProfile?.birthday).month(),
+          dayjs(this.clientProfile?.birthday).date(),
+        ),
+      });
+    }
   }
 
-  async register() {
+  async save() {
+    this.loading = true;
     try {
       const body = { ...this.form.getRawValue() };
       delete body.email;
-      delete body.rut;
-      const nationality = this.countriesService.getCodeByCountry(
-        this.nationality?.value,
-      );
+      delete body.document;
 
-      await this.userService.updateUser({
+      let nationality = this.clientProfile?.nationality;
+
+      // Si la nacionalidad ha cambiado, obtenemos el código de la nueva nacionalidad (ya que el value es el nombre de la nacionalidad)
+      // Si no lo ha cambiado usamos el codigo que tenia
+      if (this.clientProfile?.nationality !== this.nationality?.value) {
+        nationality = this.countriesService.getCodeByCountry(
+          this.nationality?.value,
+        );
+      }
+
+      await this.userService.updateProfile({
         ...body,
         nationality: nationality,
       });
-    } catch (e: any) {
-      console.error(e);
+
       this.alerts
-        .open('Error al actualizar datos' + e?.message, {
-          label: 'Error',
-          appearance: 'negative',
+        .open('Datos actualizados correctamente', {
+          label: 'Éxito',
+          appearance: 'positive',
+          autoClose: 10000,
         })
         .subscribe();
+    } catch (e: any) {
+      showErrorMessage({
+        baseMessage: 'Error al actualizar los datos',
+        alert: this.alerts,
+        errorApi: e?.message,
+      });
+    } finally {
+      this.loading = false;
     }
   }
 
@@ -184,7 +182,7 @@ export class MyDataComponent {
       last_name: ['', [Validators.required, Validators.minLength(2)]],
       phone: ['', [Validators.minLength(10)]],
       document: ['', [Validators.required, Validators.minLength(8)]],
-      gender: [Gender.male, [Validators.required]],
+      gender: [Gender.female, [Validators.required]],
       birthday: [undefined, [Validators.required]],
       nationality: ['', [Validators.required]],
     });

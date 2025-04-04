@@ -4,9 +4,7 @@
     border-right: 0 !important;
   }
 }
-::ng-deep tui-hint {
-  background: var(--tui-background-elevation-1) !important;
-}
+
 nav {
   background-color: white;
   padding: calc(var(--spacing) * 5);
