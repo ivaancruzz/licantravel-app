@@ -20,9 +20,20 @@
       {{ item.product.name }}
     </h1>
     <div class="flex flex-grow items-end">
-      <h2 class="text-lg font-bold">
-        {{ item.product.price | currency: "CLP" }}
-      </h2>
+      <div class="font-semibold text-lg">
+        @if (item.product.price_off) {
+          <div class="flex flex-col gap-1">
+            <span [style.color]="'var(--tui-text-positive)'">{{
+              item.product.price_off | currency: "CLP"
+            }}</span>
+            <small class="line-through text-xs">{{
+              item.product.price | currency: "CLP"
+            }}</small>
+          </div>
+        } @else {
+          {{ item.product.price | currency: "CLP" }}
+        }
+      </div>
     </div>
 
     @if (view.ticket) {

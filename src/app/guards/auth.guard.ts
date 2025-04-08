@@ -24,16 +24,12 @@ export const AuthGuard: CanActivateFn = async (route, state) => {
 
   if (supabaseService.isServer) return false;
 
-  if (session) {
-    const urlAcceptInvitation = route.url[0].path === 'aceptar-invitacion';
-    if (urlAcceptInvitation && session.user_metadata['is_active'] === false)
-      // Si el usuario acepta una invitación por correo,
-      // se le permite el acceso. Esto se debe a que los enlaces de invitación generan una sesión válida,
-      // por lo que no queremos redirigirlo a la página de inicio, sino generar una contraseña.
-      return true;
-
-    router.navigate(['/']);
-    return false;
+  const urlAcceptInvitation = route.url[0].path === 'aceptar-invitacion';
+  if (urlAcceptInvitation && session?.user_metadata['is_active'] === false) {
+    // Si el usuario acepta una invitación por correo,
+    // se le permite el acceso. Esto se debe a que los enlaces de invitación generan una sesión válida,
+    // por lo que no queremos redirigirlo a la página de inicio, sino generar una contraseña.
+    return true;
   }
 
   return !!userService._session();

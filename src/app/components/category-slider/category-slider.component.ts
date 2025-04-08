@@ -6,6 +6,7 @@ import {
   inject,
   Input,
   PLATFORM_ID,
+  REQUEST,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -30,6 +31,8 @@ import {
   FilterProduct,
   FilterProductType,
 } from '../../layouts/category-layout/category-layout.component';
+import { SupabaseService } from '../../services/supabase.service';
+import path from 'path';
 
 @Component({
   selector: 'app-category-slider',
@@ -46,12 +49,17 @@ import {
   styleUrl: './category-slider.component.scss',
 })
 export class CategorySliderComponent {
+  private request = inject(REQUEST);
   @Input({ required: true }) categories: Tables<'categories'>[] = [];
 
   @ViewChild(EmblaCarouselDirective) emblaRef!: EmblaCarouselDirective;
 
   public options = { loop: true, dragFree: true, align: 'start' };
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private supabaseService: SupabaseService,
+  ) {}
+
   goToCategory(slug: string) {
     this.router
       .navigateByUrl('/explorar', { skipLocationChange: true })
@@ -62,6 +70,10 @@ export class CategorySliderComponent {
       });
   }
   get currentCategory() {
-    return location.pathname.split('/categoria/').pop();
+    if (this.supabaseService.isServer) {
+      return this.request?.url.split('/categoria/').pop();
+    } else {
+      return location.pathname.split('/categoria/').pop();
+    }
   }
 }

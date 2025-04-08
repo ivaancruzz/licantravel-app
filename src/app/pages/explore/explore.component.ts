@@ -52,7 +52,7 @@ export class ExploreComponent {
   category = signal<CategoryView>({
     icon: `${environment.NGX_STORAGE_RESOURCES}/icon_explore.png`,
     name: 'Explorar',
-    picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.jpg`,
+    picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.webp`,
     slug: '/explorar',
   });
 

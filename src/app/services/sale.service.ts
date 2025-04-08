@@ -22,10 +22,42 @@ export enum PaymentMethod {
 }
 
 export enum PaymentStatus {
+  /**
+   * El usuario aún no ha completado el proceso de pago (por ejemplo, después de generar un boleto, el pago se completará cuando el usuario pague en el lugar seleccionado).
+   */
   pending = 'pending',
-  completed = 'completed',
-  failed = 'failed',
+  /**
+   * El pago ha sido aprobado y acreditado con éxito.
+   */
+  approved = 'approved',
+  /**
+   * El pago ha sido autorizado pero aún no se ha capturado.
+   */
+  authorized = 'authorized',
+  /**
+   * El pago está en proceso de revisión.
+   */
+  in_process = 'in_process',
+  /**
+   *  El usuario ha iniciado una disputa.
+   */
+  in_mediation = 'in_mediation',
+  /**
+   *  El pago fue rechazado (el usuario puede intentar pagar nuevamente).
+   */
+  rejected = 'rejected',
+  /**
+   * El pago fue cancelado por alguna de las partes o caducó.
+   */
+  cancelled = 'cancelled',
+  /**
+   * El pago fue reembolsado al usuario.
+   */
   refunded = 'refunded',
+  /**
+   * Se realizó un contracargo en la tarjeta de crédito del comprador.
+   */
+  charged_back = 'charged_back',
 }
 
 export enum CreationType {
@@ -41,9 +73,14 @@ export const paymentMethodNames = {
 };
 
 export const paymentStatusNames = {
+  [PaymentStatus.in_process]: 'Pendiente',
   [PaymentStatus.pending]: 'Pendiente',
-  [PaymentStatus.completed]: 'Completado',
-  [PaymentStatus.failed]: 'Fallido',
+  [PaymentStatus.authorized]: 'Autorizado',
+  [PaymentStatus.in_mediation]: 'Mediación',
+  [PaymentStatus.cancelled]: 'Cancelado',
+  [PaymentStatus.charged_back]: 'Contracargo',
+  [PaymentStatus.approved]: 'Aprobado',
+  [PaymentStatus.rejected]: 'Rechazado',
   [PaymentStatus.refunded]: 'Reembolsado',
 };
 

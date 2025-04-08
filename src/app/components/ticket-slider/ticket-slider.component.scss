@@ -1,6 +1,7 @@
 @media only screen and (min-width: 768px) {
   .embla {
     --slide-size: 50% !important;
+    margin: 0 !important;
   }
   // .embla__container {
   //   margin-left: -50px !important;
@@ -9,10 +10,9 @@
 
 .embla {
   max-width: 48rem;
-  margin: auto;
   --slide-height: 19rem;
-  --slide-spacing: 1rem;
-  --slide-size: 98%;
+  --slide-spacing: 0.5rem;
+  --slide-size: 90%;
 }
 .embla__viewport {
   overflow: hidden;

@@ -4,6 +4,7 @@
       @if ((breakpoint$ | async) === "mobile") {
         <img
           src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_short.svg"
+          loading="lazy"
           alt="Logo LicanTravel"
           height="50"
           style="max-height: 50px; height: 50px"
@@ -11,6 +12,7 @@
       } @else {
         <img
           src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_long.svg"
+          loading="lazy"
           alt="Logo LicanTravel"
           height="50"
           style="max-height: 50px; height: 50px"
@@ -115,7 +117,8 @@
   <div class="flex flex-col gap-10">
     <img
       src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_long.svg"
-      alt=""
+      alt="Logo LicanTravel"
+      loading="lazy"
       class="w-100"
     />
     @if (!userService._session()) {
@@ -215,7 +218,7 @@
           role="button"
           [routerLink]="item.href"
           routerLinkActive="active-link"
-          (click)="onClose()"
+          (click)="onMenuItemClick(item)"
         >
           {{ item.label }}
         </a>

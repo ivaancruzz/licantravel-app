@@ -110,7 +110,7 @@ export class SupabaseService {
       const { data, error, state, count } = await supabaseFetchFn(this.client);
 
       if (error) {
-        console.error(error);
+        console.error('Supabase Service |', error?.message);
       }
 
       this.transferState?.set(stateKey, data);

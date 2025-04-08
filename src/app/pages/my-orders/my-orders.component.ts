@@ -83,16 +83,16 @@ export class MyOrdersComponent {
     },
 
     {
-      label: 'Completados',
-      value: PaymentStatus.completed,
+      label: 'Aprobados',
+      value: PaymentStatus.approved,
     },
     {
       label: 'Pendientes',
       value: PaymentStatus.pending,
     },
     {
-      label: 'Fallidos',
-      value: PaymentStatus.failed,
+      label: 'Rechazados',
+      value: PaymentStatus.rejected,
     },
   ];
   protected readonly formFilter = new FormGroup({

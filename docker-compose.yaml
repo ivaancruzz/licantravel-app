@@ -7,12 +7,13 @@ services:
       target: local # Usa la etapa "local"
       args:
         NGX_ENV: local
-        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
         NGX_PANEL_URL: ${NGX_PANEL_URL}
         NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
         NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
         NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
         NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+        NGX_MP_WEBHOOK_SECRET_KEY: ${NGX_MP_WEBHOOK_SECRET_KEY}
+        NGX_MP_ACCESS_TOKEN: ${NGX_MP_ACCESS_TOKEN}
     ports:
       - "4200:4200"
     volumes:
@@ -28,12 +29,14 @@ services:
       target: final # Usa la última etapa
       args:
         NGX_ENV: development
-        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
         NGX_PANEL_URL: ${NGX_PANEL_URL}
         NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
         NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
         NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
         NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+        NGX_MP_WEBHOOK_SECRET_KEY: ${NGX_MP_WEBHOOK_SECRET_KEY}
+        NGX_MP_ACCESS_TOKEN: ${NGX_MP_ACCESS_TOKEN}
+
     ports:
       - "4000:4000"
     command: ["node", "server/server.mjs"]
@@ -44,12 +47,13 @@ services:
       target: final # Usa la última etapa
       args:
         NGX_ENV: production
-        NGX_MP_PUBLIC_KEY: ${NGX_MP_PUBLIC_KEY}
         NGX_PANEL_URL: ${NGX_PANEL_URL}
         NGX_SUPABASE_URL: ${NGX_SUPABASE_URL}
         NGX_SUPABASE_ANON_KEY: ${NGX_SUPABASE_ANON_KEY}
         NGX_STORAGE_RESOURCES: ${NGX_STORAGE_RESOURCES}
         NGX_TURNSTILE_KEY: ${NGX_TURNSTILE_KEY}
+        NGX_MP_WEBHOOK_SECRET_KEY: ${NGX_MP_WEBHOOK_SECRET_KEY}
+        NGX_MP_ACCESS_TOKEN: ${NGX_MP_ACCESS_TOKEN}
     env_file:
       - .env.production
     ports:

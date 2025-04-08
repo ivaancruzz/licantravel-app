@@ -1,8 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import {
+  AuthResponse,
   AuthSession,
   FunctionsHttpError,
+  Session,
   SignOut,
   SignUpWithPasswordCredentials,
   User,
@@ -76,20 +78,22 @@ export class UserService {
 
     if (error) throw error;
   }
-  async getUser(): Promise<User | null> {
+  async getUser(): Promise<{
+    user: User | null;
+    session: Session | null;
+  } | null> {
     const { data, error } = await this.supabaseService.getData<{
       user: User | null;
+      session: Session | null;
     }>('user', (client) => client.auth.getUser());
 
-    if (error && error instanceof FunctionsHttpError) {
-      const errorMessage = await error.context.json();
-
-      throw errorMessage;
+    if (error) {
+      throw error;
     }
 
     this._session.set(data?.user);
 
-    return data?.user;
+    return data;
   }
 
   async getSession(): Promise<

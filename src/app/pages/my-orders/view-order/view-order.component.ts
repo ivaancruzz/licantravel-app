@@ -55,7 +55,7 @@ export class ViewOrderComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private saleService: SaleService
+    private saleService: SaleService,
   ) {}
 
   ngOnInit() {

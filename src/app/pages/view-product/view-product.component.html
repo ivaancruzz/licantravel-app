@@ -6,9 +6,9 @@
   }
 </div>
 
-@if (isBrowserOnly) {
-  <div class="container-x overflow-hidden flex flex-col gap-5 w-[100vw]">
-    @if (recommendedProducts()?.length) {
+<div class="overflow-hidden">
+  <div class="container-x overflow-hidden flex flex-col gap-5">
+    @if (recommendedProducts().length) {
       <div>
         <h2 class="font-semibold mb-2">Te puede interezar</h2>
         <app-recommended-products
@@ -18,7 +18,7 @@
       </div>
     }
 
-    @if (categories()?.length) {
+    @if (categories().length) {
       <div>
         <h2 class="font-semibold mb-2">Explora otras categorías</h2>
         <app-category-slider
@@ -28,4 +28,6 @@
       </div>
     }
   </div>
-}
+</div>
+
+<app-splash-screen [show]="showSplash"></app-splash-screen>

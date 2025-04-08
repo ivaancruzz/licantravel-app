@@ -17,7 +17,7 @@ export class TicketSliderComponent {
   protected readonly breakpoint$ = inject(TuiBreakpointService);
   @Input({ required: true }) tickets: TicketList[] = [];
   @ViewChild(EmblaCarouselDirective) emblaRef!: EmblaCarouselDirective;
-  public options: EmblaOptionsType = { containScroll: false };
+  public options: EmblaOptionsType = { containScroll: false, align: 'start' };
 
   ngOnInit() {
     this.breakpoint$.subscribe((breakpoint) => {

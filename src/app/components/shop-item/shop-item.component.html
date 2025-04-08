@@ -12,32 +12,38 @@
       <small class="text-white">No publicado </small>
     </div>
   }
-  <div class="flex-grow bg-slate-100 wrapper-img">
-    <app-shop-images-slider
+  <div class="flex-grow bg-slate-100 wrapper-img min-h-[150px] max-h-[150px]">
+    <img
+      src="{{ product.product_multimedia[0].file_url }}"
+      [alt]="product.name"
+      loading="lazy"
+    />
+    <!-- <app-shop-images-slider
       ngSkipHydradation
       [images]="product.product_multimedia"
       [slider]="slider"
-    ></app-shop-images-slider>
+    ></app-shop-images-slider> -->
   </div>
-  <div class="p-3 w-full oveflow-hidden text-start">
-    <span tuiTitle="xs">
-      <div class="text-secondary line-clamp-3 leading-5">
-        {{ product.name }}
-      </div>
-      <div tuiSubtitle class="mt-3" [style.color]="'var(--tui-text-primary)'">
-        @if (product.price_off) {
-          <div class="flex flex-col gap-1">
-            <span [style.color]="'var(--tui-text-positive)'">{{
-              product.price_off | currency: "CLP"
-            }}</span>
-            <small class="line-through text-xs">{{
-              product.price | currency: "CLP"
-            }}</small>
-          </div>
-        } @else {
-          {{ product.price | currency: "CLP" }}
-        }
-      </div>
-    </span>
+  <div class="p-3 w-full oveflow-hidden flex flex-col gap-2 text-start">
+    <h1 class="font-normal line-clamp-2 leading-5">
+      {{ product.name }}
+    </h1>
+    <div class="font-semibold text-lg">
+      @if (product.price_off) {
+        <div class="flex flex-col gap-1">
+          <span [style.color]="'var(--tui-text-positive)'">{{
+            product.price_off | currency: "CLP"
+          }}</span>
+          <small class="line-through text-xs">{{
+            product.price | currency: "CLP"
+          }}</small>
+        </div>
+      } @else {
+        {{ product.price | currency: "CLP" }}
+      }
+    </div>
+    <span class="text-xs"
+      >{{ product.providers.commune }} - {{ product.providers.region }}</span
+    >
   </div>
 </button>

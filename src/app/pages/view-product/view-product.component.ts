@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   Component,
   inject,
   Inject,
@@ -17,6 +18,7 @@ import { NotFoundItemsComponent } from '../../components/not-found-items/not-fou
 import { CategoryService } from '../../services/category.service';
 import { Tables } from '../../lib/database.types';
 import { isPlatformBrowser } from '@angular/common';
+import { SplashScreenComponent } from '../../components/splash-screen/splash-screen.component';
 
 @Component({
   selector: 'app-view-product',
@@ -25,6 +27,7 @@ import { isPlatformBrowser } from '@angular/common';
     RecommendedProductsComponent,
     CategorySliderComponent,
     NotFoundItemsComponent,
+    SplashScreenComponent,
   ],
   templateUrl: './view-product.component.html',
   styleUrl: './view-product.component.scss',
@@ -35,17 +38,20 @@ export class ViewProductComponent {
   recommendedProducts = signal<ProductList[]>([]);
   categories = signal<Tables<'categories'>[]>([]);
   slug = '';
+  showSplash = true;
 
   constructor(
-    @Inject(REQUEST) private request: Request,
-    private supabaseService: SupabaseService,
     private productService: ProductService,
     @Inject(PLATFORM_ID) private platformId: string,
     private categoryService: CategoryService,
     private route: Router,
-  ) {}
+  ) {
+    afterNextRender(() => {
+      this.showSplash = false;
+    });
+  }
 
-  async ngOnInit() {
+  ngOnInit() {
     const [categorySlug, productSlug] =
       this.route.url.split('/categoria/').pop()?.split('/') || [];
 

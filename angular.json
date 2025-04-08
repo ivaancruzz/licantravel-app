@@ -44,9 +44,10 @@
               "src/styles.scss",
               "@taiga-ui/core/styles/taiga-ui-theme.less",
               "@taiga-ui/core/styles/taiga-ui-fonts.less",
-              "@taiga-ui/addon-mobile/styles/taiga-ui-mobile.less"
+              "@taiga-ui/addon-mobile/styles/taiga-ui-mobile.less",
+              "node_modules/aos/dist/aos.css"
             ],
-            "scripts": [],
+            "scripts": ["node_modules/aos/dist/aos.js"],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {

@@ -12,13 +12,19 @@ import {
   Inject,
   inject,
   Optional,
+  PLATFORM_ID,
   REQUEST_CONTEXT,
 } from '@angular/core';
 import { TuiResponsiveDialogService } from '@taiga-ui/addon-mobile';
 import { TuiAlertService, TuiButton, TuiRoot } from '@taiga-ui/core';
 import { TUI_CONFIRM, type TuiConfirmData } from '@taiga-ui/kit';
 import { switchMap } from 'rxjs';
-import { CommonModule, NgClass } from '@angular/common';
+import {
+  CommonModule,
+  isPlatformBrowser,
+  isPlatformServer,
+  NgClass,
+} from '@angular/common';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { SupabaseService } from './services/supabase.service';
 import { Role, UserService } from './services/user.service';
@@ -29,6 +35,8 @@ import {
   NgxPermissionsService,
   NgxRolesService,
 } from 'ngx-permissions';
+
+import Aos from 'aos';
 dayjs.locale('es');
 
 @Component({
@@ -41,22 +49,15 @@ dayjs.locale('es');
 export class AppComponent {
   loading = true;
   constructor(
+    @Inject(PLATFORM_ID) private platformId: string,
     private userService: UserService,
     private supabaseService: SupabaseService,
-    private httpClient: HttpClient,
     private ngxPermissionsService: NgxPermissionsService,
-    private router: Router,
   ) {}
 
   ngOnInit() {
-    if (this.supabaseService.isServer) return;
-
-    setTimeout(() => {
-      const body = document.querySelector('body');
-
-      body?.classList.remove('overflow-hidden');
-      this.loading = false;
-    }, 200);
+    if (isPlatformServer(this.platformId)) return;
+    Aos.init();
 
     this.supabaseService.clientBrowser.auth.onAuthStateChange(
       async (event, session) => {

@@ -139,16 +139,12 @@ export class CategoryLayoutComponent {
   }
 
   goToPage(page: number) {
-    this.scrollToTop();
-
     this.router.navigate([this.category()?.slug], {
       queryParams: { page: page + 1, filter: this.filterSelected.value },
     });
   }
 
   handleFilter(filter: FilterProduct) {
-    this.scrollToTop();
-
     this.openFilter = false;
     this.router.navigate([this.category()?.slug], {
       queryParams: { page: 1, filter: filter.value },
@@ -156,7 +152,6 @@ export class CategoryLayoutComponent {
   }
 
   goToCategory(slug: string) {
-    this.scrollToTop();
     this.router
       .navigateByUrl('/explorar', { skipLocationChange: true })
       .then(() => {

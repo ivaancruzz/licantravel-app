@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment';
 import { Role } from '../../../services/user.service';
 
 export interface Nav {
@@ -27,7 +28,7 @@ export const NAV: Nav[] = [
   },
   {
     label: 'Panel de control',
-    href: '',
+    href: environment.PANEL_URL,
     icon: '@tui.shield',
     link: true,
     permissions: [Role.supervisor, Role.superadmin],

@@ -28,9 +28,6 @@
     >
       <div class="flex flex-col gap-4 text-dark">
         @if (products().length) {
-          @if (recentSearchService.items().length && !searchValue) {
-            <tui-badge appearance="accent" size="s">Historial</tui-badge>
-          }
           @for (product of products(); track product) {
             <div
               tabindex="0"

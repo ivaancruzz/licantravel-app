@@ -18,10 +18,6 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
-    path: 'cambiar-clave',
-    renderMode: RenderMode.Client,
-  },
-  {
     path: 'aceptar-invitacion',
     renderMode: RenderMode.Client,
   },

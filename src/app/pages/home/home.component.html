@@ -4,7 +4,9 @@
       <img
         src="{{ NGX_STORAGE_RESOURCES }}/chucao_happy.png"
         width="100"
+        data-aos="fade-up"
         alt="Imágen de Chucao feliz"
+        loading="lazy"
       />
       <article class="card w-full">
         <p class="text-center text-secondary md:text-2xl md:font-semibold">
@@ -31,21 +33,27 @@
 </section>
 
 <!--Carrousel-->
-@if (isBrowserOnly && featuredProducts().length) {
-  <div class="relative">
+@if (featuredProducts().length) {
+  <div class="relative mx-auto md:max-w-[75rem]">
     <section class="container-x pt-5">
       <h2 class="font-semibold mb-2 md:text-lg">Lo que tenemos para ti</h2>
       <div class="overflow-hidden" style="border-radius: var(--border-radius)">
         <app-featured-products
+          ngSkipHydration
           [products]="featuredProducts()"
         ></app-featured-products>
       </div>
     </section>
-    <img
-      src="/chucao/señal.png"
-      alt=""
-      class="hidden md:block absolute right-[150px] bottom-0 scale-x-[-1] md:w-[200px] lg:w-[300px]"
-    />
+
+    @if ((breakpoint$ | async) !== "mobile") {
+      <img
+        src="{{ NGX_STORAGE_RESOURCES }}/chucao_senal.png"
+        data-aos="fade-right"
+        alt="Imágen de Chucao señalando los productos destacados que estan hacia su derecha"
+        loading="lazy"
+        class="absolute right-0 lg:right-[-20px] bottom-0 scale-x-[-1] md:w-[200px] lg:w-[300px]"
+      />
+    }
   </div>
 }
 
@@ -53,9 +61,9 @@
 <section class="pb-5">
   <div class="container-x flex flex-col gap-5">
     @if (products().length) {
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
         @for (product of products(); track product) {
-          <app-shop-item ngSkipHydration [product]="product"></app-shop-item>
+          <app-shop-item [product]="product"></app-shop-item>
         }
       </div>
       <button
@@ -76,41 +84,52 @@
     }
   </div>
 </section>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-  <path
-    fill="#21a0ff"
-    fill-opacity="1"
-    d="M0,288L17.1,277.3C34.3,267,69,245,103,202.7C137.1,160,171,96,206,90.7C240,85,274,139,309,181.3C342.9,224,377,256,411,266.7C445.7,277,480,267,514,234.7C548.6,203,583,149,617,154.7C651.4,160,686,224,720,240C754.3,256,789,224,823,197.3C857.1,171,891,149,926,160C960,171,994,213,1029,224C1062.9,235,1097,213,1131,213.3C1165.7,213,1200,235,1234,202.7C1268.6,171,1303,85,1337,74.7C1371.4,64,1406,128,1423,160L1440,192L1440,320L1422.9,320C1405.7,320,1371,320,1337,320C1302.9,320,1269,320,1234,320C1200,320,1166,320,1131,320C1097.1,320,1063,320,1029,320C994.3,320,960,320,926,320C891.4,320,857,320,823,320C788.6,320,754,320,720,320C685.7,320,651,320,617,320C582.9,320,549,320,514,320C480,320,446,320,411,320C377.1,320,343,320,309,320C274.3,320,240,320,206,320C171.4,320,137,320,103,320C68.6,320,34,320,17,320L0,320Z"
-  ></path>
-</svg>
+
+<div class="relative mb-[-2px]">
+  <img
+    src="{{ NGX_STORAGE_RESOURCES }}/chucao_playa.png"
+    alt="Imágen de Chucao en la playa"
+    loading="lazy"
+    class="animate-bounce absolute z-1 left-[50%] translate-x-[-50%] bottom-[-5rem] scale-x-[-1] w-[200px] md:w-[300px] lg:w-[400px]"
+  />
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path
+      fill="#21a0ff"
+      fill-opacity="1"
+      d="M0,288L17.1,277.3C34.3,267,69,245,103,202.7C137.1,160,171,96,206,90.7C240,85,274,139,309,181.3C342.9,224,377,256,411,266.7C445.7,277,480,267,514,234.7C548.6,203,583,149,617,154.7C651.4,160,686,224,720,240C754.3,256,789,224,823,197.3C857.1,171,891,149,926,160C960,171,994,213,1029,224C1062.9,235,1097,213,1131,213.3C1165.7,213,1200,235,1234,202.7C1268.6,171,1303,85,1337,74.7C1371.4,64,1406,128,1423,160L1440,192L1440,320L1422.9,320C1405.7,320,1371,320,1337,320C1302.9,320,1269,320,1234,320C1200,320,1166,320,1131,320C1097.1,320,1063,320,1029,320C994.3,320,960,320,926,320C891.4,320,857,320,823,320C788.6,320,754,320,720,320C685.7,320,651,320,617,320C582.9,320,549,320,514,320C480,320,446,320,411,320C377.1,320,343,320,309,320C274.3,320,240,320,206,320C171.4,320,137,320,103,320C68.6,320,34,320,17,320L0,320Z"
+    ></path>
+  </svg>
+</div>
 
 <!--Information -->
-<section class="bg-primary py-[150px] relative">
-  <img
-    src="/chucao/playa.png"
-    alt=""
-    class="hidden md:block absolute left-[130px] top-[350px] scale-x-[-1] md:w-[200px] lg:w-[300px]"
-  />
-
+<section class="bg-primary py-[150px] relative overflow-hidden">
   <div class="container-x flex flex-col gap-5">
     <h1
-      class="text-5xl md:text-6xl lg:text-7xl text-white font-bold text-center pb-[300px] lexend-font"
+      data-aos="zoom-out"
+      class="text-5xl md:text-7xl text-white font-bold text-center pb-[200px] lexend-font"
     >
       Descube lo fácil que es vivir una experiencia inolvidable
     </h1>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-[100px] md:gap-5">
       <!--Step 1-->
-      <div class="card-step">
+      <div class="card-step" data-aos="zoom-in">
         <div class="image-wrapper">
-          <img src="/photos/10.jpg" alt="" />
+          <img
+            src="{{ NGX_STORAGE_RESOURCES }}/step_1.webp"
+            loading="lazy"
+            alt="Amigos buscando un destino en su celular para vacacionar"
+          />
         </div>
         <span class="wrapper-step lexend-font">1</span>
         <div class="p-3 relative">
-          <img
-            src="/chucao/treking.png"
-            alt=""
-            class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
-          />
+          @if ((breakpoint$ | async) === "mobile") {
+            <img
+              src="{{ NGX_STORAGE_RESOURCES }}/chucao_treking.png"
+              alt="Imágen de Chucao en la montaña"
+              loading="lazy"
+              class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
+            />
+          }
           <h2
             tuiTitle="l"
             class="font-bold text-2xl lexend-font my-2 text-secondary"
@@ -126,13 +145,18 @@
       </div>
 
       <!--Step 2-->
-      <div class="card-step">
-        <img class="image-wrapper" src="/photos/9.jpg" alt="" />
+      <div class="card-step" data-aos="zoom-in" data-aos-delay="200">
+        <img
+          class="image-wrapper"
+          src="{{ NGX_STORAGE_RESOURCES }}/step_2.webp"
+          alt="Familia adquiriendo tickets para un trekking en su computador"
+        />
         <span class="wrapper-step lexend-font">2</span>
         <div class="p-3 relative">
           <img
-            src="/chucao/surf.png"
-            alt=""
+            src="{{ NGX_STORAGE_RESOURCES }}/chucao_surf.png"
+            alt="Imágen de Chucao surfeando"
+            loading="lazy"
             class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
           />
           <h2
@@ -149,13 +173,19 @@
       </div>
 
       <!--Step 3-->
-      <div class="card-step">
-        <img class="image-wrapper" src="/photos/3.jpg" alt="" />
+      <div class="card-step" data-aos="zoom-in" data-aos-delay="400">
+        <img
+          class="image-wrapper"
+          src="{{ NGX_STORAGE_RESOURCES }}/step_3.webp"
+          loading="lazy"
+          alt="Padre e hija disfrutando de su experiencia en kayac"
+        />
         <span class="wrapper-step lexend-font">3</span>
         <div class="p-3 relative">
           <img
-            src="/chucao/playa.png"
-            alt=""
+            src="{{ NGX_STORAGE_RESOURCES }}/chucao_playa.png"
+            alt="Imágen de Chucao en la playa"
+            loading="lazy"
             class="block md:hidden absolute top-[-90px] right-[10px] z-1 transform-[scaleX(-1)] w-[100px]"
           />
           <h2
@@ -173,7 +203,7 @@
       </div>
     </div>
     <h1
-      class="lexend-font font-bold text-6xl md:text-8xl lg:text-9xl text-center text-white leading-[1.2] pt-[300px]"
+      class="lexend-font font-bold text-6xl md:text-8xl lg:text-9xl text-center text-white leading-[1.2] pt-[200px]"
     >
       Es momento de vivir algo único
     </h1>
@@ -192,8 +222,16 @@
   </div>
 </section>
 
-<img
-  src="/chucao/treking.png"
-  alt=""
-  class="hidden md:block absolute right-[-10px] bottom-[150px] scale-x-[-1] md:w-[300px] lg:w-[400px]"
-/>
+@if ((breakpoint$ | async) !== "mobile") {
+  <div class="overflow-hidden absolute right-0 bottom-[150px]">
+    <img
+      data-aos="fade-right"
+      src="{{ NGX_STORAGE_RESOURCES }}/chucao_treking.png"
+      alt="Imágen de Chucao en la montaña"
+      loading="lazy"
+      class="scale-x-[-1] md:w-[300px] lg:w-[350px]"
+    />
+  </div>
+}
+
+<app-splash-screen [show]="showSplash"></app-splash-screen>

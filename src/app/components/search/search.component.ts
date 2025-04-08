@@ -47,16 +47,12 @@ export class SearchComponent {
   recentSearch = signal<string[]>([]);
   hint = false;
 
-  constructor(
-    private productService: ProductService,
-    public recentSearchService: RecentSearchService,
-  ) {}
+  constructor(private productService: ProductService) {}
   async search() {
     this.hint = true;
 
     if (!this.searchValue) {
       this.hint = false;
-      this.products.set(this.recentSearchService.items());
       return;
     }
     try {
@@ -68,10 +64,6 @@ export class SearchComponent {
   }
 
   goToProduct(product: ProductList & { recent?: boolean }) {
-    this.recentSearchService.add({
-      ...product,
-      recent: true,
-    });
     location.href = `categoria/${product.categories.slug}/${product.slug}`;
   }
 
@@ -81,18 +73,13 @@ export class SearchComponent {
       products.filter((p) => p.id !== productId),
     );
     if (this.products().length === 0) this.hint = false;
-    this.recentSearchService.remove(productId);
   }
 
   openHint() {
-    const hasRecentSearch = Boolean(this.recentSearchService.items().length);
-    this.hint = Boolean(hasRecentSearch || this.searchValue);
+    this.hint = Boolean(this.searchValue);
 
     if (this.searchValue) {
       this.search();
-    }
-    if (hasRecentSearch) {
-      this.products.set(this.recentSearchService.items());
     }
   }
 

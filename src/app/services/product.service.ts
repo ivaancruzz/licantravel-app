@@ -122,6 +122,7 @@ export class ProductService {
           .from('products')
           .select(this.defaultQuery)
           .limit(10)
+          .eq('is_feature', false)
           .order('created_at', { ascending: false }),
     );
 

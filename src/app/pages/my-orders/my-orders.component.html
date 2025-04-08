@@ -5,7 +5,7 @@
       <input placeholder="Cabañas, Treking, Parapente, etc" tuiTextfield />
     </tui-textfield> -->
 
-    <div class="w-full flex overflow-x-auto pb-2">
+    <!-- <div class="w-full flex overflow-x-auto pb-2">
       <form tuiGroup class="group" [formGroup]="formFilter">
         @for (filter of filters; track filter) {
           <label appearance="" tuiBlock>
@@ -20,7 +20,7 @@
           </label>
         }
       </form>
-    </div>
+    </div> -->
 
     @defer (when !loading()) {
       @if (!orders().length) {

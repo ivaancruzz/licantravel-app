@@ -162,12 +162,7 @@ export class RegisterComponent {
     this.isLoading = true;
     try {
       let user;
-
-      if (this.userService._session()) {
-        user = this.userService._session();
-      } else {
-        user = await this.userService.getUser();
-      }
+      user = this.userService._session();
 
       const isConfirmed = !!user?.confirmed_at;
       if (isConfirmed) {

@@ -41,9 +41,13 @@ export class CartService {
   async init() {
     if (this.supabaseService.isServer) return;
 
-    const realProducts = await this.getRealProducts();
     const jsonItems = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
 
+    jsonItems.forEach((item: Cart) => {
+      this._cart.set(item.product.id, item);
+    });
+
+    const realProducts = await this.getRealProducts();
     const realItems = jsonItems.filter((item: Cart) => {
       const product = realProducts.find(
         (product: ProductList) => product.id === item.product.id,

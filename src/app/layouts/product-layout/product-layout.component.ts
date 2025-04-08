@@ -17,6 +17,7 @@ import { CartService } from '../../services/cart.service';
 import { ThumbnailsProductComponent } from '../../components/thumbnails-product/thumbnails-product.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { Role } from '../../services/user.service';
+import { SplashScreenComponent } from '../../components/splash-screen/splash-screen.component';
 
 @Component({
   selector: 'app-product-layout',

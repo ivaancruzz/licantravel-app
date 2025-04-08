@@ -8,6 +8,11 @@
 
   img {
     margin-bottom: -50px;
+    z-index: 0;
+  }
+
+  .card {
+    z-index: 1;
   }
 }
 
@@ -33,6 +38,7 @@
 .card-step {
   background-color: white;
   border-radius: var(--border-radius);
+  box-shadow: var(--tui-shadow-medium);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -65,5 +71,20 @@
       height: auto;
       width: 100%;
     }
+  }
+}
+
+.animate-bounce {
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0); // Posición inicial
+  }
+  50% {
+    transform: translateY(-10px); // Mueve hacia arriba
+  }
+  100% {
+    transform: translateY(0); // Vuelve a la posición inicial
   }
 }

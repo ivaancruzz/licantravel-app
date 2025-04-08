@@ -1,0 +1,11 @@
+<div
+  class="fixed top-0 h-[100vh] w-[100vw] bg-white overflow-hidden z-[1000] flex justify-center items-center"
+  [ngClass]="show() ? 'show-loading' : 'hidden-loading'"
+>
+  <div class="logo-animated">
+    <img
+      src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_short.svg"
+      alt="Logo LicanTravel cargando"
+    />
+  </div>
+</div>

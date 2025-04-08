@@ -8,7 +8,12 @@
     ></div>
 
     <div class="title-wrapper">
-      <img [src]="category()?.icon" alt="" width="100" />
+      <img
+        [src]="category()?.icon"
+        [alt]="category()?.name"
+        loading="lazy"
+        width="100"
+      />
       <h1 class="text-5xl lexend-font w-full truncate">
         {{ category()?.name }}
       </h1>

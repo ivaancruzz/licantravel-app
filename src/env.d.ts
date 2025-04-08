@@ -1,12 +1,13 @@
 // Define the type of the environment variables.
 declare interface Env {
   readonly NODE_ENV: string;
-  readonly NGX_MP_PUBLIC_KEY: string;
   readonly NGX_PANEL_URL: string;
   readonly NGX_SUPABASE_URL: string;
   readonly NGX_SUPABASE_ANON_KEY: string;
   readonly NGX_STORAGE_RESOURCES: string;
   readonly NGX_TURNSTILE_KEY: string;
+  readonly NGX_MP_WEBHOOK_SECRET_KEY: string;
+  readonly NGX_MP_ACCESS_TOKEN: string;
 }
 
 // Choose how to access the environment variables.

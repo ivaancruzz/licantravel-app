@@ -1,13 +1,21 @@
-<div class="embla" emblaCarousel [options]="options" [plugins]="plugins">
+<div
+  class="embla relative embla-featured-products"
+  emblaCarousel
+  [options]="options"
+  [plugins]="plugins"
+>
   <div class="embla__container">
     @for (product of products(); track product) {
       <div class="embla__slide">
         <div class="embla__parallax">
-          <div class="embla__parallax__layer relative">
+          <div
+            class="embla__parallax__layer relative"
+            (click)="goToProduct(product)"
+          >
             <img
               class="embla__slide__img embla__parallax__img"
               [src]="product.product_multimedia[0].file_url"
-              alt="Your alt text"
+              [alt]="product.name"
               loading="lazy"
             />
             <div
@@ -18,7 +26,7 @@
               </tui-badge>
               <div class="z-1 mt-10 text-white">
                 <h1
-                  class="text-lg md:text-4xl line-clamp-2 md:leading-12 lexend-font font-bold md:max-w-[70%]"
+                  class="text-lg md:text-4xl line-clamp-2 md:leading-12 lexend-font font-bold max-w-[80%] md:max-w-[70%]"
                 >
                   {{ product.name }}
                 </h1>
@@ -38,7 +46,5 @@
       </div>
     }
   </div>
-  <div class="embla__controls">
-    <div class="embla__dots"></div>
-  </div>
+  <div #dots class="embla__dots"></div>
 </div>

@@ -38,14 +38,15 @@
         </div>
       }
       <div class="chucao-wrapper">
-        <img
-          src="http://127.0.0.1:54321/storage/v1/object/public/resources/chucao/summer.png"
-          alt=""
-        />
+        <img src="{{ NGX_STORAGE_RESOURCES }}/chucao_playa.png" alt="" />
       </div>
       <div class="wrapper-main">
         <div class="flex gap-2">
-          <img src="/logo/long.svg" alt="Logo LicanTravel" width="100" />
+          <img
+            src="{{ NGX_STORAGE_RESOURCES }}/lican_logo_long.svg"
+            alt="Logo LicanTravel"
+            width="100"
+          />
           <div class="flex-grow text-end">
             <tui-badge
               [appearance]="ticketStatusNames[ticket.status].color"

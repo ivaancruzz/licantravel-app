@@ -48,6 +48,7 @@ import { ProductMultimedia } from '../../services/product.service';
 })
 export class ThumbnailsProductComponent {
   images = input.required<ProductMultimedia[]>();
+  productName = input.required<string>();
   @ViewChildren(EmblaCarouselDirective)
   viewport!: QueryList<EmblaCarouselDirective>;
   @ViewChild('preview')

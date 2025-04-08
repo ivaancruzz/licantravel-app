@@ -69,7 +69,7 @@ export class ViewCategoryComponent {
         id: matchCategory.id,
         icon: matchCategory.icon as string,
         name: matchCategory.name,
-        picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.jpg`,
+        picture: `${environment.NGX_STORAGE_RESOURCES}/bg_explore.webp`,
         slug: `/categoria/${matchCategory.slug}`,
       });
     } else {

@@ -13,7 +13,12 @@ export const LoggedGuard: CanActivateFn = async (route, state) => {
   const userService = inject(UserService);
   const router = inject(Router);
   if (userService._session()) {
-    if (userService._session()?.user_metadata['email_verified']) {
+    const isRegisterPage = state.url.includes('registro');
+    const userEmailVerified =
+      userService._session()?.user_metadata['email_verified'];
+    //Cuando un usuario se registra, se le envía un correo de verificación.
+    //Al hacer clic en el enlace de verificación, se redirige a la página de registro asignandolo al paso n°3
+    if (userEmailVerified && isRegisterPage) {
       return true;
     }
 

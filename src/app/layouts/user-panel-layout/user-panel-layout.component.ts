@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TuiItem } from '@taiga-ui/cdk';
 import {
   TuiAppearance,
+  TuiBreakpointService,
   TuiButton,
   TuiExpand,
   TuiIcon,
@@ -39,6 +40,8 @@ import { environment } from '../../../environments/environment';
   styleUrl: './user-panel-layout.component.scss',
 })
 export class UserPanelLayoutComponent {
+  protected readonly breakpoint$ = inject(TuiBreakpointService);
+
   @Input() breadcrumbs: {
     caption: string;
     routerLink?: string;

@@ -2,7 +2,9 @@
   class="relative"
   [style.background-color]="'var(--tui-background-base-alt)'"
 >
-  <app-nav></app-nav>
+  @if (isBrowser) {
+    <app-nav></app-nav>
+  }
   <div>
     <ng-content></ng-content>
   </div>
@@ -12,31 +14,25 @@
     class="bg-white"
     style="border-top: 1px solid var(--tui-border-normal)"
   >
-    <div class="container-x grid grid-cols-1 md:grid-cols-3 gap-10 py-5">
+    <div class="container-x grid grid-cols-1 gap-10 py-5">
       <div>
         <h6 class="font-semibold mb-2">Cuenta</h6>
         <ul class="flex gap-3 text-slate-500 flex-wrap">
-          <li routerLink="/mis-compras">Mis compras</li>
-          <li routerLink="/mis-tickets">Mis Tickets</li>
-          <li routerLink="/ajustes/mis-datos">Mis Datos</li>
-          <li routerLink="/ajustes/cambiar-clave">Recuperar cuenta</li>
+          <li><a routerLink="/mis-compras"> Mis compras </a></li>
+          <li><a routerLink="/mis-tickets"> Mis tickets </a></li>
+          <li><a routerLink="/ajustes/mis-datos">Mis Datos</a></li>
+          <li><a routerLink="/recuperar">Recuperar cuenta</a></li>
         </ul>
-      </div>
-      <div>
-        <div>
-          <h6 class="font-semibold mb-2">Acerca de LicanTravel</h6>
-          <ul class="flex gap-3 text-slate-500 flex-wrap">
-            <li routerLink="/acerca-de">¿Como funciona?</li>
-          </ul>
-        </div>
       </div>
 
-      <div>
+      <!-- <div>
         <h6 class="font-semibold mb-2">Condiciones de uso</h6>
         <ul class="flex gap-3 text-slate-500 flex-wrap">
-          <li routerLink="/terminos-y-condiciones">Políticas de privacidad</li>
+          <li>
+            <a routerLink="/terminos-y-condiciones">Políticas de privacidad</a>
+          </li>
         </ul>
-      </div>
+      </div> -->
       <div class="text-center w-full md:col-span-3">
         © 2014-2025 LicanTravel. Todos los derechos reservados.
       </div>

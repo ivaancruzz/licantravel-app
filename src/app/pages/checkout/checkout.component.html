@@ -1,5 +1,5 @@
-<div class="container-x my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
-  <div>
+<div class="container-x my-5 flex flex-col md:grid md:grid-cols-3 gap-5">
+  <div class="flex-none">
     <tui-stepper
       tuiConnected
       [orientation]="
@@ -81,31 +81,43 @@
           @if (status == PaymentStatus.pending) {
             Pago en proceso
           } @else {
-            Pago rechazado
+            @if (timerExpired) {
+              Pago expirado
+            } @else {
+              Pago rechazado
+            }
           }
         </h1>
+        @if (status == PaymentStatus.pending) {
+          <tui-loader />
+        }
         <p>
           @if (status == PaymentStatus.pending) {
-            Estamos verificando tu pago. Por favor, espere.
+            <span class="text-center font-semibold">
+              Tienes {{ formattedTime }} para completar el pago
+            </span>
           } @else {
-            Tu pago ha sido rechazado, intenta nuevamente.
+            @if (timerExpired) {
+              El tiempo para completar el pago ha expirado
+            } @else {
+              Tu pago ha sido rechazado, intenta nuevamente.
+            }
           }
         </p>
-        <button
-          size="l"
-          tuiButton
-          type="button"
-          appearance="secondary"
-          class="w-full md:order-2"
-          iconStart="@tui.rotate-ccw"
-          (click)="reload()"
-        >
-          @if (status == PaymentStatus.pending) {
-            Actualizar
-          } @else {
+
+        @if (status == PaymentStatus.rejected) {
+          <button
+            size="l"
+            tuiButton
+            type="button"
+            appearance="secondary"
+            class="w-full md:order-2"
+            iconStart="@tui.rotate-ccw"
+            (click)="rePay()"
+          >
             Reintentar
-          }
-        </button>
+          </button>
+        }
       </div>
     }
     @if (activeIndex == 2) {

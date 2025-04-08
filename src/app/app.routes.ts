@@ -33,7 +33,7 @@ export const routes: Routes = [
     canActivate: [ngxPermissionsGuard],
     data: {
       permissions: {
-        only: [Role.client, Role.anon, Role.supervisor, Role.superadmin],
+        except: [Role.provider],
         redirectTo: '/escanear',
       },
     },
@@ -54,10 +54,6 @@ export const routes: Routes = [
     canActivate: [LoggedGuard],
   },
   {
-    path: 'cambiar-clave',
-    component: ResetPasswordComponent,
-  },
-  {
     path: 'aceptar-invitacion', // ‼️Importante: Esta ruta es una ruta de redireccion utilizada en supabase functions
     component: AcceptInvitationComponent,
     canActivate: [AuthGuard],
@@ -65,7 +61,7 @@ export const routes: Routes = [
   {
     path: 'escanear',
     component: ScanComponent,
-    canActivate: [ngxPermissionsGuard],
+    canActivate: [AuthGuard, ngxPermissionsGuard],
     data: {
       permissions: {
         only: [Role.provider],
@@ -76,41 +72,111 @@ export const routes: Routes = [
   {
     path: 'explorar',
     component: ExploreComponent,
+    canActivate: [ngxPermissionsGuard],
+    data: {
+      permissions: {
+        except: [Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'categoria/:category',
     component: ViewCategoryComponent,
+    canActivate: [ngxPermissionsGuard],
+    data: {
+      permissions: {
+        except: [Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'categoria/:category/:slug',
     component: ViewProductComponent,
+    canActivate: [ngxPermissionsGuard],
+    data: {
+      permissions: {
+        except: [Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'carrito',
     component: CheckoutComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client],
+        redirectTo: '/ingresar',
+      },
+    },
   },
   {
     path: 'mis-compras',
     component: MyOrdersComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'mis-compras/:code',
     component: ViewOrderComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'mis-tickets',
     component: MyTicketsComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'mis-tickets/:code',
     component: ViewTicketComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'ajustes/mis-datos',
     component: MyDataComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client, Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
   {
     path: 'ajustes/cambiar-clave',
     component: ChangePasswordComponent,
+    canActivate: [AuthGuard, ngxPermissionsGuard],
+    data: {
+      permissions: {
+        only: [Role.client, Role.provider],
+        redirectTo: '/',
+      },
+    },
   },
 ];

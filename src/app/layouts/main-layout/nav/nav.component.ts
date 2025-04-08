@@ -48,7 +48,7 @@ import { NotFoundItemsComponent } from '../../../components/not-found-items/not-
 import { environment } from '../../../../environments/environment';
 import { SearchComponent } from '../../../components/search/search.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { NAV } from './nav';
+import { NAV, Nav } from './nav';
 import { ClickOutsideDirective } from '../../../directives/outside-click.directive';
 
 @Component({
@@ -143,6 +143,13 @@ export class NavComponent {
     this.onClose();
     await this.userService.signOut();
     location.href = '/';
+  }
+
+  onMenuItemClick(item: Nav) {
+    this.onClose();
+    if (item.link) {
+      window.open(item.href, '_blank');
+    }
   }
 
   isActive(url: string) {

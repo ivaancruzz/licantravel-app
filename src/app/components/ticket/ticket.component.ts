@@ -34,6 +34,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { NgClass, NgStyle } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-ticket',
@@ -58,6 +59,7 @@ import { NgClass, NgStyle } from '@angular/common';
 export class TicketComponent {
   private readonly alerts = inject(TuiAlertService);
   private readonly previewDialogService = inject(TuiPreviewDialogService);
+  NGX_STORAGE_RESOURCES = environment.NGX_STORAGE_RESOURCES;
 
   @ViewChild('preview')
   protected readonly preview?: TemplateRef<TuiDialogContext>;

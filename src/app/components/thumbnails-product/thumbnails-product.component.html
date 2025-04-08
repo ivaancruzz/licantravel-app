@@ -2,9 +2,13 @@
   <div class="embla__viewport" emblaCarousel [options]="optionsMain">
     <div class="embla__container h-full">
       @for (img of images(); track img; let i = $index) {
-        <div class="embla__slide">
+        <div class="embla__slide cursor-pointer">
           <div class="embla__slide__number" (click)="show(i)">
-            <img [src]="img.file_url" alt="Your alt text" />
+            <img
+              [src]="img.file_url"
+              alt="Imagen principal - {{ productName() }}"
+              loading="lazy"
+            />
           </div>
         </div>
       }
@@ -21,7 +25,11 @@
           @for (img of images(); track img; let i = $index) {
             <div class="embla-thumbs__slide">
               <button type="button" class="embla-thumbs__slide__number">
-                <img [src]="img.file_url" alt="Your alt text" />
+                <img
+                  [src]="img.file_url"
+                  alt="Imágen {{ i + 1 }} - {{ productName() }}"
+                  loading="lazy"
+                />
               </button>
             </div>
           }
